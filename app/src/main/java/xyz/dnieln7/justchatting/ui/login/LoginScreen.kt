@@ -157,14 +157,14 @@ fun LoginForm(
         Column(modifier = Modifier.padding(paddingValues)) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Welcome Back",
+                text = stringResource(R.string.welcome_back),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             )
             VerticalSpacer(of = 8.dp)
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "Login to your account",
+                text = stringResource(R.string.login_to_your_account),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
             )
@@ -173,7 +173,7 @@ fun LoginForm(
                 modifier = Modifier.fillMaxWidth(),
                 value = email,
                 onValueChange = { email = it },
-                label = { Text("Email") },
+                label = { Text(stringResource(R.string.email)) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
@@ -220,11 +220,14 @@ fun LoginForm(
                     }
 
                     LoginState.Success -> {
-                        Icon(imageVector = Icons.Outlined.Check, contentDescription = "Logged in")
+                        Icon(
+                            imageVector = Icons.Outlined.Check,
+                            contentDescription = stringResource(R.string.logged_in),
+                        )
                     }
 
                     else -> {
-                        Text("Login")
+                        Text(stringResource(R.string.login))
                     }
                 }
             }
@@ -234,13 +237,14 @@ fun LoginForm(
                     .fillMaxWidth()
                     .clickable { onSignup() },
                 text = buildAnnotatedString {
-                    append("Don't have an account? ")
+                    append(stringResource(R.string.don_t_have_an_account))
+                    append(" ")
                     withStyle(
                         style = SpanStyle(
                             textDecoration = TextDecoration.Underline,
                             color = MaterialTheme.colorScheme.primary,
                         ),
-                        block = { append("Sign up") },
+                        block = { append(stringResource(R.string.sign_up)) },
                     )
                 },
                 textAlign = TextAlign.Center,

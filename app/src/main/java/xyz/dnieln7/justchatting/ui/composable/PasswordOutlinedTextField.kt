@@ -17,11 +17,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
 
 @Composable
@@ -46,7 +48,7 @@ fun PasswordOutlinedTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
-        label = { Text("Password") },
+        label = { Text(stringResource(R.string.password)) },
         trailingIcon = {
             Icon(
                 modifier = Modifier.clickable { showPassword = !showPassword },
