@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,7 +54,6 @@ fun PasswordOutlinedTextField(
                 contentDescription = if (showPassword) "Hide password" else "Show password"
             )
         },
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = imeAction,
@@ -63,6 +63,8 @@ fun PasswordOutlinedTextField(
             onGo = onGo,
             onNext = onNext,
         ),
+        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+        shape = MaterialTheme.shapes.small,
     )
 }
 

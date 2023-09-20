@@ -150,7 +150,7 @@ fun LoginForm(
         modifier = modifier,
         shape = MaterialTheme.shapes.extraLarge.copy(
             bottomEnd = CornerSize(0.dp),
-            bottomStart = CornerSize(0.dp)
+            bottomStart = CornerSize(0.dp),
         ),
         shadowElevation = 12.dp,
     ) {
@@ -181,6 +181,7 @@ fun LoginForm(
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 ),
+                shape = MaterialTheme.shapes.small,
             )
             VerticalSpacer(of = 12.dp)
             PasswordOutlinedTextField(
@@ -203,6 +204,7 @@ fun LoginForm(
             }
             FilledTonalButton(
                 modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small,
                 onClick = {
                     if (loginState != LoginState.Loading && loginState != LoginState.Success) {
                         onLogin(email, password)
