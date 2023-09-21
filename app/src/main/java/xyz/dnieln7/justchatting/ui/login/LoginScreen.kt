@@ -183,7 +183,7 @@ fun LoginForm(
                 ),
                 shape = MaterialTheme.shapes.small,
             )
-            VerticalSpacer(of = 12.dp)
+            VerticalSpacer(of = 4.dp)
             PasswordOutlinedTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = password,
