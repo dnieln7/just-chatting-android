@@ -53,7 +53,7 @@ import xyz.dnieln7.justchatting.ui.composable.VerticalFlexibleSpacer
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navigateToSignup: () -> Unit) {
     val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
 
     Surface(
@@ -73,7 +73,7 @@ fun LoginScreen() {
                         .weight(1F),
                     loginState = LoginState.None,
                     onLogin = { email, password -> },
-                    onSignup = {},
+                    onSignup = navigateToSignup,
                 )
             }
         } else {
@@ -89,7 +89,7 @@ fun LoginScreen() {
                         .weight(1F),
                     loginState = LoginState.None,
                     onLogin = { email, password -> },
-                    onSignup = {},
+                    onSignup = navigateToSignup,
                 )
             }
         }

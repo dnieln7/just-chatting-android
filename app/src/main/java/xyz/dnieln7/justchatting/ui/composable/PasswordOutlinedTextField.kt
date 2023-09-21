@@ -31,6 +31,7 @@ fun PasswordOutlinedTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
+    label: String = stringResource(R.string.password),
     onDone: (KeyboardActionScope.() -> Unit)? = null,
     onGo: (KeyboardActionScope.() -> Unit)? = null,
     onNext: (KeyboardActionScope.() -> Unit)? = null,
@@ -48,7 +49,7 @@ fun PasswordOutlinedTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
-        label = { Text(stringResource(R.string.password)) },
+        label = { Text(label) },
         trailingIcon = {
             Icon(
                 modifier = Modifier.clickable { showPassword = !showPassword },
