@@ -25,6 +25,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -47,13 +48,39 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.ui.composable.PasswordOutlinedTextField
 import xyz.dnieln7.justchatting.ui.composable.VerticalFlexibleSpacer
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
-fun LoginScreen(navigateToSignup: () -> Unit) {
+fun LoginRoute(
+    loginViewModel: LoginViewModel = viewModel(),
+    navigateToHome: () -> Unit,
+    navigateToSignup: () -> Unit,
+) {
+    val uiState by loginViewModel.state.collectAsStateWithLifecycle()
+
+    LoginScreen(
+        uiState = uiState,
+        login = loginViewModel::login,
+        onLoggedIn = {
+            navigateToHome()
+            loginViewModel.onLoggedIn()
+        },
+        navigateToSignup = navigateToSignup,
+    )
+}
+
+@Composable
+fun LoginScreen(
+    uiState: LoginState,
+    login: (email: String, password: String) -> Unit,
+    onLoggedIn: () -> Unit,
+    navigateToSignup: () -> Unit,
+) {
     val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
 
     Surface(
@@ -71,9 +98,10 @@ fun LoginScreen(navigateToSignup: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1F),
-                    loginState = LoginState.None,
-                    onLogin = { email, password -> },
-                    onSignup = navigateToSignup,
+                    loginState = uiState,
+                    login = { email, password -> login(email, password) },
+                    onLoggedIn = onLoggedIn,
+                    navigateToSignup = navigateToSignup,
                 )
             }
         } else {
@@ -87,9 +115,10 @@ fun LoginScreen(navigateToSignup: () -> Unit) {
                     modifier = Modifier
                         .fillMaxHeight()
                         .weight(1F),
-                    loginState = LoginState.None,
-                    onLogin = { email, password -> },
-                    onSignup = navigateToSignup,
+                    loginState = uiState,
+                    login = { email, password -> login(email, password) },
+                    onLoggedIn = onLoggedIn,
+                    navigateToSignup = navigateToSignup,
                 )
             }
         }
@@ -121,8 +150,9 @@ fun Logo(modifier: Modifier = Modifier) {
 fun LoginForm(
     modifier: Modifier = Modifier,
     loginState: LoginState,
-    onLogin: (email: String, password: String) -> Unit,
-    onSignup: () -> Unit,
+    login: (String, String) -> Unit,
+    onLoggedIn: () -> Unit,
+    navigateToSignup: () -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
     val focusManager = LocalFocusManager.current
@@ -207,7 +237,7 @@ fun LoginForm(
                 shape = MaterialTheme.shapes.small,
                 onClick = {
                     if (loginState != LoginState.Loading && loginState != LoginState.Success) {
-                        onLogin(email, password)
+                        login(email, password)
                     }
                 },
             ) {
@@ -224,6 +254,9 @@ fun LoginForm(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = stringResource(R.string.logged_in),
                         )
+                        LaunchedEffect(Unit) {
+                            onLoggedIn()
+                        }
                     }
 
                     else -> {
@@ -235,7 +268,7 @@ fun LoginForm(
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onSignup() },
+                    .clickable { navigateToSignup() },
                 text = buildAnnotatedString {
                     append(stringResource(R.string.don_t_have_an_account))
                     append(" ")

@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import xyz.dnieln7.justchatting.framework.extensions.getString
-import xyz.dnieln7.justchatting.ui.login.LoginScreen
+import xyz.dnieln7.justchatting.ui.login.LoginRoute
 import xyz.dnieln7.justchatting.ui.signup.SignupFinishScreen
 import xyz.dnieln7.justchatting.ui.signup.SignupState
 import xyz.dnieln7.justchatting.ui.signup.SignupStep1Screen
@@ -25,7 +25,10 @@ fun JustChattingNavHost(
         startDestination = startDestination
     ) {
         composable(route = LoginDestination.route) {
-            LoginScreen(navigateToSignup = { LoginDestination.navigateToSignup(navController) })
+            LoginRoute(
+                navigateToHome = { LoginDestination.navigateToContacts(navController) },
+                navigateToSignup = { LoginDestination.navigateToSignup(navController) },
+            )
         }
         composable(route = SignupStep1Destination.route) {
             SignupStep1Screen(
