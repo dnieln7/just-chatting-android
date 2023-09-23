@@ -8,4 +8,9 @@
     <string name="password">Password</string>
     <string name="login_to_your_account">Login to your account</string>
     <string name="welcome_back">Welcome Back</string>
+    <string name="username">Username</string>
+    <string name="empty_text_error">Cannot be empty</string>
+    <string name="email_not_valid_error">This is not an email</string>
+    <string name="password_length_error">Passwords must have at least 12 characters</string>
+    <string name="passwords_not_equal_error">Passwords are not equal</string>
 </resources>

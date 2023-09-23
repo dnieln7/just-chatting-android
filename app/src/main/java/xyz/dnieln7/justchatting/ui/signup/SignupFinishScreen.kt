@@ -16,6 +16,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -28,28 +29,35 @@ import xyz.dnieln7.justchatting.framework.extensions.isPortrait
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
-fun SignupFinishScreen(signupState: SignupState) {
+fun SignupFinishScreen(
+    uiState: SignupState.Register,
+    onRegistered: () -> Unit,
+    retry: () -> Unit,
+) {
     val modifier = Modifier
         .fillMaxWidth()
         .padding(20.dp)
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        when (signupState) {
-            SignupState.Loading -> {
+        when (uiState.registerStatus) {
+            RegisterStatus.Registering -> {
                 SignupLoading(modifier = modifier)
             }
 
-            SignupState.Success -> {
+            RegisterStatus.Registered -> {
                 SignupSuccess(modifier = modifier)
+                LaunchedEffect(Unit) {
+                    onRegistered()
+                }
             }
 
-            is SignupState.Error -> {
+            is RegisterStatus.Error -> {
                 SignupError(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
-                    error = signupState.message,
-                    retry = {}
+                    error = uiState.registerStatus.message,
+                    retry = retry
                 )
             }
         }
@@ -72,7 +80,7 @@ fun SignupLoading(modifier: Modifier = Modifier) {
         )
         VerticalSpacer(of = 48.dp)
         Text(
-            text = "Signing up, please wait...",
+            text = "Registering, please wait...",
             style = MaterialTheme.typography.titleLarge,
         )
     }
