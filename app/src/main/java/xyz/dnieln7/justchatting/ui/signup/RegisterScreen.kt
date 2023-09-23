@@ -3,7 +3,6 @@ package xyz.dnieln7.justchatting.ui.signup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,7 +12,6 @@ import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -29,7 +27,7 @@ import xyz.dnieln7.justchatting.framework.extensions.isPortrait
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
-fun SignupFinishScreen(
+fun RegisterScreen(
     uiState: SignupState.Register,
     onRegistered: () -> Unit,
     retry: () -> Unit,
@@ -38,34 +36,29 @@ fun SignupFinishScreen(
         .fillMaxWidth()
         .padding(20.dp)
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        when (uiState.registerStatus) {
-            RegisterStatus.Registering -> {
-                SignupLoading(modifier = modifier)
-            }
+    when (uiState.registerStatus) {
+        RegisterStatus.Registering -> RegisterLoading(modifier = modifier)
 
-            RegisterStatus.Registered -> {
-                SignupSuccess(modifier = modifier)
-                LaunchedEffect(Unit) {
-                    onRegistered()
-                }
-            }
-
-            is RegisterStatus.Error -> {
-                SignupError(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    error = uiState.registerStatus.message,
-                    retry = retry
-                )
+        RegisterStatus.Registered -> {
+            RegisterSuccess(modifier = modifier)
+            LaunchedEffect(Unit) {
+                onRegistered()
             }
         }
+
+        is RegisterStatus.Error -> RegisterError(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            error = uiState.registerStatus.message,
+            retry = retry
+        )
+
     }
 }
 
 @Composable
-fun SignupLoading(modifier: Modifier = Modifier) {
+fun RegisterLoading(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -87,7 +80,7 @@ fun SignupLoading(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SignupSuccess(modifier: Modifier = Modifier) {
+fun RegisterSuccess(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
@@ -108,7 +101,7 @@ fun SignupSuccess(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun SignupError(modifier: Modifier = Modifier, error: String, retry: () -> Unit) {
+fun RegisterError(modifier: Modifier = Modifier, error: String, retry: () -> Unit) {
     val isPortrait = LocalConfiguration.current.isPortrait()
 
     val paddingMultiplier = if (isPortrait) 4 else 1

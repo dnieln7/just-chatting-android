@@ -242,26 +242,17 @@ fun LoginForm(
                 },
             ) {
                 when (loginState) {
-                    LoginState.Loading -> {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(20.dp),
-                            strokeWidth = 2.dp
-                        )
-                    }
+                    LoginState.Loading -> CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        strokeWidth = 2.dp
+                    )
 
-                    LoginState.Success -> {
-                        Icon(
-                            imageVector = Icons.Outlined.Check,
-                            contentDescription = stringResource(R.string.logged_in),
-                        )
-                        LaunchedEffect(Unit) {
-                            onLoggedIn()
-                        }
-                    }
+                    LoginState.Success -> Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = stringResource(R.string.logged_in),
+                    )
 
-                    else -> {
-                        Text(stringResource(R.string.login))
-                    }
+                    else -> Text(stringResource(R.string.login))
                 }
             }
             VerticalSpacer(of = 12.dp)
@@ -283,6 +274,12 @@ fun LoginForm(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
             )
+        }
+    }
+
+    if (loginState == LoginState.Success) {
+        LaunchedEffect(Unit) {
+            onLoggedIn()
         }
     }
 }
