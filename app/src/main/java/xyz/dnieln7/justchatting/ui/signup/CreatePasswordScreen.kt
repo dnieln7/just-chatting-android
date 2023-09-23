@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +17,15 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.domain.validation.PasswordsValidationError
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
-import xyz.dnieln7.justchatting.ui.composable.PasswordOutlinedTextField
+import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
+import xyz.dnieln7.justchatting.ui.composable.JustChattingPasswordTextField
+import xyz.dnieln7.justchatting.ui.composable.PasswordAction
 import xyz.dnieln7.justchatting.ui.composable.StepperProgressIndicator
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
@@ -46,6 +48,7 @@ fun CreatePasswordScreen(
         PasswordsValidationError.NOT_EQUAL -> stringResource(R.string.passwords_not_equal_error)
         null -> null
     }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -65,28 +68,32 @@ fun CreatePasswordScreen(
             totalSteps = 2,
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
-        PasswordOutlinedTextField(
+        JustChattingPasswordTextField(
             modifier = Modifier.fillMaxWidth(),
             value = password,
             error = error,
             onValueChange = { password = it },
-            onNext = { focusManager.moveFocus(FocusDirection.Down) }
+            passwordAction = PasswordAction(
+                imeAction = ImeAction.Next,
+                action = { focusManager.moveFocus(FocusDirection.Down) }
+            ),
         )
         VerticalSpacer(of = (4 * paddingMultiplier).dp)
-        PasswordOutlinedTextField(
+        JustChattingPasswordTextField(
             modifier = Modifier.fillMaxWidth(),
             value = password2,
             onValueChange = { password2 = it },
             label = stringResource(R.string.confirm_password),
-            onDone = { focusManager.clearFocus() }
+            passwordAction = PasswordAction(
+                imeAction = ImeAction.Done,
+                action = { focusManager.clearFocus() }
+            ),
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
-        FilledTonalButton(
+        JustChattingButton(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
+            text = stringResource(R.string.create_password),
             onClick = { createPassword(password, password2) },
-        ) {
-            Text(stringResource(R.string.create_password))
-        }
+        )
     }
 }

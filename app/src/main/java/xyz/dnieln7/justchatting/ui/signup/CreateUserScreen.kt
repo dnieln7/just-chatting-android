@@ -6,9 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,6 +27,8 @@ import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.domain.validation.EmailValidationError
 import xyz.dnieln7.justchatting.domain.validation.UsernameValidationError
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
+import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
+import xyz.dnieln7.justchatting.ui.composable.JustChattingTextField
 import xyz.dnieln7.justchatting.ui.composable.StepperProgressIndicator
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
@@ -44,6 +44,17 @@ fun CreateUserScreen(
     var username by rememberSaveable { mutableStateOf("") }
 
     val paddingMultiplier = if (isPortrait) 4 else 1
+
+    val emailError = when (uiState.emailValidationError) {
+        EmailValidationError.EMPTY -> stringResource(R.string.empty_text_error)
+        EmailValidationError.NOT_AN_EMAIL -> stringResource(R.string.email_not_valid_error)
+        null -> null
+    }
+
+    val usernameError = when (uiState.usernameValidationError) {
+        UsernameValidationError.EMPTY -> stringResource(R.string.empty_text_error)
+        null -> null
+    }
 
     Column(
         modifier = Modifier
@@ -64,21 +75,12 @@ fun CreateUserScreen(
             totalSteps = 2,
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
-        OutlinedTextField(
+        JustChattingTextField(
             modifier = Modifier.fillMaxWidth(),
             value = email,
             onValueChange = { email = it },
-            label = { Text(stringResource(R.string.email)) },
-            isError = uiState.emailValidationError != null,
-            supportingText = {
-                val error = when (uiState.emailValidationError) {
-                    EmailValidationError.EMPTY -> stringResource(R.string.empty_text_error)
-                    EmailValidationError.NOT_AN_EMAIL -> stringResource(R.string.email_not_valid_error)
-                    null -> ""
-                }
-
-                Text(text = error)
-            },
+            label = stringResource(R.string.email),
+            error = emailError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next,
@@ -86,23 +88,14 @@ fun CreateUserScreen(
             keyboardActions = KeyboardActions(
                 onNext = { focusManager.moveFocus(FocusDirection.Down) }
             ),
-            shape = MaterialTheme.shapes.small,
         )
         VerticalSpacer(of = (4 * paddingMultiplier).dp)
-        OutlinedTextField(
+        JustChattingTextField(
             modifier = Modifier.fillMaxWidth(),
             value = username,
             onValueChange = { username = it },
-            label = { Text(stringResource(R.string.username)) },
-            isError = uiState.usernameValidationError != null,
-            supportingText = {
-                val error = when (uiState.usernameValidationError) {
-                    UsernameValidationError.EMPTY -> stringResource(R.string.empty_text_error)
-                    null -> ""
-                }
-
-                Text(text = error)
-            },
+            label = stringResource(R.string.username),
+            error = usernameError,
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Text,
                 imeAction = ImeAction.Done,
@@ -110,15 +103,12 @@ fun CreateUserScreen(
             keyboardActions = KeyboardActions(
                 onDone = { focusManager.clearFocus() }
             ),
-            shape = MaterialTheme.shapes.small,
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
-        FilledTonalButton(
+        JustChattingButton(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
+            text = stringResource(R.string.create_user),
             onClick = { createUser(email, username) },
-        ) {
-            Text(stringResource(R.string.create_user))
-        }
+        )
     }
 }

@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,10 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
+import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
@@ -73,7 +75,7 @@ fun RegisterLoading(modifier: Modifier = Modifier) {
         )
         VerticalSpacer(of = 48.dp)
         Text(
-            text = "Registering, please wait...",
+            text = stringResource(R.string.registering_please_wait),
             style = MaterialTheme.typography.titleLarge,
         )
     }
@@ -89,12 +91,12 @@ fun RegisterSuccess(modifier: Modifier = Modifier) {
         Image(
             modifier = Modifier.size(150.dp),
             imageVector = Icons.Outlined.CheckCircle,
-            contentDescription = "",
+            contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         VerticalSpacer(of = 48.dp)
         Text(
-            text = "Account created successfully!",
+            text = stringResource(R.string.account_created_successfully),
             style = MaterialTheme.typography.titleLarge,
         )
     }
@@ -115,12 +117,12 @@ fun RegisterError(modifier: Modifier = Modifier, error: String, retry: () -> Uni
         Image(
             modifier = Modifier.size(150.dp),
             imageVector = Icons.Outlined.ErrorOutline,
-            contentDescription = "",
+            contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
         Text(
-            text = "There was an error, please try again",
+            text = stringResource(R.string.generic_error),
             style = MaterialTheme.typography.titleLarge,
         )
         VerticalSpacer(of = 8.dp)
@@ -135,12 +137,10 @@ fun RegisterError(modifier: Modifier = Modifier, error: String, retry: () -> Uni
             overflow = TextOverflow.Ellipsis,
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
-        FilledTonalButton(
+        JustChattingButton(
             modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.small,
+            text = stringResource(R.string.retry),
             onClick = retry,
-        ) {
-            Text("Retry")
-        }
+        )
     }
 }

@@ -15,13 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -51,7 +45,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
-import xyz.dnieln7.justchatting.ui.composable.PasswordOutlinedTextField
+import xyz.dnieln7.justchatting.ui.composable.JustChattingNLSButton
+import xyz.dnieln7.justchatting.ui.composable.JustChattingPasswordTextField
+import xyz.dnieln7.justchatting.ui.composable.JustChattingTextField
+import xyz.dnieln7.justchatting.ui.composable.PasswordAction
 import xyz.dnieln7.justchatting.ui.composable.VerticalFlexibleSpacer
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
@@ -199,11 +196,11 @@ fun LoginForm(
                 style = MaterialTheme.typography.bodyMedium,
             )
             VerticalFlexibleSpacer()
-            OutlinedTextField(
+            JustChattingTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = email,
                 onValueChange = { email = it },
-                label = { Text(stringResource(R.string.email)) },
+                label = stringResource(R.string.email),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                     imeAction = ImeAction.Next,
@@ -211,14 +208,16 @@ fun LoginForm(
                 keyboardActions = KeyboardActions(
                     onNext = { focusManager.moveFocus(FocusDirection.Down) }
                 ),
-                shape = MaterialTheme.shapes.small,
             )
             VerticalSpacer(of = 4.dp)
-            PasswordOutlinedTextField(
+            JustChattingPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = password,
                 onValueChange = { password = it },
-                onDone = { focusManager.clearFocus() }
+                passwordAction = PasswordAction(
+                    imeAction = ImeAction.Done,
+                    action = { focusManager.clearFocus() }
+                ),
             )
             VerticalFlexibleSpacer()
             if (loginState is LoginState.Error) {
@@ -232,29 +231,13 @@ fun LoginForm(
                 )
                 VerticalSpacer(of = 12.dp)
             }
-            FilledTonalButton(
+            JustChattingNLSButton(
                 modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.small,
-                onClick = {
-                    if (loginState != LoginState.Loading && loginState != LoginState.Success) {
-                        login(email, password)
-                    }
-                },
-            ) {
-                when (loginState) {
-                    LoginState.Loading -> CircularProgressIndicator(
-                        modifier = Modifier.size(20.dp),
-                        strokeWidth = 2.dp
-                    )
-
-                    LoginState.Success -> Icon(
-                        imageVector = Icons.Outlined.Check,
-                        contentDescription = stringResource(R.string.logged_in),
-                    )
-
-                    else -> Text(stringResource(R.string.login))
-                }
-            }
+                noneText = stringResource(R.string.login),
+                successText = stringResource(R.string.logged_in),
+                nlsButtonStatus = loginState.toNLSStatus(),
+                onClick = { login(email, password) },
+            )
             VerticalSpacer(of = 12.dp)
             Text(
                 modifier = Modifier

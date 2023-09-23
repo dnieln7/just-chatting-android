@@ -1,6 +1,9 @@
 package xyz.dnieln7.justchatting.ui.composable
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -10,12 +13,14 @@ import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -27,22 +32,18 @@ import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
 
 @Composable
-fun PasswordOutlinedTextField(
+fun JustChattingPasswordTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String = stringResource(R.string.password),
     error: String? = null,
-    onDone: (KeyboardActionScope.() -> Unit)? = null,
-    onGo: (KeyboardActionScope.() -> Unit)? = null,
-    onNext: (KeyboardActionScope.() -> Unit)? = null,
+    passwordAction: PasswordAction? = null,
 ) {
     var showPassword by rememberSaveable { mutableStateOf(false) }
 
     val imeAction = when {
-        onDone != null -> ImeAction.Done
-        onGo != null -> ImeAction.Go
-        onNext != null -> ImeAction.Next
+        passwordAction?.imeAction != null -> passwordAction.imeAction
         else -> ImeAction.None
     }
 
@@ -57,27 +58,69 @@ fun PasswordOutlinedTextField(
             Icon(
                 modifier = Modifier.clickable { showPassword = !showPassword },
                 imageVector = if (showPassword) Icons.Rounded.VisibilityOff else Icons.Rounded.Visibility,
-                contentDescription = if (showPassword) "Hide password" else "Show password"
+                contentDescription = if (showPassword) stringResource(R.string.hide_password)
+                else stringResource(R.string.show_password)
             )
         },
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
             imeAction = imeAction,
         ),
-        keyboardActions = KeyboardActions(
-            onDone = onDone,
-            onGo = onGo,
-            onNext = onNext,
-        ),
+        keyboardActions = passwordAction?.buildKeyboardActions() ?: KeyboardActions.Default,
         visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
         shape = MaterialTheme.shapes.small,
     )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun OutlinedTextFieldPreview() {
     JustChattingTheme {
-        PasswordOutlinedTextField(value = "password", onValueChange = {})
+        Surface {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                JustChattingPasswordTextField(value = "password", onValueChange = {})
+            }
+        }
+    }
+}
+
+data class PasswordAction(
+    val imeAction: ImeAction,
+    val action: KeyboardActionScope.() -> Unit,
+) {
+    fun buildKeyboardActions(): KeyboardActions {
+        return when (imeAction) {
+            ImeAction.Go -> {
+                KeyboardActions(onGo = action)
+            }
+
+            ImeAction.Search -> {
+                KeyboardActions(onSearch = action)
+            }
+
+            ImeAction.Send -> {
+                KeyboardActions(onSend = action)
+            }
+
+            ImeAction.Previous -> {
+                KeyboardActions(onPrevious = action)
+            }
+
+            ImeAction.Next -> {
+                KeyboardActions(onNext = action)
+            }
+
+            ImeAction.Done -> {
+                KeyboardActions(onDone = action)
+            }
+
+            else -> {
+                KeyboardActions()
+            }
+        }
     }
 }

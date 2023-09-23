@@ -17,4 +17,10 @@
     <string name="next">Next</string>
     <string name="create_password">Create password</string>
     <string name="confirm_password">Confirm password</string>
+    <string name="generic_error">There was an error, please try again</string>
+    <string name="retry">Retry</string>
+    <string name="account_created_successfully">Account created successfully!</string>
+    <string name="registering_please_wait">Registering, please wait...</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
 </resources>
