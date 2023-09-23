@@ -30,6 +30,7 @@ fun JustChattingTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(label) },
+        isError = error != null,
         supportingText = if (error != null) ({ Text(error) }) else null,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
