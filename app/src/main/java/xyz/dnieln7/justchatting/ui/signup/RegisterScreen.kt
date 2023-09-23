@@ -30,7 +30,7 @@ import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
 fun RegisterScreen(
-    uiState: SignupState.Register,
+    registerState: SignupState.Register,
     onRegistered: () -> Unit,
     retry: () -> Unit,
 ) {
@@ -38,7 +38,7 @@ fun RegisterScreen(
         .fillMaxWidth()
         .padding(20.dp)
 
-    when (uiState.registerStatus) {
+    when (registerState.registerStatus) {
         RegisterStatus.Registering -> RegisterLoading(modifier = modifier)
 
         RegisterStatus.Registered -> {
@@ -52,7 +52,7 @@ fun RegisterScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
-            error = uiState.registerStatus.message,
+            error = registerState.registerStatus.message,
             retry = retry
         )
 

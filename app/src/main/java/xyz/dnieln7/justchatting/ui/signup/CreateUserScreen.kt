@@ -34,7 +34,7 @@ import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
 fun CreateUserScreen(
-    uiState: SignupState.CreateUser,
+    createUserState: SignupState.CreateUser,
     createUser: (email: String, username: String) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
@@ -45,13 +45,13 @@ fun CreateUserScreen(
 
     val paddingMultiplier = if (isPortrait) 4 else 1
 
-    val emailError = when (uiState.emailValidationError) {
+    val emailError = when (createUserState.emailValidationError) {
         EmailValidationError.EMPTY -> stringResource(R.string.empty_text_error)
         EmailValidationError.NOT_AN_EMAIL -> stringResource(R.string.email_not_valid_error)
         null -> null
     }
 
-    val usernameError = when (uiState.usernameValidationError) {
+    val usernameError = when (createUserState.usernameValidationError) {
         UsernameValidationError.EMPTY -> stringResource(R.string.empty_text_error)
         null -> null
     }

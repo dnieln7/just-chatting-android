@@ -1,4 +1,4 @@
-package xyz.dnieln7.justchatting.ui.navigation
+package xyz.dnieln7.justchatting
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier

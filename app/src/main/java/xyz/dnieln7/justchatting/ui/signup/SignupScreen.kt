@@ -35,17 +35,17 @@ fun SignupScreen(
     Surface(modifier = Modifier.fillMaxSize()) {
         when (uiState) {
             is SignupState.CreateUser -> CreateUserScreen(
-                uiState = uiState,
+                createUserState = uiState,
                 createUser = createUser,
             )
 
             is SignupState.CreatePassword -> CreatePasswordScreen(
-                uiState = uiState,
+                createPasswordState = uiState,
                 createPassword = createPassword,
             )
 
             is SignupState.Register -> RegisterScreen(
-                uiState = uiState,
+                registerState = uiState,
                 onRegistered = {},
                 retry = register,
             )

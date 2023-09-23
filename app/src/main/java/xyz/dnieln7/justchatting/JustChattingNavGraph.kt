@@ -1,6 +1,7 @@
-package xyz.dnieln7.justchatting.ui.navigation
+package xyz.dnieln7.justchatting
 
 import androidx.navigation.NavController
+import xyz.dnieln7.justchatting.ui.navigation.NavDestination
 
 object LoginDestination : NavDestination("just-chatting/login") {
 

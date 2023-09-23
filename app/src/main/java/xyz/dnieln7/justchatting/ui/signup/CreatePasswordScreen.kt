@@ -31,7 +31,7 @@ import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
 fun CreatePasswordScreen(
-    uiState: SignupState.CreatePassword,
+    createPasswordState: SignupState.CreatePassword,
     createPassword: (password: String, password2: String) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
@@ -42,7 +42,7 @@ fun CreatePasswordScreen(
 
     val paddingMultiplier = if (isPortrait) 4 else 1
 
-    val error = when (uiState.passwordError) {
+    val error = when (createPasswordState.passwordError) {
         PasswordsValidationError.EMPTY -> stringResource(R.string.empty_text_error)
         PasswordsValidationError.LENGTH_LESS_THAN_12 -> stringResource(R.string.password_length_error)
         PasswordsValidationError.NOT_EQUAL -> stringResource(R.string.passwords_not_equal_error)
