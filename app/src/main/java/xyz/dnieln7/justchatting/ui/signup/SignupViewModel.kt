@@ -11,56 +11,66 @@ import kotlinx.coroutines.launch
 import xyz.dnieln7.justchatting.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidatePasswordsUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidateUsernameUseCase
+import xyz.dnieln7.justchatting.ui.signup.createpassword.CreatePasswordState
+import xyz.dnieln7.justchatting.ui.signup.createuser.CreateUserState
+import xyz.dnieln7.justchatting.ui.signup.register.RegisterState
 
 class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) : ViewModel() {
+    private val _createUserState = MutableStateFlow<CreateUserState>(CreateUserState.None)
+    val createUserState get() = _createUserState.asStateFlow()
 
-    private val _state = MutableStateFlow<SignupState>(SignupState.CreateUser())
-    val state get() = _state.asStateFlow()
+    private val _createPasswordState = MutableStateFlow<CreatePasswordState>(
+        CreatePasswordState.None
+    )
+    val createPasswordState get() = _createPasswordState.asStateFlow()
+
+    private val _registerState = MutableStateFlow<RegisterState>(RegisterState.Loading)
+    val registerState get() = _registerState.asStateFlow()
 
     private lateinit var email: String
     private lateinit var username: String
     private lateinit var password: String
 
+    init {
+        println("class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) init")
+    }
+
     fun createUser(email: String, username: String) {
         viewModelScope.launch(dispatcher) {
-            delay(3000)
+            val emailError = ValidateEmailUseCase()(email).getOrNull()
+            val usernameError = ValidateUsernameUseCase()(username).getOrNull()
 
-            val emailValidationError = ValidateEmailUseCase()(email).getOrNull()
-            val usernameValidationError = ValidateUsernameUseCase()(username).getOrNull()
-
-            if (emailValidationError == null && usernameValidationError == null) {
+            if (emailError == null && usernameError == null) {
                 this@SignupViewModel.email = email
                 this@SignupViewModel.username = username
 
-                _state.emit(SignupState.CreatePassword())
+                _createUserState.emit(CreateUserState.Success)
             } else {
-                _state.emit(SignupState.CreateUser(emailValidationError, usernameValidationError))
+                _createUserState.emit(CreateUserState.Error(emailError, usernameError))
             }
         }
     }
 
     fun createPassword(password: String, password2: String) {
         viewModelScope.launch(dispatcher) {
-            delay(3000)
+            val passwordsError = ValidatePasswordsUseCase()(password, password2).getOrNull()
 
-            val passwordsValidationError =
-                ValidatePasswordsUseCase()(password, password2).getOrNull()
-
-            if (passwordsValidationError == null) {
+            if (passwordsError == null) {
                 this@SignupViewModel.password = password
 
-                _state.emit(SignupState.Register(RegisterStatus.Registering))
-                register()
+                _createPasswordState.emit(CreatePasswordState.Success)
             } else {
-                _state.emit(SignupState.CreatePassword(passwordsValidationError))
+                _createPasswordState.emit(CreatePasswordState.Error(passwordsError))
             }
         }
     }
 
     fun register() {
+        println("fun register() {-----------------------")
         viewModelScope.launch(dispatcher) {
+            _registerState.emit(RegisterState.Loading)
             delay(3000)
-            _state.emit(SignupState.Register(RegisterStatus.Registered))
+            _registerState.emit(RegisterState.Success)
         }
     }
 }

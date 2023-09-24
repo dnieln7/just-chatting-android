@@ -7,7 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import xyz.dnieln7.justchatting.ui.login.LoginRoute
-import xyz.dnieln7.justchatting.ui.signup.SignupRoute
+import xyz.dnieln7.justchatting.ui.signup.signupNavGraph
 
 @Composable
 fun JustChattingNavHost(
@@ -26,10 +26,10 @@ fun JustChattingNavHost(
                 navigateToSignup = { LoginDestination.navigateToSignup(navController) },
             )
         }
-        composable(route = SignupDestination.route) {
-            SignupRoute(
-                navigateToHome = { LoginDestination.navigateToContacts(navController) },
-            )
-        }
+        signupNavGraph(
+            navController = navController,
+            route = SignupDestination.route,
+            navigateToHome = { SignupDestination.navigateToContacts(navController) }
+        )
     }
 }

@@ -1,5 +1,6 @@
-package xyz.dnieln7.justchatting.ui.signup
+package xyz.dnieln7.justchatting.ui.signup.register
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,23 +15,67 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.CoroutineScope
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
 import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
+import xyz.dnieln7.justchatting.ui.signup.SignupViewModel
+
+@Composable
+fun launchSaveable(block: suspend CoroutineScope.() -> Unit): @Composable () -> Unit {
+    val (isWorking, setIsWorking) = rememberSaveable { mutableStateOf(false) }
+
+    if (!isWorking) {
+        LaunchedEffect(Unit) {
+            block()
+            setIsWorking(true)
+        }
+    }
+
+    return {
+        if (isWorking) {
+            LaunchedEffect(Unit) {
+                setIsWorking(false)
+            }
+        }
+    }
+}
+
+@Composable
+fun RegisterRoute(
+    signupViewModel: SignupViewModel = viewModel(viewModelStoreOwner = (LocalContext.current as ComponentActivity)),
+    navigateToHome: () -> Unit,
+) {
+    val uiState by signupViewModel.registerState.collectAsStateWithLifecycle()
+
+    launchSaveable { signupViewModel.register() }
+
+    RegisterScreen(
+        uiState = uiState,
+        onRegistered = { println("RegisterScreen_onRegistered") },
+        retry = signupViewModel::register,
+    )
+}
 
 @Composable
 fun RegisterScreen(
-    registerState: SignupState.Register,
+    uiState: RegisterState,
     onRegistered: () -> Unit,
     retry: () -> Unit,
 ) {
@@ -38,24 +83,23 @@ fun RegisterScreen(
         .fillMaxWidth()
         .padding(20.dp)
 
-    when (registerState.registerStatus) {
-        RegisterStatus.Registering -> RegisterLoading(modifier = modifier)
+    when (uiState) {
+        RegisterState.Loading -> RegisterLoading(modifier = modifier)
 
-        RegisterStatus.Registered -> {
+        RegisterState.Success -> {
             RegisterSuccess(modifier = modifier)
             LaunchedEffect(Unit) {
                 onRegistered()
             }
         }
 
-        is RegisterStatus.Error -> RegisterError(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            error = registerState.registerStatus.message,
-            retry = retry
-        )
-
+        is RegisterState.Error -> {
+            RegisterError(
+                modifier = modifier,
+                error = uiState.message,
+                retry = retry,
+            )
+        }
     }
 }
 
