@@ -31,10 +31,6 @@ class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.
     private lateinit var username: String
     private lateinit var password: String
 
-    init {
-        println("class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.IO) init")
-    }
-
     fun createUser(email: String, username: String) {
         viewModelScope.launch(dispatcher) {
             val emailError = ValidateEmailUseCase()(email).getOrNull()
@@ -48,6 +44,12 @@ class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.
             } else {
                 _createUserState.emit(CreateUserState.Error(emailError, usernameError))
             }
+        }
+    }
+
+    fun onUserCreated() {
+        viewModelScope.launch(dispatcher) {
+            _createUserState.emit(CreateUserState.None)
         }
     }
 
@@ -65,8 +67,13 @@ class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.
         }
     }
 
+    fun onPasswordCreated() {
+        viewModelScope.launch(dispatcher) {
+            _createPasswordState.emit(CreatePasswordState.None)
+        }
+    }
+
     fun register() {
-        println("fun register() {-----------------------")
         viewModelScope.launch(dispatcher) {
             _registerState.emit(RegisterState.Loading)
             delay(3000)

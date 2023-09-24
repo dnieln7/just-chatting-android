@@ -50,6 +50,7 @@ fun CreateUserRoute(
     if (uiState == CreateUserState.Success) {
         LaunchedEffect(Unit) {
             navigateToCreatePassword()
+            signupViewModel.onUserCreated()
         }
     } else {
         CreateUserScreen(

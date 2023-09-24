@@ -13,10 +13,6 @@ class LoginViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.I
     private val _state = MutableStateFlow<LoginState>(LoginState.None)
     val state get() = _state.asStateFlow()
 
-    init {
-        println("LoginViewModel init")
-    }
-
     fun login(email: String, password: String) {
         viewModelScope.launch(dispatcher) {
             _state.emit(LoginState.Loading)
@@ -29,11 +25,5 @@ class LoginViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.I
         viewModelScope.launch(dispatcher) {
             _state.emit(LoginState.None)
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-
-        println("LoginViewModel onCleared")
     }
 }

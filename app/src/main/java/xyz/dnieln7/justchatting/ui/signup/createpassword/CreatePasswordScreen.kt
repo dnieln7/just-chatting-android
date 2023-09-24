@@ -47,6 +47,7 @@ fun CreatePasswordRoute(
     if (uiState == CreatePasswordState.Success) {
         LaunchedEffect(Unit) {
             navigateToRegister()
+            signupViewModel.onPasswordCreated()
         }
     } else {
         CreatePasswordScreen(
