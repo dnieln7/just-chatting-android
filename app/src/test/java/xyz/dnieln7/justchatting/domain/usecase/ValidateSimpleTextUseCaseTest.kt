@@ -15,7 +15,7 @@ class ValidateSimpleTextUseCaseTest {
     }
 
     @Test
-    fun `GIVEN a non empty String WHEN invoke THEN return Unit`() {
+    fun `GIVEN the happy path String WHEN invoke THEN return Unit`() {
         val string = "STRING"
 
         val result = useCase(string).getOrNull()

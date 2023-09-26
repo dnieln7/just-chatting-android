@@ -33,7 +33,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
 import xyz.dnieln7.justchatting.framework.validation.stringFromEmailValidationError
-import xyz.dnieln7.justchatting.framework.validation.stringFromUsernameValidationError
+import xyz.dnieln7.justchatting.framework.validation.stringFromSimpleTextValidationError
 import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
 import xyz.dnieln7.justchatting.ui.composable.JustChattingTextField
 import xyz.dnieln7.justchatting.ui.composable.StepperProgressIndicator
@@ -113,7 +113,7 @@ fun CreateUserScreen(
                 value = username,
                 onValueChange = { username = it },
                 label = stringResource(R.string.username),
-                error = stringFromUsernameValidationError(uiState.asError()?.usernameError),
+                error = stringFromSimpleTextValidationError(uiState.asError()?.usernameError),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
                     imeAction = ImeAction.Done,

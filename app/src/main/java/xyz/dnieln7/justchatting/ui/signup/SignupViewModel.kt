@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import xyz.dnieln7.justchatting.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidatePasswordsUseCase
-import xyz.dnieln7.justchatting.domain.usecase.ValidateUsernameUseCase
+import xyz.dnieln7.justchatting.domain.usecase.ValidateSimpleTextUseCase
 import xyz.dnieln7.justchatting.ui.signup.createpassword.CreatePasswordState
 import xyz.dnieln7.justchatting.ui.signup.createuser.CreateUserState
 import xyz.dnieln7.justchatting.ui.signup.register.RegisterState
@@ -33,8 +33,8 @@ class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.
 
     fun createUser(email: String, username: String) {
         viewModelScope.launch(dispatcher) {
-            val emailError = ValidateEmailUseCase()(email).getOrNull()
-            val usernameError = ValidateUsernameUseCase()(username).getOrNull()
+            val emailError = ValidateEmailUseCase()(email).swap().getOrNull()
+            val usernameError = ValidateSimpleTextUseCase()(username).swap().getOrNull()
 
             if (emailError == null && usernameError == null) {
                 this@SignupViewModel.email = email
@@ -55,7 +55,7 @@ class SignupViewModel(private val dispatcher: CoroutineDispatcher = Dispatchers.
 
     fun createPassword(password: String, password2: String) {
         viewModelScope.launch(dispatcher) {
-            val passwordsError = ValidatePasswordsUseCase()(password, password2).getOrNull()
+            val passwordsError = ValidatePasswordsUseCase()(password, password2).swap().getOrNull()
 
             if (passwordsError == null) {
                 this@SignupViewModel.password = password

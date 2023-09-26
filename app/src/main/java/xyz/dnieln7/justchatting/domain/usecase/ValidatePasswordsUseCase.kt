@@ -10,22 +10,22 @@ class ValidatePasswordsUseCase {
     operator fun invoke(
         password: String,
         password2: String,
-    ): Either<Unit, PasswordsValidationError> {
+    ): Either<PasswordsValidationError, Unit> {
         return when {
             password.isBlank() -> {
-                PasswordsValidationError.EMPTY.right()
+                PasswordsValidationError.EMPTY.left()
             }
 
             password.length < 12 -> {
-                PasswordsValidationError.LENGTH_LESS_THAN_12.right()
+                PasswordsValidationError.LENGTH_LESS_THAN_12.left()
             }
 
             password != password2 -> {
-                PasswordsValidationError.NOT_EQUAL.right()
+                PasswordsValidationError.NOT_EQUAL.left()
             }
 
             else -> {
-                Unit.left()
+                Unit.right()
             }
         }
     }
