@@ -55,8 +55,8 @@ import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 @Composable
 fun LoginRoute(
     loginViewModel: LoginViewModel = viewModel(),
-    navigateToHome: () -> Unit,
     navigateToSignup: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val uiState by loginViewModel.state.collectAsStateWithLifecycle()
 

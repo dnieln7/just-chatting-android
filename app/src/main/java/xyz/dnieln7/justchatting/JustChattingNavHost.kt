@@ -1,11 +1,16 @@
 package xyz.dnieln7.justchatting
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import xyz.dnieln7.justchatting.ui.home.homeNavGraph
 import xyz.dnieln7.justchatting.ui.login.LoginRoute
 import xyz.dnieln7.justchatting.ui.signup.signupNavGraph
 
@@ -15,21 +20,33 @@ fun JustChattingNavHost(
     navController: NavHostController = rememberNavController(),
     startDestination: String,
 ) {
+    var rootDestination by rememberSaveable { mutableStateOf(startDestination) }
+
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = rootDestination
     ) {
         composable(route = LoginDestination.route) {
             LoginRoute(
-                navigateToHome = { LoginDestination.navigateToContacts(navController) },
                 navigateToSignup = { LoginDestination.navigateToSignup(navController) },
+                navigateToHome = {
+                    LoginDestination.navigateToHome(navController)
+                    rootDestination = HomeDestination.route
+                },
             )
         }
         signupNavGraph(
             navController = navController,
             route = SignupDestination.route,
-            navigateToHome = { SignupDestination.navigateToContacts(navController) }
+            navigateToHome = {
+                SignupDestination.navigateToHome(navController)
+                rootDestination = HomeDestination.route
+            }
+        )
+        homeNavGraph(
+            navController = navController,
+            route = HomeDestination.route,
         )
     }
 }

@@ -9,16 +9,16 @@ object LoginDestination : NavDestination("just-chatting/login") {
         navController.navigate(SignupDestination.route)
     }
 
-    fun navigateToContacts(navController: NavController) {
-        navController.navigate(ContactsDestination.route)
+    fun navigateToHome(navController: NavController) {
+        navController.navigate(HomeDestination.route)
     }
 }
 
 object SignupDestination : NavDestination("just-chatting/signup") {
 
-    fun navigateToContacts(navController: NavController) {
-        navController.navigate(ContactsDestination.route)
+    fun navigateToHome(navController: NavController) {
+        navController.navigate(HomeDestination.route)
     }
 }
 
-object ContactsDestination : NavDestination("just-chatting/contacts")
+object HomeDestination : NavDestination("just-chatting/home")
