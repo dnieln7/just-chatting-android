@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
@@ -39,7 +40,9 @@ fun JustChattingNLSButton(
                 )
 
                 NLSButtonStatus.LOADING -> CircularProgressIndicator(
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier
+                        .size(20.dp)
+                        .testTag(JC_NLS_BUTTON_L_TAG),
                     strokeWidth = 2.dp
                 )
 
@@ -74,3 +77,5 @@ enum class NLSButtonStatus {
     LOADING,
     SUCCESS,
 }
+
+const val JC_NLS_BUTTON_L_TAG = "JC_NLS_BUTTON_L_TAG"
