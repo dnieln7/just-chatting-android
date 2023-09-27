@@ -9,7 +9,7 @@ import org.junit.Rule
 import org.junit.Test
 import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
 
-class JustChattingProgressButtonTest {
+class JustChattingNLSButtonTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
