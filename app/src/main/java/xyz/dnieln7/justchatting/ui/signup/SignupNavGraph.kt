@@ -1,5 +1,7 @@
 package xyz.dnieln7.justchatting.ui.signup
 
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -16,19 +18,29 @@ fun NavGraphBuilder.signupNavGraph(
 ) {
     navigation(startDestination = CreateUserDestination.route, route = route) {
         composable(route = CreateUserDestination.route) {
+            val signupEntry = remember(it) { navController.getBackStackEntry(route) }
+
             CreateUserRoute(
+                signupViewModel = hiltViewModel(signupEntry),
                 navigateToCreatePassword = {
                     CreateUserDestination.navigateToCreatePassword(navController)
                 },
             )
         }
         composable(route = CreatePasswordDestination.route) {
+            val signupEntry = remember(it) { navController.getBackStackEntry(route) }
+
             CreatePasswordRoute(
+                signupViewModel = hiltViewModel(signupEntry),
                 navigateToRegister = { CreatePasswordDestination.navigateToRegister(navController) },
             )
         }
         composable(route = RegisterDestination.route) {
-            RegisterRoute(navigateToHome = navigateToHome)
+            val signupEntry = remember(it) { navController.getBackStackEntry(route) }
+            RegisterRoute(
+                signupViewModel = hiltViewModel(signupEntry),
+                navigateToHome = navigateToHome,
+            )
         }
     }
 }

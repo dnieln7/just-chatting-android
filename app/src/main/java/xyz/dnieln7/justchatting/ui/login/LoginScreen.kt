@@ -42,8 +42,8 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.ui.composable.JustChattingNLSButton
 import xyz.dnieln7.justchatting.ui.composable.JustChattingPasswordTextField
@@ -54,7 +54,7 @@ import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
 
 @Composable
 fun LoginRoute(
-    loginViewModel: LoginViewModel = viewModel(),
+    loginViewModel: LoginViewModel = hiltViewModel(),
     navigateToSignup: () -> Unit,
     navigateToHome: () -> Unit,
 ) {

@@ -4,8 +4,9 @@ import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
 import xyz.dnieln7.justchatting.domain.validation.PasswordsValidationError
+import javax.inject.Inject
 
-class ValidatePasswordsUseCase {
+class ValidatePasswordsUseCase @Inject constructor() {
 
     operator fun invoke(
         password: String,

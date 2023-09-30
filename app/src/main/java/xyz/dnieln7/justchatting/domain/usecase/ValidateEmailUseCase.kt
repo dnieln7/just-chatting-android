@@ -5,8 +5,9 @@ import arrow.core.left
 import arrow.core.right
 import xyz.dnieln7.justchatting.domain.validation.EmailValidationError
 import java.util.regex.Pattern
+import javax.inject.Inject
 
-class ValidateEmailUseCase {
+class ValidateEmailUseCase @Inject constructor() {
 
     operator fun invoke(email: String): Either<EmailValidationError, Unit> {
         return if (email.isBlank()) {

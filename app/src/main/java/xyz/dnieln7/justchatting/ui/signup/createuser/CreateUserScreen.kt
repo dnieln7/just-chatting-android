@@ -1,6 +1,5 @@
 package xyz.dnieln7.justchatting.ui.signup.createuser
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -29,7 +27,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
 import xyz.dnieln7.justchatting.framework.validation.stringFromEmailValidationError
@@ -42,7 +39,7 @@ import xyz.dnieln7.justchatting.ui.signup.SignupViewModel
 
 @Composable
 fun CreateUserRoute(
-    signupViewModel: SignupViewModel = viewModel(viewModelStoreOwner = (LocalContext.current as ComponentActivity)),
+    signupViewModel: SignupViewModel,
     navigateToCreatePassword: () -> Unit,
 ) {
     val uiState by signupViewModel.createUserState.collectAsStateWithLifecycle()

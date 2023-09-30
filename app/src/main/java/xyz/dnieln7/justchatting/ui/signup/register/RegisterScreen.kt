@@ -1,6 +1,5 @@
 package xyz.dnieln7.justchatting.ui.signup.register
 
-import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,13 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.framework.extensions.isPortrait
 import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
@@ -37,7 +34,7 @@ import xyz.dnieln7.justchatting.ui.signup.SignupViewModel
 
 @Composable
 fun RegisterRoute(
-    signupViewModel: SignupViewModel = viewModel(viewModelStoreOwner = (LocalContext.current as ComponentActivity)),
+    signupViewModel: SignupViewModel,
     navigateToHome: () -> Unit,
 ) {
     val uiState by signupViewModel.registerState.collectAsStateWithLifecycle()
