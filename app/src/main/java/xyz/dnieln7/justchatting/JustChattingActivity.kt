@@ -8,8 +8,10 @@ import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
 
 @AndroidEntryPoint
 class JustChattingActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             JustChattingTheme {
                 JustChattingNavHost(startDestination = LoginDestination.route)

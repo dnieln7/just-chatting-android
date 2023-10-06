@@ -1,4 +1,4 @@
-package xyz.dnieln7.justchatting.framework.extensions
+package xyz.dnieln7.justchatting.framework.extension
 
 import androidx.navigation.NavBackStackEntry
 

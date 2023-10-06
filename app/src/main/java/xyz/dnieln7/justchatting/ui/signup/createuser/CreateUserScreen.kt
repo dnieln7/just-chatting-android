@@ -28,7 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import xyz.dnieln7.justchatting.R
-import xyz.dnieln7.justchatting.framework.extensions.isPortrait
+import xyz.dnieln7.justchatting.framework.extension.isPortrait
 import xyz.dnieln7.justchatting.framework.validation.stringFromEmailValidationError
 import xyz.dnieln7.justchatting.framework.validation.stringFromSimpleTextValidationError
 import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
