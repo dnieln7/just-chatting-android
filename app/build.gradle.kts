@@ -83,6 +83,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-extended")
 
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
     implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
     implementation("io.arrow-kt:arrow-core")
 

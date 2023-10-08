@@ -13,13 +13,11 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher"
             android:supportsRtl="true"
-            android:theme="@style/Theme.JustChatting"
+            android:theme="@style/Theme.JustChatting.Starting"
             tools:targetApi="31">
         <activity
                 android:name=".JustChattingActivity"
-                android:exported="true"
-                android:label="@string/app_name"
-                android:theme="@style/Theme.JustChatting">
+                android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
