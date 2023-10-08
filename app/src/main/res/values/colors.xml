@@ -1,4 +1,4 @@
 <resources>
-    <color name="background">#FDFCFF</color>
-    <color name="brand">#0061A4</color>
+    <color name="md_theme_light_surface">#FDFCFF</color>
+    <color name="md_theme_dark_surface">#1A1C1E</color>
 </resources>
