@@ -6,6 +6,7 @@ import io.mockk.coEvery
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -51,20 +52,35 @@ class LoginUseCaseTest {
     }
 
     @Test
-    fun `GIVEN the unhappy path WHEN invoke THEN call the expected functions`() {
+    fun `GIVEN the happy path WHEN invoke THEN return the expected result`() {
+        val email = "email"
+        val password = "password"
+
+        val user = buildUser()
+
+        coEvery { authRepository.login(email, password) } returns user.right()
+
+        runTest(dispatcher) {
+            val result = useCase(email, password).getOrNull()
+
+            result shouldBeEqualTo Unit
+        }
+    }
+
+    @Test
+    fun `GIVEN the unhappy path WHEN invoke THEN return the expected result`() {
         val email = "email"
         val password = "password"
 
         val throwable = buildException()
 
         coEvery { authRepository.login(email, password) } returns throwable.left()
+        coEvery { getErrorFromThrowableUseCase(throwable) } returns throwable.localizedMessage!!
 
         runTest(dispatcher) {
-            useCase(email, password)
+            val result = useCase(email, password).swap().getOrNull()
 
-            coVerifyOnce {
-                getErrorFromThrowableUseCase(throwable)
-            }
+            result shouldBeEqualTo throwable.localizedMessage
         }
     }
 }
