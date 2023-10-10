@@ -4,11 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import xyz.dnieln7.justchatting.di.common.IO
+import xyz.dnieln7.justchatting.domain.usecase.SignupUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidatePasswordsUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidateSimpleTextUseCase
@@ -23,6 +23,7 @@ class SignupViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordsUseCase: ValidatePasswordsUseCase,
     private val validateSimpleTextUseCase: ValidateSimpleTextUseCase,
+    private val signupUseCase: SignupUseCase,
 ) : ViewModel() {
     private val _createUserState = MutableStateFlow<CreateUserState>(CreateUserState.None)
     val createUserState get() = _createUserState.asStateFlow()
@@ -84,8 +85,15 @@ class SignupViewModel @Inject constructor(
     fun register() {
         viewModelScope.launch(dispatcher) {
             _registerState.emit(RegisterState.Loading)
-            delay(3000)
-            _registerState.emit(RegisterState.Success)
+
+            signupUseCase(email, password, username).fold(
+                {
+                    _registerState.emit(RegisterState.Error(it))
+                },
+                {
+                    _registerState.emit(RegisterState.Success)
+                }
+            )
         }
     }
 }
