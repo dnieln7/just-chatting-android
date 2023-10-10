@@ -4,7 +4,9 @@ import app.cash.turbine.test
 import arrow.core.left
 import arrow.core.right
 import io.mockk.coEvery
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
@@ -13,6 +15,7 @@ import org.junit.Test
 import xyz.dnieln7.justchatting.domain.usecase.LoginUseCase
 import xyz.dnieln7.justchatting.mockk.relaxedMockk
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LoginViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
@@ -77,6 +80,8 @@ class LoginViewModelTest {
             viewModel.onLoggedIn()
 
             viewModel.state.test {
+                advanceUntilIdle()
+
                 awaitItem() shouldBeEqualTo LoginState.None
             }
         }
