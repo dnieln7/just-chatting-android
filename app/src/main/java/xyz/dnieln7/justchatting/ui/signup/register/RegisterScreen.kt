@@ -11,6 +11,7 @@ import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ErrorOutline
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -58,22 +59,24 @@ fun RegisterScreen(
         .fillMaxWidth()
         .padding(20.dp)
 
-    when (uiState) {
-        RegisterState.Loading -> RegisterLoading(modifier = modifier)
+    Surface {
+        when (uiState) {
+            RegisterState.Loading -> RegisterLoading(modifier = modifier)
 
-        RegisterState.Success -> {
-            RegisterSuccess(modifier = modifier)
-            LaunchedEffect(Unit) {
-                onRegistered()
+            RegisterState.Success -> {
+                RegisterSuccess(modifier = modifier)
+                LaunchedEffect(Unit) {
+                    onRegistered()
+                }
             }
-        }
 
-        is RegisterState.Error -> {
-            RegisterError(
-                modifier = modifier,
-                error = uiState.message,
-                retry = retry,
-            )
+            is RegisterState.Error -> {
+                RegisterError(
+                    modifier = modifier,
+                    error = uiState.message,
+                    retry = retry,
+                )
+            }
         }
     }
 }
