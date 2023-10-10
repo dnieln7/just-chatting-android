@@ -29,7 +29,7 @@ class LoginUseCaseTest {
 
     @Before
     fun setup() {
-        useCase = LoginUseCase(authRepository, preferencesProvider, getErrorFromThrowableUseCase)
+        useCase = LoginUseCase(preferencesProvider, authRepository, getErrorFromThrowableUseCase)
     }
 
     @Test

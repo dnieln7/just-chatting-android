@@ -7,8 +7,8 @@ import xyz.dnieln7.justchatting.domain.repository.AuthRepository
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(
-    private val authRepository: AuthRepository,
     private val preferencesProvider: PreferencesProvider,
+    private val authRepository: AuthRepository,
     private val getErrorFromThrowableUseCase: GetErrorFromThrowableUseCase,
 ) {
 
