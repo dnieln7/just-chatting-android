@@ -39,9 +39,9 @@ class LoginViewModelTest {
         coEvery { loginUseCase(email, password) } returns Unit.right()
 
         runTest(dispatcher) {
-            viewModel.state.test {
-                viewModel.login(email, password)
+            viewModel.login(email, password)
 
+            viewModel.state.test {
                 awaitItem() shouldBeEqualTo LoginState.None
                 awaitItem() shouldBeEqualTo LoginState.Loading
                 awaitItem() shouldBeEqualTo LoginState.Success
@@ -58,9 +58,9 @@ class LoginViewModelTest {
         coEvery { loginUseCase(email, password) } returns error.left()
 
         runTest(dispatcher) {
-            viewModel.state.test {
-                viewModel.login(email, password)
+            viewModel.login(email, password)
 
+            viewModel.state.test {
                 awaitItem() shouldBeEqualTo LoginState.None
                 awaitItem() shouldBeEqualTo LoginState.Loading
                 awaitItem().let {
@@ -74,9 +74,9 @@ class LoginViewModelTest {
     @Test
     fun `GIVEN the happy path WHEN onLoggedIn THEN emit the expected states`() {
         runTest(dispatcher) {
-            viewModel.state.test {
-                viewModel.onLoggedIn()
+            viewModel.onLoggedIn()
 
+            viewModel.state.test {
                 awaitItem() shouldBeEqualTo LoginState.None
             }
         }
