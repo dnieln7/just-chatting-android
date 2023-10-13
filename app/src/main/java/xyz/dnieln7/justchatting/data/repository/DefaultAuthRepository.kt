@@ -3,6 +3,7 @@ package xyz.dnieln7.justchatting.data.repository
 import arrow.core.Either
 import xyz.dnieln7.justchatting.data.mapper.toDomain
 import xyz.dnieln7.justchatting.data.server.JustChattingApiService
+import xyz.dnieln7.justchatting.data.server.model.EmailAvailabilitySvModel
 import xyz.dnieln7.justchatting.data.server.model.LoginSvModel
 import xyz.dnieln7.justchatting.data.server.model.SignupSvModel
 import xyz.dnieln7.justchatting.domain.model.User
@@ -26,5 +27,11 @@ class DefaultAuthRepository(
         val signupSvModel = SignupSvModel(email, password, username)
 
         return Either.catch { justChattingApiService.signup(signupSvModel).toDomain() }
+    }
+
+    override suspend fun getEmailAvailability(email: String): Either<Throwable, Unit> {
+        val emailAvailabilitySvModel = EmailAvailabilitySvModel(email)
+
+        return Either.catch { justChattingApiService.getEmailAvailability(emailAvailabilitySvModel) }
     }
 }

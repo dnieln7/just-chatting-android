@@ -25,13 +25,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.justchatting.R
 import xyz.dnieln7.justchatting.framework.extension.isPortrait
 import xyz.dnieln7.justchatting.framework.validation.stringFromEmailValidationError
 import xyz.dnieln7.justchatting.framework.validation.stringFromSimpleTextValidationError
-import xyz.dnieln7.justchatting.ui.composable.JustChattingButton
+import xyz.dnieln7.justchatting.ui.composable.JustChattingNLSButton
 import xyz.dnieln7.justchatting.ui.composable.JustChattingTextField
 import xyz.dnieln7.justchatting.ui.composable.StepperProgressIndicator
 import xyz.dnieln7.justchatting.ui.composable.VerticalSpacer
@@ -39,7 +41,7 @@ import xyz.dnieln7.justchatting.ui.signup.SignupViewModel
 
 @Composable
 fun CreateUserRoute(
-    signupViewModel: SignupViewModel,
+    signupViewModel: SignupViewModel = viewModel(),
     navigateToCreatePassword: () -> Unit,
 ) {
     val uiState by signupViewModel.createUserState.collectAsStateWithLifecycle()
@@ -119,11 +121,24 @@ fun CreateUserScreen(
                     onDone = { focusManager.clearFocus() }
                 ),
             )
+            if (uiState is CreateUserState.Error && uiState.error != null) {
+                VerticalSpacer(of = 12.dp)
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = uiState.error,
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error),
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                VerticalSpacer(of = 12.dp)
+            }
             VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingButton(
+            JustChattingNLSButton(
                 modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.create_user),
+                noneText = stringResource(R.string.create_user),
                 onClick = { createUser(email, username) },
+                nlsButtonStatus = uiState.toNLSStatus(),
             )
         }
     }

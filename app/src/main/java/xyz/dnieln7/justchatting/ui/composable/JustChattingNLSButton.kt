@@ -21,7 +21,7 @@ import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
 fun JustChattingNLSButton(
     modifier: Modifier = Modifier,
     noneText: String,
-    successText: String,
+    successText: String? = null,
     nlsButtonStatus: NLSButtonStatus,
     onClick: () -> Unit,
 ) {
@@ -64,7 +64,7 @@ fun JustChattingNLSButtonPreview() {
                 JustChattingNLSButton(
                     noneText = "JustChattingNLSButton",
                     successText = "Success",
-                    nlsButtonStatus = NLSButtonStatus.NONE,
+                    nlsButtonStatus = NLSButtonStatus.SUCCESS,
                     onClick = {},
                 )
             }

@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import xyz.dnieln7.justchatting.di.common.IO
+import xyz.dnieln7.justchatting.domain.usecase.GetEmailAvailabilityUserCase
 import xyz.dnieln7.justchatting.domain.usecase.SignupUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.justchatting.domain.usecase.ValidatePasswordsUseCase
@@ -23,6 +24,7 @@ class SignupViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordsUseCase: ValidatePasswordsUseCase,
     private val validateSimpleTextUseCase: ValidateSimpleTextUseCase,
+    private val getEmailAvailabilityUserCase: GetEmailAvailabilityUserCase,
     private val signupUseCase: SignupUseCase,
 ) : ViewModel() {
     private val _createUserState = MutableStateFlow<CreateUserState>(CreateUserState.None)
@@ -42,16 +44,27 @@ class SignupViewModel @Inject constructor(
 
     fun createUser(email: String, username: String) {
         viewModelScope.launch(dispatcher) {
+            _createUserState.emit(CreateUserState.Loading)
+
             val emailError = validateEmailUseCase(email).swap().getOrNull()
             val usernameError = validateSimpleTextUseCase(username).swap().getOrNull()
 
             if (emailError == null && usernameError == null) {
-                this@SignupViewModel.email = email
-                this@SignupViewModel.username = username
+                getEmailAvailabilityUserCase(email).fold(
+                    {
+                        _createUserState.emit(CreateUserState.Error(error = it))
+                    },
+                    {
+                        this@SignupViewModel.email = email
+                        this@SignupViewModel.username = username
 
-                _createUserState.emit(CreateUserState.Success)
+                        _createUserState.emit(CreateUserState.Success)
+                    }
+                )
             } else {
-                _createUserState.emit(CreateUserState.Error(emailError, usernameError))
+                _createUserState.emit(
+                    CreateUserState.Error(emailError = emailError, usernameError = usernameError)
+                )
             }
         }
     }

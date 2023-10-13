@@ -20,8 +20,9 @@
     <string name="generic_error">There was an error, please try again</string>
     <string name="retry">Retry</string>
     <string name="account_created_successfully">Account created successfully!</string>
-    <string name="registering_please_wait">Registering, please wait...</string>
+    <string name="registering_please_wait">Registering, please wait…</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="email_not_available">This email is already registered</string>
 </resources>
