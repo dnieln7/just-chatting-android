@@ -3,14 +3,12 @@ import java.io.FileInputStream
 import java.util.Properties
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.dagger.hilt.android)
 }
-
-
 
 android {
     namespace = "xyz.dnieln7.justchatting"
@@ -72,50 +70,46 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation(platform("androidx.compose:compose-bom:2023.09.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(platform(libs.io.arrow.kt.arrow.stack))
+    implementation(libs.io.arrow.kt.arrow.core)
 
-    implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
-    implementation("io.arrow-kt:arrow-core")
+    kapt(libs.com.google.dagger.hilt.android.compiler)
+    implementation(libs.com.google.dagger.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    ksp(libs.com.squareup.moshi.kotlin.codegen)
+    implementation(libs.com.squareup.moshi)
+    implementation(libs.com.squareup.retrofit2.converter.moshi)
+    implementation(libs.com.squareup.okhttp3.logging.interceptor)
 
-    implementation("androidx.navigation:navigation-compose:2.7.2")
+    implementation(libs.androidx.datastore.preferences)
 
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-    implementation("com.google.dagger:hilt-android:2.44")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
-    implementation("com.squareup.moshi:moshi:1.15.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
-
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.09.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.amshove.kluent:kluent-android:1.73")
-    testImplementation("io.mockk:mockk:1.13.8")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("app.cash.turbine:turbine:1.0.0")
-
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
+    testImplementation(libs.io.mockk)
+    testImplementation(libs.app.cash.turbine)
+    testImplementation(libs.org.amshove.kluent.android)
 }
 
 fun ApplicationDefaultConfig.setBuildConfigFields() {
