@@ -10,14 +10,13 @@ plugins {
     alias(libs.plugins.com.google.dagger.hilt.android)
 }
 
+apply<ApplicationDefaultConfigPlugin>()
+
 android {
     namespace = "xyz.dnieln7.justchatting"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "xyz.dnieln7.justchatting"
-        minSdk = 26
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
