@@ -8,9 +8,9 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Test
-import xyz.dnieln7.justchatting.domain.usecase.GetUserUserCase
-import xyz.dnieln7.justchatting.fake.buildUser
-import xyz.dnieln7.justchatting.mockk.relaxedMockk
+import xyz.dnieln7.domain.usecase.GetUserUserCase
+import xyz.dnieln7.testing.fake.buildUser
+import xyz.dnieln7.testing.relaxedMockk
 
 class JustChattingViewModelTest {
 

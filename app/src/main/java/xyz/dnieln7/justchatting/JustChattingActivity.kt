@@ -13,7 +13,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JustChattingTheme
 
 @AndroidEntryPoint
 class JustChattingActivity : ComponentActivity() {

@@ -11,6 +11,10 @@ class LibraryDefaultConfigPlugin : Plugin<Project> {
             defaultConfig {
                 minSdk = MIN_SDK
             }
+
+            buildFeatures {
+                buildConfig = true
+            }
         }
     }
 }

@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import xyz.dnieln7.justchatting.ui.home.homeNavGraph
-import xyz.dnieln7.justchatting.ui.login.LoginRoute
-import xyz.dnieln7.justchatting.ui.signup.signupNavGraph
+import xyz.dnieln7.login.screen.LoginRoute
+import xyz.dnieln7.signup.navigation.signupNavHost
 
 @Composable
 fun JustChattingNavHost(
@@ -36,7 +36,7 @@ fun JustChattingNavHost(
                 },
             )
         }
-        signupNavGraph(
+        signupNavHost(
             navController = navController,
             route = SignupDestination.route,
             navigateToHome = {

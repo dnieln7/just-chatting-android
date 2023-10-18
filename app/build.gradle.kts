@@ -1,7 +1,4 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
-import java.io.FileInputStream
-import java.util.Properties
-
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -21,8 +18,6 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        setBuildConfigFields()
 
         vectorDrawables {
             useSupportLibrary = true
@@ -90,36 +85,27 @@ dependencies {
     implementation(libs.com.google.dagger.hilt.android)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    ksp(libs.com.squareup.moshi.kotlin.codegen)
-    implementation(libs.com.squareup.moshi)
-    implementation(libs.com.squareup.retrofit2.converter.moshi)
-    implementation(libs.com.squareup.okhttp3.logging.interceptor)
-
-    implementation(libs.androidx.datastore.preferences)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
 
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
     testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
     testImplementation(libs.io.mockk)
     testImplementation(libs.app.cash.turbine)
     testImplementation(libs.org.amshove.kluent.android)
-}
 
-fun ApplicationDefaultConfig.setBuildConfigFields() {
-    val localProperties = Properties()
-    localProperties.load(FileInputStream(rootProject.file("local.properties")))
-
-    val justChattingUrl = (localProperties["JUST_CHATTING_URL"] as String?) ?: ""
-
-    buildConfigField(
-        type = "String",
-        name = "JUST_CHATTING_URL",
-        value = "\"$justChattingUrl\""
-    )
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":framework"))
+    implementation(project(":common:composable"))
+    implementation(project(":common:coroutines"))
+    implementation(project(":common:navigation"))
+    implementation(project(":common:testing"))
+    implementation(project(":features:login"))
+    implementation(project(":features:signup"))
 }

@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import xyz.dnieln7.justchatting.ui.home.contacts.ContactsRoute
-import xyz.dnieln7.justchatting.ui.navigation.NavDestination
+import xyz.dnieln7.navigation.NavDestination
 
 fun NavGraphBuilder.homeNavGraph(
     navController: NavController,

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="show_password">Show password</string>
+    <string name="hide_password">Hide password</string>
+    <string name="password">Password</string>
+    <string name="empty_text_error">Cannot be empty</string>
+    <string name="email_not_valid_error">This is not an email</string>
+    <string name="password_length_error">Passwords must have at least 12 characters</string>
+    <string name="passwords_not_equal_error">Passwords are not equal</string>
+</resources>
