@@ -12,6 +12,11 @@ class LibraryDefaultConfigPlugin : Plugin<Project> {
                 minSdk = MIN_SDK
             }
 
+            compileOptions {
+                sourceCompatibility = javaVersion
+                targetCompatibility = javaVersion
+            }
+
             buildFeatures {
                 buildConfig = true
             }

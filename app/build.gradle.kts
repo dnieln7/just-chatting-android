@@ -7,7 +7,7 @@ plugins {
     alias(libs.plugins.com.google.dagger.hilt.android)
 }
 
-apply<ApplicationDefaultConfigPlugin>()
+apply<ApplicationComposeConfigPlugin>()
 
 android {
     namespace = "xyz.dnieln7.justchatting"
@@ -34,30 +34,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "META-INF/LICENSE.md"
-            excludes += "META-INF/LICENSE-notice.md"
-        }
+        jvmTarget = javaVersion.toString()
     }
 
     kapt {

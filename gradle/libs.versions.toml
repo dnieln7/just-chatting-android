@@ -1,6 +1,6 @@
 [versions]
 androidx-activity-compose = "1.8.0"
-gradle = "8.1.1"
+gradle = "8.1.2"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
 hilt = "2.44"
@@ -37,6 +37,7 @@ com-google-dagger-hilt-android = { id = "com.google.dagger.hilt.android", versio
 
 [libraries]
 com-android-tools-build-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "gradle" }
+org-jetbrains-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "core-splashscreen" }

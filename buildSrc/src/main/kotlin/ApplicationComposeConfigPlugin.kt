@@ -1,15 +1,18 @@
+import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.withType
 
 @Suppress("UnstableApiUsage")
-class LibraryComposeConfigPlugin : Plugin<Project> {
+class ApplicationComposeConfigPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        project.withLibraryExtension {
+        project.withApplicationExtension {
             compileSdk = TARGET_SDK
 
             defaultConfig {
                 minSdk = MIN_SDK
+                targetSdk = TARGET_SDK
             }
 
             compileOptions {
@@ -24,6 +27,12 @@ class LibraryComposeConfigPlugin : Plugin<Project> {
 
             composeOptions {
                 kotlinCompilerExtensionVersion = KOTLIN_COMPILER_EXTENSION_VERSION
+            }
+
+            packaging {
+                resources {
+                    excludes.addAll(excludedResources)
+                }
             }
         }
     }
