@@ -1,6 +1,5 @@
 package xyz.dnieln7.login.screen
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import xyz.dnieln7.composable.button.JustChattingNLSButton
+import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalFlexibleSpacer
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.textfield.JustChattingPasswordTextField
@@ -78,7 +78,7 @@ fun LoginScreen(
     onLoggedIn: () -> Unit,
     navigateToSignup: () -> Unit,
 ) {
-    val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
+    val isPortrait = LocalConfiguration.current.isPortrait()
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -151,7 +151,7 @@ fun LoginForm(
     onLoggedIn: () -> Unit,
     navigateToSignup: () -> Unit,
 ) {
-    val isPortrait = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
+    val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
 
     var email by rememberSaveable { mutableStateOf("") }
