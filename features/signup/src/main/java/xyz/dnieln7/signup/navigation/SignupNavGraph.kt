@@ -3,6 +3,8 @@ package xyz.dnieln7.signup.navigation
 import androidx.navigation.NavController
 import xyz.dnieln7.navigation.NavDestination
 
+object SignupDestination : NavDestination("just-chatting/signup")
+
 object CreateUserDestination : NavDestination("just-chatting/signup/create-user") {
 
     fun navigateToCreatePassword(navController: NavController) {

@@ -12,12 +12,13 @@ import xyz.dnieln7.signup.screen.register.RegisterRoute
 
 fun NavGraphBuilder.signupNavHost(
     navController: NavController,
-    route: String,
     navigateToHome: () -> Unit,
 ) {
-    navigation(startDestination = CreateUserDestination.route, route = route) {
+    navigation(startDestination = CreateUserDestination.route, route = SignupDestination.route) {
         composable(route = CreateUserDestination.route) {
-            val signupEntry = remember(it) { navController.getBackStackEntry(route) }
+            val signupEntry = remember(it) {
+                navController.getBackStackEntry(SignupDestination.route)
+            }
 
             CreateUserRoute(
                 signupViewModel = hiltViewModel(signupEntry),
@@ -27,7 +28,9 @@ fun NavGraphBuilder.signupNavHost(
             )
         }
         composable(route = CreatePasswordDestination.route) {
-            val signupEntry = remember(it) { navController.getBackStackEntry(route) }
+            val signupEntry = remember(it) {
+                navController.getBackStackEntry(SignupDestination.route)
+            }
 
             CreatePasswordRoute(
                 signupViewModel = hiltViewModel(signupEntry),
@@ -35,7 +38,10 @@ fun NavGraphBuilder.signupNavHost(
             )
         }
         composable(route = RegisterDestination.route) {
-            val signupEntry = remember(it) { navController.getBackStackEntry(route) }
+            val signupEntry = remember(it) {
+                navController.getBackStackEntry(SignupDestination.route)
+            }
+
             RegisterRoute(
                 signupViewModel = hiltViewModel(signupEntry),
                 navigateToHome = navigateToHome,

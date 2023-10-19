@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import xyz.dnieln7.composable.theme.JustChattingTheme
 import xyz.dnieln7.justchatting.navigation.HomeDestination
 import xyz.dnieln7.justchatting.navigation.JustChattingNavHost
-import xyz.dnieln7.justchatting.navigation.LoginDestination
+import xyz.dnieln7.login.navigation.LoginDestination
 
 @AndroidEntryPoint
 class JustChattingActivity : ComponentActivity() {

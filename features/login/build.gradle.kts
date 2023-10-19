@@ -66,6 +66,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":common:composable"))
     implementation(project(":common:coroutines"))
+    implementation(project(":common:navigation"))
 
     testImplementation(project(":common:testing"))
 }
