@@ -1,4 +1,4 @@
-package xyz.dnieln7.justchatting.ui.home.contacts
+package xyz.dnieln7.contacts.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

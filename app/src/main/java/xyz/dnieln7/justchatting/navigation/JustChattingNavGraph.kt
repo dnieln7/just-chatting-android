@@ -1,4 +1,4 @@
-package xyz.dnieln7.justchatting
+package xyz.dnieln7.justchatting.navigation
 
 import androidx.navigation.NavController
 import xyz.dnieln7.navigation.NavDestination

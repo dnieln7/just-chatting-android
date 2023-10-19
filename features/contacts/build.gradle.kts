@@ -1,27 +1,18 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
-    alias(libs.plugins.com.google.devtools.ksp)
-    alias(libs.plugins.com.google.dagger.hilt.android)
 }
 
-apply<ApplicationComposeConfigPlugin>()
+apply<LibraryComposeConfigPlugin>()
 
 android {
-    namespace = "xyz.dnieln7.justchatting"
+    namespace = "xyz.dnieln7.contacts"
 
     defaultConfig {
-        applicationId = "xyz.dnieln7.justchatting"
-        versionCode = 1
-        versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -37,18 +28,11 @@ android {
     kotlinOptions {
         jvmTarget = javaVersion.toString()
     }
-
-    kapt {
-        correctErrorTypes = true
-    }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
 
     implementation(platform(libs.androidx.compose.bom))
@@ -80,13 +64,8 @@ dependencies {
     testImplementation(libs.org.amshove.kluent.android)
 
     implementation(project(":domain"))
-    implementation(project(":data"))
-    implementation(project(":framework"))
-    implementation(project(":common:composable"))
     implementation(project(":common:coroutines"))
     implementation(project(":common:navigation"))
-    implementation(project(":common:testing"))
-    implementation(project(":features:login"))
-    implementation(project(":features:signup"))
-    implementation(project(":features:contacts"))
+
+    testImplementation(project(":common:testing"))
 }

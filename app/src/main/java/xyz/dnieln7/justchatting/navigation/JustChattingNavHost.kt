@@ -1,4 +1,4 @@
-package xyz.dnieln7.justchatting
+package xyz.dnieln7.justchatting.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -10,7 +10,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import xyz.dnieln7.justchatting.ui.home.homeNavGraph
 import xyz.dnieln7.login.screen.LoginRoute
 import xyz.dnieln7.signup.navigation.signupNavHost
 
@@ -44,7 +43,7 @@ fun JustChattingNavHost(
                 rootDestination = HomeDestination.route
             }
         )
-        homeNavGraph(
+        homeNavHost(
             navController = navController,
             route = HomeDestination.route,
         )
