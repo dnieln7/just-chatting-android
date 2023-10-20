@@ -3,6 +3,7 @@ package xyz.dnieln7.domain.usecase
 import arrow.core.left
 import arrow.core.right
 import io.mockk.coEvery
+import io.mockk.every
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -75,7 +76,7 @@ class LoginUseCaseTest {
         val throwable = buildException()
 
         coEvery { authRepository.login(email, password) } returns throwable.left()
-        coEvery { getErrorFromThrowableUseCase(throwable) } returns throwable.localizedMessage!!
+        every { getErrorFromThrowableUseCase(throwable) } returns throwable.localizedMessage!!
 
         runTest(dispatcher) {
             val result = useCase(email, password).swap().getOrNull()
