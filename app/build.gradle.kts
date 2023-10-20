@@ -88,5 +88,5 @@ dependencies {
     implementation(project(":common:testing"))
     implementation(project(":features:login"))
     implementation(project(":features:signup"))
-    implementation(project(":features:contacts"))
+    implementation(project(":features:friendships"))
 }

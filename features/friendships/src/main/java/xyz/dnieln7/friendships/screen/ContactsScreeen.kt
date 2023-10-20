@@ -1,4 +1,4 @@
-package xyz.dnieln7.contacts.screen
+package xyz.dnieln7.friendships.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -10,15 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-fun ContactsRoute() {
-    ContactsScreen()
+fun FriendshipsRoute() {
+    FriendshipsScreen()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ContactsScreen() {
+fun FriendshipsScreen() {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Contacts") }) }
+        topBar = { TopAppBar(title = { Text("Friendships") }) }
     ) {
         Column(modifier = Modifier.padding(it)) {
 

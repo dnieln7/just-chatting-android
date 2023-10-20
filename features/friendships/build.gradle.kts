@@ -8,7 +8,7 @@ plugins {
 apply<LibraryComposeConfigPlugin>()
 
 android {
-    namespace = "xyz.dnieln7.contacts"
+    namespace = "xyz.dnieln7.friendships"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
