@@ -20,6 +20,12 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments["room.schemaLocation"] = "$projectDir/schemas"
+            }
+        }
     }
 
     buildTypes {
@@ -52,15 +58,23 @@ dependencies {
     implementation(libs.com.squareup.retrofit2.converter.moshi)
     implementation(libs.com.squareup.okhttp3.logging.interceptor)
 
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.runtime)
+
     implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)
 
+    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
+    testImplementation(libs.io.mockk)
     testImplementation(libs.org.amshove.kluent.android)
 
     implementation(project(":domain"))
+
+    testImplementation(project(":common:testing"))
 }
 
 fun setBuildConfigFields(libraryDefaultConfig: LibraryDefaultConfig) {
