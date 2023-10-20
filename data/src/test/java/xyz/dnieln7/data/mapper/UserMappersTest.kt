@@ -7,7 +7,7 @@ import xyz.dnieln7.data.server.model.UserSvModel
 class UserMappersTest {
 
     @Test
-    fun `GIVEN the happy path WHEN toDomain THEN return the expected result`() {
+    fun `GIVEN a UserSvModel WHEN toDomain THEN return the expected result`() {
         val userSvModel = UserSvModel("id", "email", "username", "2023-09-09T20:05:48.363565Z", "2023-09-09T20:05:48.363565Z")
 
         val result = userSvModel.toDomain()
