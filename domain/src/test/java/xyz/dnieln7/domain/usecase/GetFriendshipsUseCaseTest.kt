@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldContainAll
+import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.Before
 import org.junit.Test
@@ -53,7 +53,7 @@ class GetFriendshipsUseCaseTest {
             val result = useCase().getOrNull()
 
             result.shouldNotBeNull()
-            result shouldContainAll friendships
+            result shouldContainSame friendships
         }
     }
 
