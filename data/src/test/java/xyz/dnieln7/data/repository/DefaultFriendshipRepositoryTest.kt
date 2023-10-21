@@ -1,18 +1,26 @@
 package xyz.dnieln7.data.repository
 
 import io.mockk.coEvery
+import io.mockk.every
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldContainAll
+import org.amshove.kluent.shouldBeInstanceOf
+import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.Before
 import org.junit.Test
+import retrofit2.HttpException
+import retrofit2.Response
 import xyz.dnieln7.data.database.dao.FriendshipDao
+import xyz.dnieln7.data.exception.FriendshipDuplicatedException
 import xyz.dnieln7.data.mapper.toDbModel
 import xyz.dnieln7.data.server.JustChattingApiService
 import xyz.dnieln7.data.server.model.FriendshipSvModel
+import xyz.dnieln7.data.server.model.SendFriendshipRequestSvModel
+import xyz.dnieln7.domain.provider.ResourceProvider
 import xyz.dnieln7.testing.coVerifyOnce
 import xyz.dnieln7.testing.fake.buildException
 import xyz.dnieln7.testing.fake.buildFriendships
@@ -26,12 +34,31 @@ class DefaultFriendshipRepositoryTest {
 
     private val justChattingApiService = relaxedMockk<JustChattingApiService>()
     private val friendshipDao = relaxedMockk<FriendshipDao>()
+    private val resourceProvider = relaxedMockk<ResourceProvider>()
 
     private lateinit var repository: DefaultFriendshipRepository
 
     @Before
     fun setup() {
-        repository = DefaultFriendshipRepository(justChattingApiService, friendshipDao)
+        repository = DefaultFriendshipRepository(justChattingApiService, friendshipDao, resourceProvider)
+    }
+
+    @Test
+    fun `GIVEN a 409 code WHEN sendFriendshipRequest THEN return the expected result`() {
+        val userID = "userID"
+        val friendID = "friendID"
+        val error = "friendship duplicated"
+        val throwable = HttpException(Response.error<Void>(409, "".toResponseBody()))
+
+        coEvery { justChattingApiService.sendFriendshipRequest(SendFriendshipRequestSvModel(userID, friendID)) } throws throwable
+        every { resourceProvider.getString(any()) } returns error
+
+        runTest(dispatcher) {
+            val result = repository.sendFriendshipRequest(userID, friendID).swap().getOrNull()
+
+            result shouldBeInstanceOf FriendshipDuplicatedException::class
+            result?.message shouldBeEqualTo error
+        }
     }
 
     @Test
@@ -67,7 +94,7 @@ class DefaultFriendshipRepositoryTest {
             val result = repository.getFriendships(user.id).getOrNull()
 
             result.shouldNotBeNull()
-            result shouldContainAll friendships
+            result shouldContainSame friendships
         }
     }
 

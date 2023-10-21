@@ -31,7 +31,8 @@ object RepositoryModule {
     fun provideFriendshipRepository(
         justChattingApiService: JustChattingApiService,
         friendshipDao: FriendshipDao,
+        resourceProvider: ResourceProvider,
     ): FriendshipRepository {
-        return DefaultFriendshipRepository(justChattingApiService, friendshipDao)
+        return DefaultFriendshipRepository(justChattingApiService, friendshipDao, resourceProvider)
     }
 }

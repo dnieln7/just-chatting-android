@@ -12,6 +12,14 @@ fun FriendshipSvModel.toDbModel(): FriendshipDbModel {
     )
 }
 
+fun FriendshipSvModel.toDomain(): Friendship {
+    return Friendship(
+        id = id,
+        email = email,
+        username = username,
+    )
+}
+
 fun FriendshipDbModel.toDomain(): Friendship {
     return Friendship(
         id = id,
