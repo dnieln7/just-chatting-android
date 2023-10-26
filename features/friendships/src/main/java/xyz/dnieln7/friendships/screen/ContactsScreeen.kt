@@ -8,20 +8,17 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-
-@Composable
-fun FriendshipsRoute() {
-    FriendshipsScreen()
-}
+import androidx.compose.ui.res.stringResource
+import xyz.dnieln7.friendships.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendshipsScreen() {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Friendships") }) }
+        topBar = { TopAppBar(title = { Text(stringResource(R.string.friendships)) }) }
     ) {
         Column(modifier = Modifier.padding(it)) {
-
+            Text(text = "Friendships")
         }
     }
 }

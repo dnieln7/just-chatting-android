@@ -89,4 +89,5 @@ dependencies {
     implementation(project(":features:login"))
     implementation(project(":features:signup"))
     implementation(project(":features:friendships"))
+    implementation(project(":features:chats"))
 }
