@@ -24,6 +24,9 @@ interface JustChattingApiService {
     @POST("email/availability")
     suspend fun getEmailAvailability(@Body body: EmailAvailabilitySvModel)
 
+    @GET("users/{email}")
+    suspend fun getUserByEmail(@Path("email") email: String): UserSvModel
+
     @POST("friendships")
     suspend fun sendFriendshipRequest(@Body body: SendFriendshipRequestSvModel)
 

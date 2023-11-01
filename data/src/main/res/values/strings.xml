@@ -2,4 +2,5 @@
 <resources>
     <string name="email_not_available">This email is already registered</string>
     <string name="friendship_request_duplicated">The friendship request is already created with a status of pending or accepted</string>
+    <string name="user_not_found">User not found, is the email correct?</string>
 </resources>
