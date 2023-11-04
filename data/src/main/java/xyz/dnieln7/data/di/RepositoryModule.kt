@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import xyz.dnieln7.data.database.dao.FriendshipDao
 import xyz.dnieln7.data.repository.DefaultAuthRepository
 import xyz.dnieln7.data.repository.DefaultFriendshipRepository
 import xyz.dnieln7.data.repository.DefaultUserRepository
@@ -32,10 +31,9 @@ object RepositoryModule {
     @Singleton
     fun provideFriendshipRepository(
         justChattingApiService: JustChattingApiService,
-        friendshipDao: FriendshipDao,
         resourceProvider: ResourceProvider,
     ): FriendshipRepository {
-        return DefaultFriendshipRepository(justChattingApiService, friendshipDao, resourceProvider)
+        return DefaultFriendshipRepository(justChattingApiService, resourceProvider)
     }
 
     @Provides

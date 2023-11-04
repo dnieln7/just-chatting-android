@@ -3,7 +3,6 @@ package xyz.dnieln7.data.repository
 import arrow.core.Either
 import retrofit2.HttpException
 import xyz.dnieln7.data.R
-import xyz.dnieln7.data.database.dao.FriendshipDao
 import xyz.dnieln7.data.exception.FriendshipDuplicatedException
 import xyz.dnieln7.data.mapper.toDomain
 import xyz.dnieln7.data.server.JustChattingApiService
@@ -16,7 +15,6 @@ import xyz.dnieln7.domain.repository.FriendshipRepository
 
 class DefaultFriendshipRepository(
     private val justChattingApiService: JustChattingApiService,
-    private val friendshipDao: FriendshipDao,
     private val resourceProvider: ResourceProvider,
 ) : FriendshipRepository {
 

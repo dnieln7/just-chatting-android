@@ -14,9 +14,7 @@ import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
-import xyz.dnieln7.data.database.dao.FriendshipDao
 import xyz.dnieln7.data.exception.FriendshipDuplicatedException
-import xyz.dnieln7.data.mapper.toDbModel
 import xyz.dnieln7.data.server.JustChattingApiService
 import xyz.dnieln7.data.server.model.FriendshipSvModel
 import xyz.dnieln7.data.server.model.SendFriendshipRequestSvModel
@@ -32,14 +30,13 @@ class DefaultFriendshipRepositoryTest {
     private val dispatcher = UnconfinedTestDispatcher()
 
     private val justChattingApiService = relaxedMockk<JustChattingApiService>()
-    private val friendshipDao = relaxedMockk<FriendshipDao>()
     private val resourceProvider = relaxedMockk<ResourceProvider>()
 
     private lateinit var repository: DefaultFriendshipRepository
 
     @Before
     fun setup() {
-        repository = DefaultFriendshipRepository(justChattingApiService, friendshipDao, resourceProvider)
+        repository = DefaultFriendshipRepository(justChattingApiService, resourceProvider)
     }
 
     @Test
@@ -65,10 +62,8 @@ class DefaultFriendshipRepositoryTest {
         val user = buildUser()
         val friendships = buildFriendships()
         val friendshipSvModels = friendships.map { FriendshipSvModel(it.id, it.email, it.username) }
-        val friendshipBdModels = friendshipSvModels.map { it.toDbModel() }
 
         coEvery { justChattingApiService.getFriendships(user.id) } returns friendshipSvModels
-        coEvery { friendshipDao.getFriendships() } returns friendshipBdModels
 
         runTest(dispatcher) {
             val result = repository.getFriendships(user.id).getOrNull()
