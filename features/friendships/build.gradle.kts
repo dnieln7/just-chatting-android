@@ -64,6 +64,7 @@ dependencies {
     testImplementation(libs.org.amshove.kluent.android)
 
     implementation(project(":domain"))
+    implementation(project(":common:composable"))
     implementation(project(":common:coroutines"))
     implementation(project(":common:navigation"))
 
