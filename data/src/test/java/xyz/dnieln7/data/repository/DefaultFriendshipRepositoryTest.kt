@@ -21,7 +21,6 @@ import xyz.dnieln7.data.server.JustChattingApiService
 import xyz.dnieln7.data.server.model.FriendshipSvModel
 import xyz.dnieln7.data.server.model.SendFriendshipRequestSvModel
 import xyz.dnieln7.domain.provider.ResourceProvider
-import xyz.dnieln7.testing.coVerifyOnce
 import xyz.dnieln7.testing.fake.buildException
 import xyz.dnieln7.testing.fake.buildFriendships
 import xyz.dnieln7.testing.fake.buildUser
@@ -62,25 +61,6 @@ class DefaultFriendshipRepositoryTest {
     }
 
     @Test
-    fun `GIVEN the happy path WHEN getFriendships THEN call the expected functions`() {
-        val user = buildUser()
-        val friendships = buildFriendships()
-        val friendshipSvModels = friendships.map { FriendshipSvModel(it.id, it.email, it.username) }
-        val friendshipBdModels = friendshipSvModels.map { it.toDbModel() }
-
-        coEvery { justChattingApiService.getFriendships(user.id) } returns friendshipSvModels
-        coEvery { friendshipDao.getFriendships() } returns friendshipBdModels
-
-        runTest(dispatcher) {
-            repository.getFriendships(user.id)
-
-            coVerifyOnce {
-                friendshipDao.insertFriendships(friendshipBdModels)
-            }
-        }
-    }
-
-    @Test
     fun `GIVEN the happy path WHEN getFriendships THEN return the expected result`() {
         val user = buildUser()
         val friendships = buildFriendships()
@@ -104,41 +84,6 @@ class DefaultFriendshipRepositoryTest {
         val throwable = buildException()
 
         coEvery { justChattingApiService.getFriendships(user.id) } throws throwable
-
-        runTest(dispatcher) {
-            val result = repository.getFriendships(user.id).swap().getOrNull()
-
-            result shouldBeEqualTo throwable
-        }
-    }
-
-    @Test
-    fun `GIVEN a Throwable from friendshipDao_insertFriendships WHEN getFriendships THEN return the expected result`() {
-        val user = buildUser()
-        val throwable = buildException()
-        val friendships = buildFriendships()
-        val friendshipSvModels = friendships.map { FriendshipSvModel(it.id, it.email, it.username) }
-        val friendshipBdModels = friendshipSvModels.map { it.toDbModel() }
-
-        coEvery { justChattingApiService.getFriendships(user.id) } returns friendshipSvModels
-        coEvery { friendshipDao.insertFriendships(friendshipBdModels) } throws throwable
-
-        runTest(dispatcher) {
-            val result = repository.getFriendships(user.id).swap().getOrNull()
-
-            result shouldBeEqualTo throwable
-        }
-    }
-
-    @Test
-    fun `GIVEN a Throwable from friendshipDao_getFriendships WHEN getFriendships THEN return the expected result`() {
-        val user = buildUser()
-        val throwable = buildException()
-        val friendships = buildFriendships()
-        val friendshipSvModels = friendships.map { FriendshipSvModel(it.id, it.email, it.username) }
-
-        coEvery { justChattingApiService.getFriendships(user.id) } returns friendshipSvModels
-        coEvery { friendshipDao.getFriendships() } throws throwable
 
         runTest(dispatcher) {
             val result = repository.getFriendships(user.id).swap().getOrNull()

@@ -1,12 +1,10 @@
 package xyz.dnieln7.data.repository
 
 import arrow.core.Either
-import arrow.core.left
 import retrofit2.HttpException
 import xyz.dnieln7.data.R
 import xyz.dnieln7.data.database.dao.FriendshipDao
 import xyz.dnieln7.data.exception.FriendshipDuplicatedException
-import xyz.dnieln7.data.mapper.toDbModel
 import xyz.dnieln7.data.mapper.toDomain
 import xyz.dnieln7.data.server.JustChattingApiService
 import xyz.dnieln7.data.server.extension.isConflict
@@ -59,18 +57,7 @@ class DefaultFriendshipRepository(
     }
 
     override suspend fun getFriendships(userID: String): Either<Throwable, List<Friendship>> {
-        return Either.catch {
-            val result = justChattingApiService.getFriendships(userID).map { it.toDbModel() }
-
-            friendshipDao.insertFriendships(result)
-        }.fold(
-            {
-                it.left()
-            },
-            {
-                Either.catch { friendshipDao.getFriendships().map { it.toDomain() } }
-            }
-        )
+        return Either.catch { justChattingApiService.getFriendships(userID).map { it.toDomain() } }
     }
 
     override suspend fun deleteFriendship(
