@@ -103,3 +103,9 @@ ij_kotlin_wrap_first_method_in_call_chain = false
 
 [{**/test/**.kt, **/androidTest/**.kt}]
 max_line_length = 200
+
+[{features/**/test/**.kt, features/**/androidTest/**.kt}]
+max_line_length = 200
+
+[{common/**/test/**.kt, common/**/androidTest/**.kt}]
+max_line_length = 200
