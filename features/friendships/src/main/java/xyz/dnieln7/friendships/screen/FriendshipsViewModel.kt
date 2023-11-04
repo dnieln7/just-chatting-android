@@ -34,11 +34,12 @@ class FriendshipsViewModel @Inject constructor(
             _state.emit(FriendshipsState.Loading)
 
             getFriendshipsUseCase().fold(
-                { error ->
-                    _state.emit(FriendshipsState.Error(error))
+                {
+                    _state.emit(FriendshipsState.Error(it))
                 },
                 { friendships ->
                     statefulFriendships = friendships.map { StatefulFriendship(data = it) }
+
                     _state.emit(FriendshipsState.Success(statefulFriendships))
                 }
             )

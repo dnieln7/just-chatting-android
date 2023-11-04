@@ -7,6 +7,7 @@ import io.mockk.coEvery
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldContainSame
@@ -87,8 +88,7 @@ class FriendshipsViewModelTest {
     @Test
     fun `GIVEN the happy path WHEN deleteFriendship THEN emit the expected states`() {
         val friendships = buildFriendships()
-        val index = 0
-        val friendship = friendships[index]
+        val friendship = friendships.first()
 
         coEvery { getFriendshipsUseCase() } returns friendships.right()
         coEvery { deleteFriendshipUseCase(friendship.id) } returns Unit.right()
@@ -100,13 +100,41 @@ class FriendshipsViewModelTest {
 
             viewModel.state.test {
                 skipItems(1)
-                awaitItem().let {
-                    it shouldBeInstanceOf FriendshipsState.Success::class
-                    (it as FriendshipsState.Success).data[index].isLoading.shouldBeTrue()
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf FriendshipsState.Success::class
+                    (state as FriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeTrue()
                 }
                 awaitItem().let {
                     it shouldBeInstanceOf FriendshipsState.Success::class
                     (it as FriendshipsState.Success).data shouldNotContain friendship
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the unhappy path WHEN deleteFriendship THEN emit the expected states`() {
+        val friendships = buildFriendships()
+        val friendship = friendships.first()
+        val error = "Error"
+
+        coEvery { getFriendshipsUseCase() } returns friendships.right()
+        coEvery { deleteFriendshipUseCase(friendship.id) } returns error.left()
+
+        viewModel = FriendshipsViewModel(dispatcher, getFriendshipsUseCase, deleteFriendshipUseCase)
+
+        runTest(dispatcher) {
+            viewModel.deleteFriendship(friendship)
+
+            viewModel.state.test {
+                skipItems(1)
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf FriendshipsState.Success::class
+                    (state as FriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeTrue()
+                }
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf FriendshipsState.Success::class
+                    (state as FriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeFalse()
                 }
             }
         }
