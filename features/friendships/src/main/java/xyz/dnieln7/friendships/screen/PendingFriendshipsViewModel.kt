@@ -25,6 +25,8 @@ class PendingFriendshipsViewModel @Inject constructor(
     private val _state = MutableStateFlow<PendingFriendshipsState>(PendingFriendshipsState.Loading)
     val state get() = _state.asStateFlow()
 
+    private var statefulFriendships = emptyList<StatefulPendingFriendship>()
+
     init {
         getPendingFriendships()
     }
@@ -38,7 +40,8 @@ class PendingFriendshipsViewModel @Inject constructor(
                     _state.emit(PendingFriendshipsState.Error(it))
                 },
                 { friendships ->
-                    _state.emit(PendingFriendshipsState.Success(friendships))
+                    statefulFriendships = friendships.map { StatefulPendingFriendship(data = it) }
+                    _state.emit(PendingFriendshipsState.Success(statefulFriendships))
                 }
             )
         }
@@ -46,13 +49,71 @@ class PendingFriendshipsViewModel @Inject constructor(
 
     fun acceptFriendship(friendship: Friendship) {
         viewModelScope.launch(dispatcher) {
-            acceptFriendshipRequestUseCase(friendship.id)
+            statefulFriendships = statefulFriendships.map {
+                if (it.data.id == friendship.id) {
+                    it.copy(isLoading = true)
+                } else {
+                    it
+                }
+            }
+
+            _state.emit(PendingFriendshipsState.Success(statefulFriendships))
+
+            acceptFriendshipRequestUseCase(friendship.id).fold(
+                {
+                    statefulFriendships = statefulFriendships.map {
+                        if (it.data.id == friendship.id) {
+                            it.copy(isLoading = false)
+                        } else {
+                            it
+                        }
+                    }
+
+                    _state.emit(PendingFriendshipsState.Success(statefulFriendships))
+                },
+                {
+                    statefulFriendships = statefulFriendships.filterNot {
+                        it.data.id == friendship.id
+                    }
+
+                    _state.emit(PendingFriendshipsState.Success(statefulFriendships))
+                }
+            )
         }
     }
 
     fun rejectFriendship(friendship: Friendship) {
         viewModelScope.launch(dispatcher) {
-            deleteFriendshipUseCase(friendship.id)
+            statefulFriendships = statefulFriendships.map {
+                if (it.data.id == friendship.id) {
+                    it.copy(isLoading = true)
+                } else {
+                    it
+                }
+            }
+
+            _state.emit(PendingFriendshipsState.Success(statefulFriendships))
+
+            deleteFriendshipUseCase(friendship.id).fold(
+                {
+                    statefulFriendships = statefulFriendships.map {
+                        if (it.data.id == friendship.id) {
+                            it.copy(isLoading = false)
+                        } else {
+                            it
+                        }
+                    }
+
+                    _state.emit(PendingFriendshipsState.Success(statefulFriendships))
+                },
+                {
+                    statefulFriendships = statefulFriendships.filterNot {
+                        it.data.id == friendship.id
+                    }
+
+                    _state.emit(PendingFriendshipsState.Success(statefulFriendships))
+                }
+            )
         }
     }
 }

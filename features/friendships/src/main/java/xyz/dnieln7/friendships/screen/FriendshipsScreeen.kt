@@ -200,11 +200,11 @@ fun PendingFriendships(
 
         is PendingFriendshipsState.Success -> JustChattingPullRefresh(onRefresh = getPendingFriendships) {
             LazyColumn {
-                items(items = pendingFriendshipsState.data, key = { it.id }) {
+                items(items = pendingFriendshipsState.data, key = { it.data.id }) {
                     PendingFriendshipListTile(
                         friendship = it,
-                        onAccept = { acceptFriendship(it) },
-                        onReject = { rejectFriendship(it) },
+                        onAccept = acceptFriendship,
+                        onReject = rejectFriendship,
                     )
                 }
             }

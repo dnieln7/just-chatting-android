@@ -7,8 +7,11 @@ import io.mockk.coEvery
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeInstanceOf
+import org.amshove.kluent.shouldBeTrue
 import org.amshove.kluent.shouldContainSame
+import org.amshove.kluent.shouldNotContain
 import org.junit.Test
 import xyz.dnieln7.domain.usecase.AcceptFriendshipRequestUseCase
 import xyz.dnieln7.domain.usecase.DeleteFriendshipUseCase
@@ -28,6 +31,7 @@ class PendingFriendshipsViewModelTest {
     @Test
     fun `GIVEN the happy path WHEN init THEN emit the expected states`() {
         val friendships = buildFriendships()
+        val statefulFriendships = friendships.map { StatefulPendingFriendship(data = it) }
 
         coEvery { getPendingFriendshipsUseCase() } returns friendships.right()
 
@@ -43,7 +47,7 @@ class PendingFriendshipsViewModelTest {
                 awaitItem() shouldBeEqualTo PendingFriendshipsState.Loading
                 awaitItem().let {
                     it shouldBeInstanceOf PendingFriendshipsState.Success::class
-                    (it as PendingFriendshipsState.Success).data shouldContainSame friendships
+                    (it as PendingFriendshipsState.Success).data shouldContainSame statefulFriendships
                 }
             }
         }
@@ -93,6 +97,116 @@ class PendingFriendshipsViewModelTest {
                 skipItems(1)
                 awaitItem() shouldBeEqualTo PendingFriendshipsState.Loading
                 awaitItem() shouldBeInstanceOf PendingFriendshipsState.Success::class
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the happy path WHEN acceptFriendship THEN emit the expected states`() {
+        val friendships = buildFriendships()
+        val friendship = friendships.first()
+
+        coEvery { getPendingFriendshipsUseCase() } returns friendships.right()
+        coEvery { acceptFriendshipRequestUseCase(friendship.id) } returns Unit.right()
+
+        viewModel = PendingFriendshipsViewModel(dispatcher, getPendingFriendshipsUseCase, acceptFriendshipRequestUseCase, deleteFriendshipUseCase)
+
+        runTest(dispatcher) {
+            viewModel.acceptFriendship(friendship)
+
+            viewModel.state.test {
+                skipItems(1)
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (state as PendingFriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeTrue()
+                }
+                awaitItem().let {
+                    it shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (it as PendingFriendshipsState.Success).data shouldNotContain friendship
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the unhappy path WHEN acceptFriendship THEN emit the expected states`() {
+        val friendships = buildFriendships()
+        val friendship = friendships.first()
+        val error = "Error"
+
+        coEvery { getPendingFriendshipsUseCase() } returns friendships.right()
+        coEvery { acceptFriendshipRequestUseCase(friendship.id) } returns error.left()
+
+        viewModel = PendingFriendshipsViewModel(dispatcher, getPendingFriendshipsUseCase, acceptFriendshipRequestUseCase, deleteFriendshipUseCase)
+
+        runTest(dispatcher) {
+            viewModel.acceptFriendship(friendship)
+
+            viewModel.state.test {
+                skipItems(1)
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (state as PendingFriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeTrue()
+                }
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (state as PendingFriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeFalse()
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the happy path WHEN rejectFriendship THEN emit the expected states`() {
+        val friendships = buildFriendships()
+        val friendship = friendships.first()
+
+        coEvery { getPendingFriendshipsUseCase() } returns friendships.right()
+        coEvery { deleteFriendshipUseCase(friendship.id) } returns Unit.right()
+
+        viewModel = PendingFriendshipsViewModel(dispatcher, getPendingFriendshipsUseCase, acceptFriendshipRequestUseCase, deleteFriendshipUseCase)
+
+        runTest(dispatcher) {
+            viewModel.rejectFriendship(friendship)
+
+            viewModel.state.test {
+                skipItems(1)
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (state as PendingFriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeTrue()
+                }
+                awaitItem().let {
+                    it shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (it as PendingFriendshipsState.Success).data shouldNotContain friendship
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the unhappy path WHEN rejectFriendship THEN emit the expected states`() {
+        val friendships = buildFriendships()
+        val friendship = friendships.first()
+        val error = "Error"
+
+        coEvery { getPendingFriendshipsUseCase() } returns friendships.right()
+        coEvery { deleteFriendshipUseCase(friendship.id) } returns error.left()
+
+        viewModel = PendingFriendshipsViewModel(dispatcher, getPendingFriendshipsUseCase, acceptFriendshipRequestUseCase, deleteFriendshipUseCase)
+
+        runTest(dispatcher) {
+            viewModel.rejectFriendship(friendship)
+
+            viewModel.state.test {
+                skipItems(1)
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (state as PendingFriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeTrue()
+                }
+                awaitItem().let { state ->
+                    state shouldBeInstanceOf PendingFriendshipsState.Success::class
+                    (state as PendingFriendshipsState.Success).data.find { it.data.id == friendship.id }!!.isLoading.shouldBeFalse()
+                }
             }
         }
     }
