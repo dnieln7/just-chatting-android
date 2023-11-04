@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PersonRemove
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,6 +22,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,13 +34,14 @@ import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.theme.JustChattingTheme
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.friendships.R
+import xyz.dnieln7.friendships.screen.StatefulFriendship
 
 @Composable
 fun FriendshipListTile(
     modifier: Modifier = Modifier,
-    friendship: Friendship,
+    friendship: StatefulFriendship,
     onClick: () -> Unit,
-    onDelete: () -> Unit,
+    onDelete: (Friendship) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -64,21 +67,25 @@ fun FriendshipListTile(
         HorizontalSpacer(of = 12.dp)
         Column {
             Text(
-                text = friendship.username,
+                text = friendship.data.username,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             )
             VerticalSpacer(of = 4.dp)
             Text(
-                text = friendship.email,
+                text = friendship.data.email,
                 style = MaterialTheme.typography.titleMedium,
             )
         }
         HorizontalFlexibleSpacer()
-        JustChattingIconButton(
-            icon = Icons.Rounded.PersonRemove,
-            contentDescription = stringResource(R.string.unfriend),
-            onClick = onDelete
-        )
+        if (friendship.isLoading) {
+            CircularProgressIndicator(strokeCap = StrokeCap.Round)
+        } else {
+            JustChattingIconButton(
+                icon = Icons.Rounded.PersonRemove,
+                contentDescription = stringResource(R.string.unfriend),
+                onClick = { onDelete(friendship.data) }
+            )
+        }
     }
 }
 
@@ -94,7 +101,10 @@ fun FriendshipListTilePreview() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                FriendshipListTile(friendship = friendship, onClick = {}, onDelete = {})
+                FriendshipListTile(
+                    friendship = StatefulFriendship(isLoading = true, data = friendship),
+                    onClick = {},
+                    onDelete = {})
             }
         }
     }

@@ -5,10 +5,10 @@ import xyz.dnieln7.domain.model.Friendship
 sealed class FriendshipsState {
     object Loading : FriendshipsState()
     class Error(val message: String) : FriendshipsState()
-    class Success(val data: List<Friendship>) : FriendshipsState()
+    class Success(val data: List<StatefulFriendship>) : FriendshipsState()
 }
 
-sealed class StatefulFriendship {
-    object Loading : StatefulFriendship()
-    class NotLoading(val friendship: Friendship) : StatefulFriendship()
-}
+data class StatefulFriendship(
+    val isLoading: Boolean = false,
+    val data: Friendship,
+)

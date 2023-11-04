@@ -23,6 +23,8 @@ class FriendshipsViewModel @Inject constructor(
     private val _state = MutableStateFlow<FriendshipsState>(FriendshipsState.Loading)
     val state get() = _state.asStateFlow()
 
+    private var statefulFriendships = emptyList<StatefulFriendship>()
+
     init {
         getFriendships()
     }
@@ -32,11 +34,12 @@ class FriendshipsViewModel @Inject constructor(
             _state.emit(FriendshipsState.Loading)
 
             getFriendshipsUseCase().fold(
-                {
-                    _state.emit(FriendshipsState.Error(it))
+                { error ->
+                    _state.emit(FriendshipsState.Error(error))
                 },
-                {
-                    _state.emit(FriendshipsState.Success(it))
+                { friendships ->
+                    statefulFriendships = friendships.map { StatefulFriendship(data = it) }
+                    _state.emit(FriendshipsState.Success(statefulFriendships))
                 }
             )
         }
@@ -44,7 +47,36 @@ class FriendshipsViewModel @Inject constructor(
 
     fun deleteFriendship(friendship: Friendship) {
         viewModelScope.launch(dispatcher) {
-            deleteFriendshipUseCase(friendship.id)
+            statefulFriendships = statefulFriendships.map {
+                if (it.data.id == friendship.id) {
+                    it.copy(isLoading = true)
+                } else {
+                    it
+                }
+            }
+
+            _state.emit(FriendshipsState.Success(statefulFriendships))
+
+            deleteFriendshipUseCase(friendship.id).fold(
+                {
+                    statefulFriendships = statefulFriendships.map {
+                        if (it.data.id == friendship.id) {
+                            it.copy(isLoading = false)
+                        } else {
+                            it
+                        }
+                    }
+
+                    _state.emit(FriendshipsState.Success(statefulFriendships))
+                },
+                {
+                    statefulFriendships = statefulFriendships.filterNot {
+                        it.data.id == friendship.id
+                    }
+
+                    _state.emit(FriendshipsState.Success(statefulFriendships))
+                }
+            )
         }
     }
 }

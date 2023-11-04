@@ -167,11 +167,12 @@ fun Friendships(
 
         is FriendshipsState.Success -> JustChattingPullRefresh(onRefresh = getFriendships) {
             LazyColumn {
-                items(items = friendshipsState.data, key = { it.id }) {
+                items(items = friendshipsState.data, key = { it.data.id }) {
                     FriendshipListTile(
                         friendship = it,
                         onClick = { println("onClick") },
-                        onDelete = { deleteFriendship(it) })
+                        onDelete = deleteFriendship,
+                    )
                 }
                 item { Spacer(Modifier.height(80.dp)) }
             }
