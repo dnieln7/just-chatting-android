@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.ErrorOutline
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,7 +19,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -30,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import xyz.dnieln7.composable.button.JustChattingButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.launchSaveable
+import xyz.dnieln7.composable.progress.JustChattingScreenProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.signup.R
 import xyz.dnieln7.signup.screen.SignupViewModel
@@ -89,13 +88,7 @@ fun RegisterLoading(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(150.dp),
-            strokeCap = StrokeCap.Round,
-            strokeWidth = 15.dp,
-            color = MaterialTheme.colorScheme.secondary,
-            trackColor = MaterialTheme.colorScheme.secondaryContainer,
-        )
+        JustChattingScreenProgressIndicator()
         VerticalSpacer(of = 48.dp)
         Text(
             text = stringResource(R.string.registering_please_wait),
