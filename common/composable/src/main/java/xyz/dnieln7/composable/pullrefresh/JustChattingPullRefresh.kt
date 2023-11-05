@@ -45,12 +45,12 @@ fun JustChattingPullRefresh(
             .pullRefresh(refreshState)
             .then(modifier)
     ) {
+        content()
         PullRefreshIndicator(
             modifier = Modifier.align(Alignment.TopCenter),
             refreshing = refreshing,
             state = refreshState,
         )
-        content()
     }
 }
 
