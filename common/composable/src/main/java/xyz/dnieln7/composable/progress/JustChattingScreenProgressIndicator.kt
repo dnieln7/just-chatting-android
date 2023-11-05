@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,6 +26,8 @@ fun JustChattingScreenProgressIndicator(modifier: Modifier = Modifier) {
             modifier = Modifier.size(100.dp),
             strokeWidth = 10.dp,
             strokeCap = StrokeCap.Round,
+            color = MaterialTheme.colorScheme.secondary,
+            trackColor = MaterialTheme.colorScheme.secondaryContainer,
         )
     }
 }
