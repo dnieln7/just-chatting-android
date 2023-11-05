@@ -73,7 +73,7 @@ fun FriendshipsScreen(
     val modalBottomSheetState = rememberModalBottomSheetState()
 
     var showAddFriendship by rememberSaveable { mutableStateOf(false) }
-    var showAcceptedFriendships by rememberSaveable { mutableStateOf(true) }
+    var showFriendships by rememberSaveable { mutableStateOf(true) }
 
     if (showAddFriendship) {
         AddFriendship(
@@ -108,7 +108,15 @@ fun FriendshipsScreen(
                         stringResource(R.string.friendships),
                         stringResource(R.string.pending)
                     ),
-                    onTabChange = { showAcceptedFriendships = it == 0 },
+                    onTabChange = {
+                        if (it == 0) {
+                            showFriendships = true
+                            getFriendships()
+                        } else {
+                            showFriendships = false
+                            getPendingFriendships()
+                        }
+                    },
                     selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
                     indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 )
@@ -140,7 +148,7 @@ fun FriendshipsScreen(
                 bottomEnd = CornerSize(0.dp),
             ),
         ) {
-            if (showAcceptedFriendships) {
+            if (showFriendships) {
                 Friendships(friendshipsState, getFriendships, deleteFriendship)
             } else {
                 PendingFriendships(
