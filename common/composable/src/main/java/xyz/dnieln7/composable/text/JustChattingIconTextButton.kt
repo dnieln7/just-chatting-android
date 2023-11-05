@@ -20,15 +20,18 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import xyz.dnieln7.composable.button.JustChattingButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.theme.JustChattingTheme
 
 @Composable
-fun JustChattingIconText(
+fun JustChattingIconTextButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     text: String,
+    buttonText: String,
+    onClick: () -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
 
@@ -50,6 +53,11 @@ fun JustChattingIconText(
                 text = text,
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
+            )
+            VerticalSpacer(of = 24.dp)
+            JustChattingButton(
+                text = buttonText,
+                onClick = onClick,
             )
         }
     } else {
@@ -77,6 +85,11 @@ fun JustChattingIconText(
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge,
                 )
+                VerticalSpacer(of = 24.dp)
+                JustChattingButton(
+                    text = buttonText,
+                    onClick = onClick,
+                )
             }
         }
     }
@@ -84,7 +97,7 @@ fun JustChattingIconText(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingIconTextPreview() {
+fun JustChattingIconTextButtonPreview() {
     JustChattingTheme {
         Surface {
             Column(
@@ -92,10 +105,12 @@ fun JustChattingIconTextPreview() {
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingIconText(
+                JustChattingIconTextButton(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Rounded.Warning,
                     text = "This is a sample message",
+                    buttonText = "Try again",
+                    onClick = {},
                 )
             }
         }

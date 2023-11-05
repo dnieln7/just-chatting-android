@@ -21,6 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.extension.isPortrait
+import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.theme.JustChattingTheme
 
 @Composable
@@ -43,6 +44,7 @@ fun JustChattingError(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface
             )
+            VerticalSpacer(of = 12.dp)
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = error,
@@ -60,7 +62,7 @@ fun JustChattingError(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Icon(
-                    modifier = Modifier.size(150.dp),
+                    modifier = Modifier.size(100.dp),
                     imageVector = icon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface

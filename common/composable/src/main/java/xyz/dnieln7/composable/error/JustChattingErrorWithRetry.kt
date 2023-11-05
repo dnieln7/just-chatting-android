@@ -48,6 +48,7 @@ fun JustChattingErrorWithRetry(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurface
             )
+            VerticalSpacer(of = 12.dp)
             Text(
                 modifier = Modifier.fillMaxWidth(),
                 text = error,
@@ -70,7 +71,7 @@ fun JustChattingErrorWithRetry(
                 verticalArrangement = Arrangement.Center,
             ) {
                 Icon(
-                    modifier = Modifier.size(150.dp),
+                    modifier = Modifier.size(100.dp),
                     imageVector = icon,
                     contentDescription = null,
                     tint = MaterialTheme.colorScheme.onSurface

@@ -13,7 +13,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material.icons.rounded.Error
+import androidx.compose.material.icons.rounded.Pending
 import androidx.compose.material.icons.rounded.PersonAdd
 import androidx.compose.material.icons.rounded.PersonSearch
 import androidx.compose.material.icons.rounded.SearchOff
@@ -47,6 +49,7 @@ import xyz.dnieln7.composable.pullrefresh.JustChattingPullRefresh
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.tab.JustChattingTabs
 import xyz.dnieln7.composable.text.JustChattingIconText
+import xyz.dnieln7.composable.text.JustChattingIconTextButton
 import xyz.dnieln7.composable.textfield.JustChattingOutlinedSearchBar
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.domain.model.User
@@ -152,7 +155,7 @@ fun FriendshipsScreen(
                 Friendships(friendshipsState, getFriendships, deleteFriendship)
             } else {
                 PendingFriendships(
-                    pendingFriendshipsState = pendingFriendshipsState,
+                    uiState = pendingFriendshipsState,
                     getPendingFriendships = getPendingFriendships,
                     acceptFriendship = acceptFriendship,
                     rejectFriendship = rejectFriendship,
@@ -164,31 +167,43 @@ fun FriendshipsScreen(
 
 @Composable
 fun Friendships(
-    friendshipsState: FriendshipsState,
+    uiState: FriendshipsState,
     getFriendships: () -> Unit,
     deleteFriendship: (Friendship) -> Unit
 ) {
-    when (friendshipsState) {
+    when (uiState) {
         FriendshipsState.Loading -> JustChattingScreenProgressIndicator(
             modifier = Modifier.fillMaxSize()
         )
 
-        is FriendshipsState.Success -> JustChattingPullRefresh(onRefresh = getFriendships) {
-            LazyColumn {
-                items(items = friendshipsState.data, key = { it.data.id }) {
-                    FriendshipListTile(
-                        friendship = it,
-                        onClick = { println("onClick") },
-                        onDelete = deleteFriendship,
-                    )
+        is FriendshipsState.Success -> {
+            if (uiState.data.isEmpty()) {
+                JustChattingIconTextButton(
+                    modifier = Modifier.fillMaxSize(),
+                    icon = Icons.Rounded.Contacts,
+                    text = stringResource(R.string.empty_friendships),
+                    buttonText = stringResource(R.string.try_again),
+                    onClick = getFriendships,
+                )
+            } else {
+                JustChattingPullRefresh(onRefresh = getFriendships) {
+                    LazyColumn {
+                        items(items = uiState.data, key = { it.data.id }) {
+                            FriendshipListTile(
+                                friendship = it,
+                                onClick = { println("onClick") },
+                                onDelete = deleteFriendship,
+                            )
+                        }
+                        item { Spacer(Modifier.height(80.dp)) }
+                    }
                 }
-                item { Spacer(Modifier.height(80.dp)) }
             }
         }
 
         is FriendshipsState.Error -> JustChattingErrorWithRetry(
             icon = Icons.Rounded.Error,
-            error = friendshipsState.message,
+            error = uiState.message,
             onRetry = getFriendships
         )
     }
@@ -196,31 +211,43 @@ fun Friendships(
 
 @Composable
 fun PendingFriendships(
-    pendingFriendshipsState: PendingFriendshipsState,
+    uiState: PendingFriendshipsState,
     getPendingFriendships: () -> Unit,
     acceptFriendship: (Friendship) -> Unit,
     rejectFriendship: (Friendship) -> Unit,
 ) {
-    when (pendingFriendshipsState) {
+    when (uiState) {
         PendingFriendshipsState.Loading -> JustChattingScreenProgressIndicator(
             modifier = Modifier.fillMaxSize()
         )
 
-        is PendingFriendshipsState.Success -> JustChattingPullRefresh(onRefresh = getPendingFriendships) {
-            LazyColumn {
-                items(items = pendingFriendshipsState.data, key = { it.data.id }) {
-                    PendingFriendshipListTile(
-                        friendship = it,
-                        onAccept = acceptFriendship,
-                        onReject = rejectFriendship,
-                    )
+        is PendingFriendshipsState.Success -> {
+            if (uiState.data.isEmpty()) {
+                JustChattingIconTextButton(
+                    modifier = Modifier.fillMaxSize(),
+                    icon = Icons.Rounded.Pending,
+                    text = stringResource(R.string.empty_pending_friendships),
+                    buttonText = stringResource(R.string.try_again),
+                    onClick = getPendingFriendships,
+                )
+            } else {
+                JustChattingPullRefresh(onRefresh = getPendingFriendships) {
+                    LazyColumn {
+                        items(items = uiState.data, key = { it.data.id }) {
+                            PendingFriendshipListTile(
+                                friendship = it,
+                                onAccept = acceptFriendship,
+                                onReject = rejectFriendship,
+                            )
+                        }
+                    }
                 }
             }
         }
 
         is PendingFriendshipsState.Error -> JustChattingErrorWithRetry(
             icon = Icons.Rounded.Error,
-            error = pendingFriendshipsState.message,
+            error = uiState.message,
             onRetry = getPendingFriendships
         )
     }
