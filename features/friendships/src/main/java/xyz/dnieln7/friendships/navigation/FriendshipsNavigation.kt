@@ -13,9 +13,9 @@ import xyz.dnieln7.navigation.NavDestination
 
 fun NavGraphBuilder.friendshipsNavigation() {
     composable(route = FriendshipsDestination.route) {
-        val friendshipsViewModel: FriendshipsViewModel = hiltViewModel()
-        val pendingFriendshipsViewModel: PendingFriendshipsViewModel = hiltViewModel()
-        val addFriendshipViewModel: AddFriendshipViewModel = hiltViewModel()
+        val friendshipsViewModel = hiltViewModel<FriendshipsViewModel>()
+        val pendingFriendshipsViewModel = hiltViewModel<PendingFriendshipsViewModel>()
+        val addFriendshipViewModel = hiltViewModel<AddFriendshipViewModel>()
 
         val friendshipsState by friendshipsViewModel.state.collectAsStateWithLifecycle()
         val pendingFriendshipsState by pendingFriendshipsViewModel.state.collectAsStateWithLifecycle()

@@ -41,8 +41,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import xyz.dnieln7.composable.button.JustChattingNLSButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalFlexibleSpacer
@@ -51,25 +49,6 @@ import xyz.dnieln7.composable.textfield.JustChattingPasswordTextField
 import xyz.dnieln7.composable.textfield.JustChattingTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
 import xyz.dnieln7.login.R
-
-@Composable
-fun LoginRoute(
-    loginViewModel: LoginViewModel = hiltViewModel(),
-    navigateToSignup: () -> Unit,
-    navigateToHome: () -> Unit,
-) {
-    val uiState by loginViewModel.state.collectAsStateWithLifecycle()
-
-    LoginScreen(
-        uiState = uiState,
-        login = loginViewModel::login,
-        onLoggedIn = {
-            navigateToHome()
-            loginViewModel.onLoggedIn()
-        },
-        navigateToSignup = navigateToSignup,
-    )
-}
 
 @Composable
 fun LoginScreen(
