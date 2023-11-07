@@ -14,7 +14,7 @@ import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldNotBeNull
 import org.junit.Before
 import org.junit.Test
-import xyz.dnieln7.domain.usecase.GetEmailAvailabilityUserCase
+import xyz.dnieln7.domain.usecase.GetEmailAvailabilityUseCase
 import xyz.dnieln7.domain.usecase.SignupUseCase
 import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.domain.usecase.ValidatePasswordsUseCase
@@ -36,7 +36,7 @@ class SignupViewModelTest {
     private val validateEmailUseCase = relaxedMockk<ValidateEmailUseCase>()
     private val validatePasswordsUseCase = relaxedMockk<ValidatePasswordsUseCase>()
     private val validateSimpleTextUseCase = relaxedMockk<ValidateSimpleTextUseCase>()
-    private val getEmailAvailabilityUserCase = relaxedMockk<GetEmailAvailabilityUserCase>()
+    private val getEmailAvailabilityUseCase = relaxedMockk<GetEmailAvailabilityUseCase>()
     private val signupUseCase = relaxedMockk<SignupUseCase>()
 
     private lateinit var viewModel: SignupViewModel
@@ -48,7 +48,7 @@ class SignupViewModelTest {
             validateEmailUseCase = validateEmailUseCase,
             validatePasswordsUseCase = validatePasswordsUseCase,
             validateSimpleTextUseCase = validateSimpleTextUseCase,
-            getEmailAvailabilityUserCase = getEmailAvailabilityUserCase,
+            getEmailAvailabilityUseCase = getEmailAvailabilityUseCase,
             signupUseCase = signupUseCase,
         )
     }
@@ -67,7 +67,7 @@ class SignupViewModelTest {
 
         every { validateEmailUseCase(email) } returns Unit.right()
         every { validateSimpleTextUseCase(username) } returns Unit.right()
-        coEvery { getEmailAvailabilityUserCase(email) } returns Unit.right()
+        coEvery { getEmailAvailabilityUseCase(email) } returns Unit.right()
 
         runTest(dispatcher) {
             viewModel.createUser(email, username)
@@ -112,7 +112,7 @@ class SignupViewModelTest {
 
         every { validateEmailUseCase(any()) } returns Unit.right()
         every { validateSimpleTextUseCase(any()) } returns Unit.right()
-        coEvery { getEmailAvailabilityUserCase(email) } returns error.left()
+        coEvery { getEmailAvailabilityUseCase(email) } returns error.left()
 
         runTest(dispatcher) {
             viewModel.createUser(email, username)
@@ -195,7 +195,7 @@ class SignupViewModelTest {
     fun `GIVEN the happy path WHEN register THEN emit the expected states`() {
         every { validateEmailUseCase(any()) } returns Unit.right()
         every { validateSimpleTextUseCase(any()) } returns Unit.right()
-        coEvery { getEmailAvailabilityUserCase(any()) } returns Unit.right()
+        coEvery { getEmailAvailabilityUseCase(any()) } returns Unit.right()
         every { validatePasswordsUseCase(any(), any()) } returns Unit.right()
 
         viewModel.createUser("", "")
@@ -219,7 +219,7 @@ class SignupViewModelTest {
 
         every { validateEmailUseCase(any()) } returns Unit.right()
         every { validateSimpleTextUseCase(any()) } returns Unit.right()
-        coEvery { getEmailAvailabilityUserCase(any()) } returns Unit.right()
+        coEvery { getEmailAvailabilityUseCase(any()) } returns Unit.right()
         every { validatePasswordsUseCase(any(), any()) } returns Unit.right()
 
         viewModel.createUser("", "")

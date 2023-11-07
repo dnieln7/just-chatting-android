@@ -11,7 +11,7 @@ import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
 import org.junit.Test
-import xyz.dnieln7.domain.usecase.GetUserUserCase
+import xyz.dnieln7.domain.usecase.GetUserUseCase
 import xyz.dnieln7.domain.usecase.LogoutUseCase
 import xyz.dnieln7.testing.fake.buildUser
 import xyz.dnieln7.testing.relaxedMockk
@@ -20,7 +20,7 @@ class ProfileViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
 
-    private val getUserUserCase = relaxedMockk<GetUserUserCase>()
+    private val getUserUseCase = relaxedMockk<GetUserUseCase>()
     private val logoutUseCase = relaxedMockk<LogoutUseCase>()
 
     private lateinit var viewModel: ProfileViewModel
@@ -29,10 +29,10 @@ class ProfileViewModelTest {
     fun `GIVEN the happy path WHEN init THEN emit the expected states`() {
         val user = buildUser()
 
-        coEvery { getUserUserCase() } returns user.some()
+        coEvery { getUserUseCase() } returns user.some()
 
         runTest(dispatcher) {
-            viewModel = ProfileViewModel(dispatcher, getUserUserCase, logoutUseCase)
+            viewModel = ProfileViewModel(dispatcher, getUserUseCase, logoutUseCase)
 
             viewModel.state.test {
                 awaitItem() shouldBeEqualTo ProfileState.Loading
@@ -46,10 +46,10 @@ class ProfileViewModelTest {
 
     @Test
     fun `GIVEN the unhappy path WHEN init THEN emit the expected states`() {
-        coEvery { getUserUserCase() } returns none()
+        coEvery { getUserUseCase() } returns none()
 
         runTest(dispatcher) {
-            viewModel = ProfileViewModel(dispatcher, getUserUserCase, logoutUseCase)
+            viewModel = ProfileViewModel(dispatcher, getUserUseCase, logoutUseCase)
 
             viewModel.state.test {
                 awaitItem() shouldBeEqualTo ProfileState.Loading
@@ -62,9 +62,9 @@ class ProfileViewModelTest {
     fun `GIVEN the happy path WHEN re-init THEN emit the expected states`() {
         val user = buildUser()
 
-        coEvery { getUserUserCase() } returns user.some()
+        coEvery { getUserUseCase() } returns user.some()
 
-        viewModel = ProfileViewModel(dispatcher, getUserUserCase, logoutUseCase)
+        viewModel = ProfileViewModel(dispatcher, getUserUseCase, logoutUseCase)
 
         runTest(dispatcher) {
             viewModel.getUser()
@@ -82,9 +82,9 @@ class ProfileViewModelTest {
         val user = buildUser()
 
         coEvery { logoutUseCase() } returns Unit.right()
-        coEvery { getUserUserCase() } returns user.some()
+        coEvery { getUserUseCase() } returns user.some()
 
-        viewModel = ProfileViewModel(dispatcher, getUserUserCase, logoutUseCase)
+        viewModel = ProfileViewModel(dispatcher, getUserUseCase, logoutUseCase)
 
         runTest(dispatcher) {
             viewModel.logout()
@@ -103,9 +103,9 @@ class ProfileViewModelTest {
         val error = "Error"
 
         coEvery { logoutUseCase() } returns error.left()
-        coEvery { getUserUserCase() } returns user.some()
+        coEvery { getUserUseCase() } returns user.some()
 
-        viewModel = ProfileViewModel(dispatcher, getUserUserCase, logoutUseCase)
+        viewModel = ProfileViewModel(dispatcher, getUserUseCase, logoutUseCase)
 
         runTest(dispatcher) {
             viewModel.logout()

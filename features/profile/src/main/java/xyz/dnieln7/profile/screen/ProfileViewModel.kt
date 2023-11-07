@@ -8,14 +8,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import xyz.dnieln7.coroutines.di.IO
-import xyz.dnieln7.domain.usecase.GetUserUserCase
+import xyz.dnieln7.domain.usecase.GetUserUseCase
 import xyz.dnieln7.domain.usecase.LogoutUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     @IO private val dispatcher: CoroutineDispatcher,
-    private val getUserUserCase: GetUserUserCase,
+    private val getUserUseCase: GetUserUseCase,
     private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
 
@@ -30,7 +30,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             _state.emit(ProfileState.Loading)
 
-            getUserUserCase().fold(
+            getUserUseCase().fold(
                 {
                     _state.emit(ProfileState.UserNotFound)
                 },

@@ -6,7 +6,7 @@ import xyz.dnieln7.domain.model.User
 import xyz.dnieln7.domain.preferences.DataStorePreferences
 import javax.inject.Inject
 
-class GetUserUserCase @Inject constructor(private val dataStorePreferences: DataStorePreferences) {
+class GetUserUseCase @Inject constructor(private val dataStorePreferences: DataStorePreferences) {
 
     suspend operator fun invoke(): Option<User> {
         return Option.catch { dataStorePreferences.getUser().first()!! }

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import xyz.dnieln7.coroutines.di.IO
-import xyz.dnieln7.domain.usecase.GetEmailAvailabilityUserCase
+import xyz.dnieln7.domain.usecase.GetEmailAvailabilityUseCase
 import xyz.dnieln7.domain.usecase.SignupUseCase
 import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.domain.usecase.ValidatePasswordsUseCase
@@ -24,7 +24,7 @@ class SignupViewModel @Inject constructor(
     private val validateEmailUseCase: ValidateEmailUseCase,
     private val validatePasswordsUseCase: ValidatePasswordsUseCase,
     private val validateSimpleTextUseCase: ValidateSimpleTextUseCase,
-    private val getEmailAvailabilityUserCase: GetEmailAvailabilityUserCase,
+    private val getEmailAvailabilityUseCase: GetEmailAvailabilityUseCase,
     private val signupUseCase: SignupUseCase,
 ) : ViewModel() {
     private val _createUserState = MutableStateFlow<CreateUserState>(CreateUserState.None)
@@ -50,7 +50,7 @@ class SignupViewModel @Inject constructor(
             val usernameError = validateSimpleTextUseCase(username).swap().getOrNull()
 
             if (emailError == null && usernameError == null) {
-                getEmailAvailabilityUserCase(email).fold(
+                getEmailAvailabilityUseCase(email).fold(
                     {
                         _createUserState.emit(CreateUserState.Error(error = it))
                     },

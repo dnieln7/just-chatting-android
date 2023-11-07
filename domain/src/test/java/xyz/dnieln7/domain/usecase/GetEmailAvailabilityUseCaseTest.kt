@@ -14,7 +14,7 @@ import xyz.dnieln7.domain.fake.buildException
 import xyz.dnieln7.domain.repository.AuthRepository
 import xyz.dnieln7.testing.relaxedMockk
 
-class GetEmailAvailabilityUserCaseTest {
+class GetEmailAvailabilityUseCaseTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
@@ -22,11 +22,11 @@ class GetEmailAvailabilityUserCaseTest {
     private val authRepository = relaxedMockk<AuthRepository>()
     private val getErrorFromThrowableUseCase = relaxedMockk<GetErrorFromThrowableUseCase>()
 
-    private lateinit var useCase: GetEmailAvailabilityUserCase
+    private lateinit var useCase: GetEmailAvailabilityUseCase
 
     @Before
     fun setup() {
-        useCase = GetEmailAvailabilityUserCase(
+        useCase = GetEmailAvailabilityUseCase(
             authRepository = authRepository,
             getErrorFromThrowableUseCase = getErrorFromThrowableUseCase,
         )

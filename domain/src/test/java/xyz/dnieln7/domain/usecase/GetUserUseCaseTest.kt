@@ -15,18 +15,18 @@ import xyz.dnieln7.domain.preferences.DataStorePreferences
 import xyz.dnieln7.testing.fake.buildUser
 import xyz.dnieln7.testing.relaxedMockk
 
-class GetUserUserCaseTest {
+class GetUserUseCaseTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
 
     private val dataStorePreferences = relaxedMockk<DataStorePreferences>()
 
-    private lateinit var useCase: GetUserUserCase
+    private lateinit var useCase: GetUserUseCase
 
     @Before
     fun setup() {
-        useCase = GetUserUserCase(dataStorePreferences)
+        useCase = GetUserUseCase(dataStorePreferences)
     }
 
     @Test

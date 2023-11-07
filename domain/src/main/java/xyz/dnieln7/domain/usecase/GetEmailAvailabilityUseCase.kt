@@ -4,7 +4,7 @@ import arrow.core.Either
 import xyz.dnieln7.domain.repository.AuthRepository
 import javax.inject.Inject
 
-class GetEmailAvailabilityUserCase @Inject constructor(
+class GetEmailAvailabilityUseCase @Inject constructor(
     private val authRepository: AuthRepository,
     private val getErrorFromThrowableUseCase: GetErrorFromThrowableUseCase
 ) {
