@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import xyz.dnieln7.login.navigation.LoginDestination
 import xyz.dnieln7.login.navigation.loginNavigation
 import xyz.dnieln7.signup.navigation.SignupDestination
 import xyz.dnieln7.signup.navigation.signupNavHost
@@ -36,7 +37,7 @@ fun JustChattingNavHost(
             navigateToHome = { rootDestination = HomeDestination.route }
         )
         composable(route = HomeDestination.route) {
-            HomeNavHost()
+            HomeNavHost(navigateToLogin = { rootDestination = LoginDestination.route })
         }
     }
 }

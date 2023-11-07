@@ -3,6 +3,7 @@ package xyz.dnieln7.justchatting.navigation
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Chat
 import androidx.compose.material.icons.rounded.Contacts
 import androidx.compose.material3.Icon
@@ -25,11 +26,13 @@ import xyz.dnieln7.friendships.navigation.friendshipsNavigation
 import xyz.dnieln7.navigation.NavDestination
 import xyz.dnieln7.navigation.extensions.navigateTo
 import xyz.dnieln7.navigation.utils.compareRouteToDestination
+import xyz.dnieln7.profile.navigation.ProfileDestination
+import xyz.dnieln7.profile.navigation.profileNavigation
 
 object HomeDestination : NavDestination("just-chatting/home")
 
 @Composable
-fun HomeNavHost() {
+fun HomeNavHost(navigateToLogin: () -> Unit) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
@@ -51,6 +54,13 @@ fun HomeNavHost() {
                     onClick = { navController.navigateTo(it) },
                     isSelected = { compareRouteToDestination(currentRoute, it) }
                 )
+                JustChattingNavigationBarItem(
+                    label = stringResource(xyz.dnieln7.profile.R.string.profile),
+                    icon = Icons.Rounded.AccountCircle,
+                    destination = ProfileDestination,
+                    onClick = { navController.navigateTo(it) },
+                    isSelected = { compareRouteToDestination(currentRoute, it) }
+                )
             }
         }
     ) {
@@ -61,6 +71,7 @@ fun HomeNavHost() {
         ) {
             friendshipsNavigation()
             chatsNavigation()
+            profileNavigation(navigateToLogin = navigateToLogin)
         }
     }
 }

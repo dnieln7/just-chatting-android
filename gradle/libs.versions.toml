@@ -19,6 +19,7 @@ converter-moshi = "2.9.0"
 logging-interceptor = "4.11.0"
 datastore-preferences = "1.0.0"
 room = "2.5.0"
+coil = "2.5.0"
 
 junit = "4.13.2"
 ext-junit = "1.1.5"
@@ -27,6 +28,8 @@ coroutines-test = "1.7.3"
 mockk = "1.13.8"
 turbine = "1.0.0"
 kluent-android = "1.73"
+appcompat = "1.6.1"
+material = "1.10.0"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
@@ -66,6 +69,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+io-coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
