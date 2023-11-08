@@ -1,4 +1,4 @@
-package xyz.dnieln7.justchatting.domain.validation
+package xyz.dnieln7.domain.validation
 
 enum class PasswordsValidationError {
     EMPTY,

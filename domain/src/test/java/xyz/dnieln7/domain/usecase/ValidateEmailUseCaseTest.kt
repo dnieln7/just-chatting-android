@@ -3,7 +3,7 @@ package xyz.dnieln7.domain.usecase
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Test
-import xyz.dnieln7.justchatting.domain.validation.EmailValidationError
+import xyz.dnieln7.domain.validation.EmailValidationError
 
 class ValidateEmailUseCaseTest {
 

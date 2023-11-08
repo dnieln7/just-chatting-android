@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import xyz.dnieln7.composable.R
-import xyz.dnieln7.justchatting.domain.validation.PasswordsValidationError
+import xyz.dnieln7.domain.validation.PasswordsValidationError
 
 // TODO: 17/10/23 Should be part of textfields behaviour?
 @Composable

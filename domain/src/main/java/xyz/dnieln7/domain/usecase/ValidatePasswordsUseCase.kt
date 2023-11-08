@@ -3,7 +3,7 @@ package xyz.dnieln7.domain.usecase
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
-import xyz.dnieln7.justchatting.domain.validation.PasswordsValidationError
+import xyz.dnieln7.domain.validation.PasswordsValidationError
 import javax.inject.Inject
 
 class ValidatePasswordsUseCase @Inject constructor() {
