@@ -27,8 +27,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import xyz.dnieln7.composable.button.JustChattingNLSButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.progress.StepperProgressIndicator
@@ -37,32 +35,13 @@ import xyz.dnieln7.composable.string.stringFromEmailValidationError
 import xyz.dnieln7.composable.string.stringFromSimpleTextValidationError
 import xyz.dnieln7.composable.textfield.JustChattingTextField
 import xyz.dnieln7.signup.R
-import xyz.dnieln7.signup.screen.SignupViewModel
-
-@Composable
-fun CreateUserRoute(
-    signupViewModel: SignupViewModel = viewModel(),
-    navigateToCreatePassword: () -> Unit,
-) {
-    val uiState by signupViewModel.createUserState.collectAsStateWithLifecycle()
-
-    if (uiState == CreateUserState.Success) {
-        LaunchedEffect(Unit) {
-            navigateToCreatePassword()
-            signupViewModel.onUserCreated()
-        }
-    } else {
-        CreateUserScreen(
-            uiState = uiState,
-            createUser = signupViewModel::createUser,
-        )
-    }
-}
 
 @Composable
 fun CreateUserScreen(
     uiState: CreateUserState,
     createUser: (email: String, username: String) -> Unit,
+    resetState: () -> Unit,
+    navigateToCreatePassword: (String, String) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -72,74 +51,81 @@ fun CreateUserScreen(
 
     val paddingMultiplier = if (isPortrait) 4 else 1
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.create_user),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            )
-            VerticalSpacer(of = 20.dp)
-            StepperProgressIndicator(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                currentSteps = 1,
-                totalSteps = 2,
-            )
-            VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = email,
-                onValueChange = { email = it },
-                label = stringResource(R.string.email),
-                error = stringFromEmailValidationError(uiState.asError()?.emailError),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Email,
-                    imeAction = ImeAction.Next,
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
-            VerticalSpacer(of = (4 * paddingMultiplier).dp)
-            JustChattingTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = username,
-                onValueChange = { username = it },
-                label = stringResource(R.string.username),
-                error = stringFromSimpleTextValidationError(uiState.asError()?.usernameError),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Done,
-                ),
-                keyboardActions = KeyboardActions(
-                    onDone = { focusManager.clearFocus() }
-                ),
-            )
-            if (uiState is CreateUserState.Error && uiState.error != null) {
-                VerticalSpacer(of = 12.dp)
+    if (uiState is CreateUserState.Success) {
+        LaunchedEffect(Unit) {
+            navigateToCreatePassword(uiState.email, uiState.username)
+            resetState()
+        }
+    } else {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = uiState.error,
+                    text = stringResource(R.string.create_user),
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 )
-                VerticalSpacer(of = 12.dp)
+                VerticalSpacer(of = 20.dp)
+                StepperProgressIndicator(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    currentSteps = 1,
+                    totalSteps = 2,
+                )
+                VerticalSpacer(of = (12 * paddingMultiplier).dp)
+                JustChattingTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = email,
+                    onValueChange = { email = it },
+                    label = stringResource(R.string.email),
+                    error = stringFromEmailValidationError(uiState.asError()?.emailError),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Next,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                )
+                VerticalSpacer(of = (4 * paddingMultiplier).dp)
+                JustChattingTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = username,
+                    onValueChange = { username = it },
+                    label = stringResource(R.string.username),
+                    error = stringFromSimpleTextValidationError(uiState.asError()?.usernameError),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Text,
+                        imeAction = ImeAction.Done,
+                    ),
+                    keyboardActions = KeyboardActions(
+                        onDone = { focusManager.clearFocus() }
+                    ),
+                )
+                if (uiState is CreateUserState.Error && uiState.error != null) {
+                    VerticalSpacer(of = 12.dp)
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = uiState.error,
+                        textAlign = TextAlign.Center,
+                        style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error),
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    VerticalSpacer(of = 12.dp)
+                }
+                VerticalSpacer(of = (12 * paddingMultiplier).dp)
+                JustChattingNLSButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    noneText = stringResource(R.string.create_user),
+                    onClick = { createUser(email, username) },
+                    nlsButtonStatus = uiState.toNLSStatus(),
+                )
             }
-            VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingNLSButton(
-                modifier = Modifier.fillMaxWidth(),
-                noneText = stringResource(R.string.create_user),
-                onClick = { createUser(email, username) },
-                nlsButtonStatus = uiState.toNLSStatus(),
-            )
         }
     }
 }

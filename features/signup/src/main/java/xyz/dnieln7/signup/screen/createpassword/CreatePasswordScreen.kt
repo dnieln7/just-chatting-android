@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import xyz.dnieln7.composable.button.JustChattingButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.progress.StepperProgressIndicator
@@ -32,32 +31,13 @@ import xyz.dnieln7.composable.string.stringFromPasswordsValidationError
 import xyz.dnieln7.composable.textfield.JustChattingPasswordTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
 import xyz.dnieln7.signup.R
-import xyz.dnieln7.signup.screen.SignupViewModel
-
-@Composable
-fun CreatePasswordRoute(
-    signupViewModel: SignupViewModel,
-    navigateToRegister: () -> Unit,
-) {
-    val uiState by signupViewModel.createPasswordState.collectAsStateWithLifecycle()
-
-    if (uiState == CreatePasswordState.Success) {
-        LaunchedEffect(Unit) {
-            navigateToRegister()
-            signupViewModel.onPasswordCreated()
-        }
-    } else {
-        CreatePasswordScreen(
-            uiState = uiState,
-            createPassword = signupViewModel::createPassword,
-        )
-    }
-}
 
 @Composable
 fun CreatePasswordScreen(
     uiState: CreatePasswordState,
-    createPassword: (password: String, password2: String) -> Unit,
+    createPassword: (String, String) -> Unit,
+    resetState: () -> Unit,
+    navigateToRegister: (String, String, String) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -67,53 +47,60 @@ fun CreatePasswordScreen(
 
     val paddingMultiplier = if (isPortrait) 4 else 1
 
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.create_password),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
-            )
-            VerticalSpacer(of = 20.dp)
-            StepperProgressIndicator(
-                modifier = Modifier.padding(horizontal = 20.dp),
-                currentSteps = 2,
-                totalSteps = 2,
-            )
-            VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingPasswordTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = password,
-                error = stringFromPasswordsValidationError(uiState.asError()?.passwordError),
-                onValueChange = { password = it },
-                passwordAction = PasswordAction(
-                    imeAction = ImeAction.Next,
-                    action = { focusManager.moveFocus(FocusDirection.Down) }
-                ),
-            )
-            VerticalSpacer(of = (4 * paddingMultiplier).dp)
-            JustChattingPasswordTextField(
-                modifier = Modifier.fillMaxWidth(),
-                value = password2,
-                onValueChange = { password2 = it },
-                label = stringResource(R.string.confirm_password),
-                passwordAction = PasswordAction(
-                    imeAction = ImeAction.Done,
-                    action = { focusManager.clearFocus() }
-                ),
-            )
-            VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingButton(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(R.string.create_password),
-                onClick = { createPassword(password, password2) },
-            )
+    if (uiState is CreatePasswordState.Success) {
+        LaunchedEffect(Unit) {
+            navigateToRegister(uiState.email, uiState.password, uiState.username)
+            resetState()
+        }
+    } else {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.create_password),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                )
+                VerticalSpacer(of = 20.dp)
+                StepperProgressIndicator(
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                    currentSteps = 2,
+                    totalSteps = 2,
+                )
+                VerticalSpacer(of = (12 * paddingMultiplier).dp)
+                JustChattingPasswordTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = password,
+                    error = stringFromPasswordsValidationError(uiState.asError()?.passwordError),
+                    onValueChange = { password = it },
+                    passwordAction = PasswordAction(
+                        imeAction = ImeAction.Next,
+                        action = { focusManager.moveFocus(FocusDirection.Down) }
+                    ),
+                )
+                VerticalSpacer(of = (4 * paddingMultiplier).dp)
+                JustChattingPasswordTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = password2,
+                    onValueChange = { password2 = it },
+                    label = stringResource(R.string.confirm_password),
+                    passwordAction = PasswordAction(
+                        imeAction = ImeAction.Done,
+                        action = { focusManager.clearFocus() }
+                    ),
+                )
+                VerticalSpacer(of = (12 * paddingMultiplier).dp)
+                JustChattingButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.create_password),
+                    onClick = { createPassword(password, password2) },
+                )
+            }
         }
     }
 }

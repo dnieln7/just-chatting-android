@@ -15,7 +15,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -24,57 +23,46 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import xyz.dnieln7.composable.button.JustChattingButton
 import xyz.dnieln7.composable.extension.isPortrait
-import xyz.dnieln7.composable.launchSaveable
 import xyz.dnieln7.composable.progress.JustChattingScreenProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.signup.R
-import xyz.dnieln7.signup.screen.SignupViewModel
-
-@Composable
-fun RegisterRoute(
-    signupViewModel: SignupViewModel,
-    navigateToHome: () -> Unit,
-) {
-    val uiState by signupViewModel.registerState.collectAsStateWithLifecycle()
-
-    launchSaveable { signupViewModel.register() }
-
-    RegisterScreen(
-        uiState = uiState,
-        onRegistered = { navigateToHome() },
-        retry = signupViewModel::register,
-    )
-}
 
 @Composable
 fun RegisterScreen(
     uiState: RegisterState,
-    onRegistered: () -> Unit,
-    retry: () -> Unit,
+    navigateToHome: () -> Unit,
+    register: () -> Unit,
+    resetState: () -> Unit,
 ) {
-    val modifier = Modifier
-        .fillMaxWidth()
-        .padding(20.dp)
-
     Surface(modifier = Modifier.fillMaxSize()) {
         when (uiState) {
-            RegisterState.Loading -> RegisterLoading(modifier = modifier)
+            RegisterState.Loading -> RegisterLoading(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+            )
 
             RegisterState.Success -> {
-                RegisterSuccess(modifier = modifier)
+                RegisterSuccess(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                )
                 LaunchedEffect(Unit) {
-                    onRegistered()
+                    navigateToHome()
+                    resetState()
                 }
             }
 
             is RegisterState.Error -> {
                 RegisterError(
-                    modifier = modifier,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
                     error = uiState.message,
-                    retry = retry,
+                    retry = register,
                 )
             }
         }

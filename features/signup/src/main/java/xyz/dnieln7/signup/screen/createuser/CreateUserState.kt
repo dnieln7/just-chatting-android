@@ -1,13 +1,13 @@
 package xyz.dnieln7.signup.screen.createuser
 
 import xyz.dnieln7.composable.button.NLSButtonStatus
-import xyz.dnieln7.justchatting.domain.validation.EmailValidationError
-import xyz.dnieln7.justchatting.domain.validation.SimpleTextValidationError
+import xyz.dnieln7.domain.validation.EmailValidationError
+import xyz.dnieln7.domain.validation.SimpleTextValidationError
 
 sealed class CreateUserState {
     object None : CreateUserState()
     object Loading : CreateUserState()
-    object Success : CreateUserState()
+    class Success(val email: String, val username: String) : CreateUserState()
     class Error(
         val error: String? = null,
         val emailError: EmailValidationError? = null,
@@ -26,7 +26,7 @@ sealed class CreateUserState {
         return when (this) {
             None -> NLSButtonStatus.NONE
             Loading -> NLSButtonStatus.LOADING
-            Success -> NLSButtonStatus.SUCCESS
+            is Success -> NLSButtonStatus.SUCCESS
             is Error -> NLSButtonStatus.NONE
         }
     }
