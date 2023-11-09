@@ -48,6 +48,7 @@ dependencies {
 
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)
+    implementation(libs.io.arrow.kt.arrow.core.retrofit)
 
     kapt(libs.com.google.dagger.hilt.android.compiler)
     implementation(libs.com.google.dagger.hilt.android)

@@ -1,8 +1,11 @@
 package xyz.dnieln7.data.repository
 
 import arrow.core.Either
-import retrofit2.HttpException
+import arrow.retrofit.adapter.either.networkhandling.HttpError
+import arrow.retrofit.adapter.either.networkhandling.IOError
+import arrow.retrofit.adapter.either.networkhandling.UnexpectedCallError
 import xyz.dnieln7.data.R
+import xyz.dnieln7.data.exception.ApiException
 import xyz.dnieln7.data.exception.EmailNotAvailableException
 import xyz.dnieln7.data.mapper.toDomain
 import xyz.dnieln7.data.server.JustChattingApiService
@@ -38,15 +41,20 @@ class DefaultAuthRepository(
     override suspend fun getEmailAvailability(email: String): Either<Throwable, Unit> {
         val emailAvailabilitySvModel = EmailAvailabilitySvModel(email)
 
-        return Either.catch {
-            justChattingApiService.getEmailAvailability(emailAvailabilitySvModel)
-        }.mapLeft {
-            if (it is HttpException && it.isConflict()) {
-                val message = resourceProvider.getString(R.string.email_not_available)
+        return justChattingApiService.getEmailAvailability(emailAvailabilitySvModel).mapLeft {
+            when (it) {
+                is HttpError -> {
+                    if (it.isConflict()) {
+                        val message = resourceProvider.getString(R.string.email_not_available)
 
-                EmailNotAvailableException(message)
-            } else {
-                it
+                        EmailNotAvailableException(message)
+                    } else {
+                        ApiException(it.message)
+                    }
+                }
+
+                is IOError -> it.cause
+                is UnexpectedCallError -> it.cause
             }
         }
     }

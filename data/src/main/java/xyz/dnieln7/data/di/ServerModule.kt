@@ -1,5 +1,6 @@
 package xyz.dnieln7.data.di
 
+import arrow.retrofit.adapter.either.EitherCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +29,7 @@ object ServerModule {
             .baseUrl(BuildConfig.JUST_CHATTING_URL)
             .client(justChattingClient.okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create())
+            .addCallAdapterFactory(EitherCallAdapterFactory.create())
             .build()
             .create(JustChattingApiService::class.java)
     }

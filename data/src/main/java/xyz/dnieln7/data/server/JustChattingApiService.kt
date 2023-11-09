@@ -1,5 +1,7 @@
 package xyz.dnieln7.data.server
 
+import arrow.core.Either
+import arrow.retrofit.adapter.either.networkhandling.CallError
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -22,7 +24,7 @@ interface JustChattingApiService {
     suspend fun signup(@Body body: SignupSvModel): UserSvModel
 
     @POST("email/availability")
-    suspend fun getEmailAvailability(@Body body: EmailAvailabilitySvModel)
+    suspend fun getEmailAvailability(@Body body: EmailAvailabilitySvModel): Either<CallError, Unit>
 
     @GET("users/{email}")
     suspend fun getUserByEmail(@Path("email") email: String): UserSvModel
