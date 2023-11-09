@@ -35,13 +35,13 @@ class ValidatePasswordsUseCaseTest {
     }
 
     @Test
-    fun `GIVEN a password with less than 12 characters WHEN invoke THEN return PasswordsValidation_LENGHT_LESS_THAN_12`() {
-        val password = "12345678901"
-        val password2 = "12345678901"
+    fun `GIVEN a password with less than 8 characters WHEN invoke THEN return PasswordsValidation_LENGHT_LESS_THAN_12`() {
+        val password = "1234567"
+        val password2 = "1234567"
 
         val result = useCase(password, password2).swap().getOrNull()
 
-        result shouldBeEqualTo PasswordsValidationError.LENGTH_LESS_THAN_12
+        result shouldBeEqualTo PasswordsValidationError.TOO_SHORT
     }
 
     @Test

@@ -12,7 +12,7 @@ import xyz.dnieln7.domain.validation.PasswordsValidationError
 fun stringFromPasswordsValidationError(passwordsValidationError: PasswordsValidationError?): String? {
     return when (passwordsValidationError) {
         PasswordsValidationError.EMPTY -> stringResource(R.string.empty_text_error)
-        PasswordsValidationError.LENGTH_LESS_THAN_12 -> stringResource(R.string.password_length_error)
+        PasswordsValidationError.TOO_SHORT -> stringResource(R.string.password_length_error)
         PasswordsValidationError.NOT_EQUAL -> stringResource(R.string.passwords_not_equal_error)
         null -> null
     }

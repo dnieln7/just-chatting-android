@@ -17,8 +17,8 @@ class ValidatePasswordsUseCase @Inject constructor() {
                 PasswordsValidationError.EMPTY.left()
             }
 
-            password.length < 12 -> {
-                PasswordsValidationError.LENGTH_LESS_THAN_12.left()
+            password.length < 8 -> {
+                PasswordsValidationError.TOO_SHORT.left()
             }
 
             password != password2 -> {
