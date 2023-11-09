@@ -1,5 +1,4 @@
 [versions]
-androidx-activity-compose = "1.8.0"
 gradle = "8.1.2"
 kotlin = "1.8.10"
 ksp = "1.8.10-1.0.9"
@@ -13,12 +12,12 @@ activity-compose = "1.7.2"
 navigation-compose = "2.7.4"
 compose-bom = "2023.10.01"
 arrow-stack = "1.2.0"
-hilt-navigation-compose = "1.0.0"
 moshi = "1.15.0"
 converter-moshi = "2.9.0"
 logging-interceptor = "4.11.0"
 datastore-preferences = "1.0.0"
 room = "2.5.0"
+hilt-navigation-compose = "1.0.0"
 coil = "2.5.0"
 
 junit = "4.13.2"
@@ -28,8 +27,6 @@ coroutines-test = "1.7.3"
 mockk = "1.13.8"
 turbine = "1.0.0"
 kluent-android = "1.73"
-appcompat = "1.6.1"
-material = "1.10.0"
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
@@ -59,9 +56,6 @@ androidx-compose-material = { module = "androidx.compose.material:material" }
 io-arrow-kt-arrow-stack = { module = "io.arrow-kt:arrow-stack", version.ref = "arrow-stack" }
 io-arrow-kt-arrow-core = { module = "io.arrow-kt:arrow-core" }
 io-arrow-kt-arrow-core-retrofit = { module = "io.arrow-kt:arrow-core-retrofit" }
-com-google-dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
-com-google-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
-androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 com-squareup-moshi-kotlin-codegen = { module = "com.squareup.moshi:moshi-kotlin-codegen", version.ref = "moshi" }
 com-squareup-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 com-squareup-retrofit2-converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converter-moshi" }
@@ -70,6 +64,9 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+com-google-dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+com-google-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 io-coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }

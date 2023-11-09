@@ -50,20 +50,20 @@ dependencies {
     implementation(libs.io.arrow.kt.arrow.core)
     implementation(libs.io.arrow.kt.arrow.core.retrofit)
 
-    kapt(libs.com.google.dagger.hilt.android.compiler)
-    implementation(libs.com.google.dagger.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
-
     ksp(libs.com.squareup.moshi.kotlin.codegen)
     implementation(libs.com.squareup.moshi)
     implementation(libs.com.squareup.retrofit2.converter.moshi)
     implementation(libs.com.squareup.okhttp3.logging.interceptor)
 
+    implementation(libs.androidx.datastore.preferences)
+
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
 
-    implementation(libs.androidx.datastore.preferences)
+    kapt(libs.com.google.dagger.hilt.android.compiler)
+    implementation(libs.com.google.dagger.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
