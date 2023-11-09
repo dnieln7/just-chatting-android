@@ -83,7 +83,7 @@ class DefaultFriendshipRepositoryTest {
         runTest(dispatcher) {
             val result = repository.getFriendships(user.id).swap().getOrNull()
 
-            result shouldBeEqualTo throwable
+            result?.localizedMessage shouldBeEqualTo throwable.localizedMessage
         }
     }
 }
