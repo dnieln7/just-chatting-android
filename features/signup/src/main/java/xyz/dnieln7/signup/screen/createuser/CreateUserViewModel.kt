@@ -9,15 +9,11 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import xyz.dnieln7.coroutines.di.IO
 import xyz.dnieln7.domain.usecase.GetEmailAvailabilityUseCase
-import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
-import xyz.dnieln7.domain.usecase.ValidateSimpleTextUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class CreateUserViewModel @Inject constructor(
     @IO private val dispatcher: CoroutineDispatcher,
-    private val validateEmailUseCase: ValidateEmailUseCase,
-    private val validateSimpleTextUseCase: ValidateSimpleTextUseCase,
     private val getEmailAvailabilityUseCase: GetEmailAvailabilityUseCase,
 ) : ViewModel() {
 
@@ -28,23 +24,14 @@ class CreateUserViewModel @Inject constructor(
         viewModelScope.launch(dispatcher) {
             _state.emit(CreateUserState.Loading)
 
-            val emailError = validateEmailUseCase(email).swap().getOrNull()
-            val usernameError = validateSimpleTextUseCase(username).swap().getOrNull()
-
-            if (emailError == null && usernameError == null) {
-                getEmailAvailabilityUseCase(email).fold(
-                    {
-                        _state.emit(CreateUserState.Error(error = it))
-                    },
-                    {
-                        _state.emit(CreateUserState.Success(email, username))
-                    }
-                )
-            } else {
-                _state.emit(
-                    CreateUserState.Error(emailError = emailError, usernameError = usernameError)
-                )
-            }
+            getEmailAvailabilityUseCase(email).fold(
+                {
+                    _state.emit(CreateUserState.Error(it))
+                },
+                {
+                    _state.emit(CreateUserState.Success(email, username))
+                }
+            )
         }
     }
 

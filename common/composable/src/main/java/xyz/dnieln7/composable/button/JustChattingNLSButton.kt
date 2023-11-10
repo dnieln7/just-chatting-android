@@ -20,6 +20,7 @@ import xyz.dnieln7.composable.theme.JustChattingTheme
 @Composable
 fun JustChattingNLSButton(
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     noneText: String,
     successText: String? = null,
     nlsButtonStatus: NLSButtonStatus,
@@ -27,6 +28,7 @@ fun JustChattingNLSButton(
 ) {
     FilledTonalButton(
         modifier = modifier,
+        enabled = enabled,
         shape = MaterialTheme.shapes.small,
         onClick = {
             if (nlsButtonStatus != NLSButtonStatus.LOADING && nlsButtonStatus != NLSButtonStatus.SUCCESS) {

@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import xyz.dnieln7.signup.screen.createpassword.CreatePasswordScreen
 import xyz.dnieln7.signup.screen.createpassword.CreatePasswordViewModel
+import xyz.dnieln7.signup.screen.createuser.CreateUserFormViewModel
 import xyz.dnieln7.signup.screen.createuser.CreateUserScreen
 import xyz.dnieln7.signup.screen.createuser.CreateUserViewModel
 import xyz.dnieln7.signup.screen.register.RegisterScreen
@@ -21,7 +22,11 @@ fun NavGraphBuilder.signupNavHost(
     navigation(startDestination = CreateUserDestination.route, route = SignupDestination.route) {
         composable(route = CreateUserDestination.route) {
             val createUserViewModel = hiltViewModel<CreateUserViewModel>()
+            val createUserFormViewModel = hiltViewModel<CreateUserFormViewModel>()
+
             val uiState by createUserViewModel.state.collectAsStateWithLifecycle()
+            val form by createUserFormViewModel.form.collectAsStateWithLifecycle()
+            val validation by createUserFormViewModel.validation.collectAsStateWithLifecycle()
 
             CreateUserScreen(
                 uiState = uiState,
@@ -29,7 +34,11 @@ fun NavGraphBuilder.signupNavHost(
                 resetState = createUserViewModel::resetState,
                 navigateToCreatePassword = { email, username ->
                     CreateUserDestination.navigateToCreatePassword(navController, email, username)
-                }
+                },
+                form = form,
+                validation = validation,
+                updateEmail = createUserFormViewModel::updateEmail,
+                updateUsername = createUserFormViewModel::updateUsername,
             )
         }
         composable(

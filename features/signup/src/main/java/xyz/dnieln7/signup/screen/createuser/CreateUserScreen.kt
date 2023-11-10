@@ -12,10 +12,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalConfiguration
@@ -42,12 +38,13 @@ fun CreateUserScreen(
     createUser: (email: String, username: String) -> Unit,
     resetState: () -> Unit,
     navigateToCreatePassword: (String, String) -> Unit,
+    form: CreateUserForm,
+    validation: CreateUserFormValidation,
+    updateEmail: (String) -> Unit,
+    updateUsername: (String) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
-
-    var email by rememberSaveable { mutableStateOf("") }
-    var username by rememberSaveable { mutableStateOf("") }
 
     val paddingMultiplier = if (isPortrait) 4 else 1
 
@@ -79,10 +76,10 @@ fun CreateUserScreen(
                 VerticalSpacer(of = (12 * paddingMultiplier).dp)
                 JustChattingTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = email,
-                    onValueChange = { email = it },
+                    value = form.email,
+                    onValueChange = updateEmail,
                     label = stringResource(R.string.email),
-                    error = stringFromEmailValidationError(uiState.asError()?.emailError),
+                    error = stringFromEmailValidationError(validation.emailValidationError),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next,
@@ -94,10 +91,10 @@ fun CreateUserScreen(
                 VerticalSpacer(of = (4 * paddingMultiplier).dp)
                 JustChattingTextField(
                     modifier = Modifier.fillMaxWidth(),
-                    value = username,
-                    onValueChange = { username = it },
+                    value = form.username,
+                    onValueChange = updateUsername,
                     label = stringResource(R.string.username),
-                    error = stringFromSimpleTextValidationError(uiState.asError()?.usernameError),
+                    error = stringFromSimpleTextValidationError(validation.usernameValidationError),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done,
@@ -106,23 +103,23 @@ fun CreateUserScreen(
                         onDone = { focusManager.clearFocus() }
                     ),
                 )
-                if (uiState is CreateUserState.Error && uiState.error != null) {
+                if (uiState is CreateUserState.Error) {
                     VerticalSpacer(of = 12.dp)
                     Text(
                         modifier = Modifier.fillMaxWidth(),
-                        text = uiState.error,
+                        text = uiState.message,
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.bodyMedium.copy(color = MaterialTheme.colorScheme.error),
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    VerticalSpacer(of = 12.dp)
                 }
                 VerticalSpacer(of = (12 * paddingMultiplier).dp)
                 JustChattingNLSButton(
                     modifier = Modifier.fillMaxWidth(),
+                    enabled = validation.emailValidationError == null && validation.usernameValidationError == null,
                     noneText = stringResource(R.string.create_user),
-                    onClick = { createUser(email, username) },
+                    onClick = { createUser(form.email, form.username) },
                     nlsButtonStatus = uiState.toNLSStatus(),
                 )
             }
