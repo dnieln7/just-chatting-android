@@ -22,12 +22,12 @@ class RegisterViewModel @Inject constructor(
     private val signupUseCase: SignupUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<RegisterState>(RegisterState.Loading)
-    val state get() = _state.asStateFlow()
-
     private val email: String = savedStateHandle[REGISTER_EMAIL]!!
     private val password: String = savedStateHandle[REGISTER_PASSWORD]!!
     private val username: String = savedStateHandle[REGISTER_USERNAME]!!
+
+    private val _state = MutableStateFlow<RegisterState>(RegisterState.Loading)
+    val state get() = _state.asStateFlow()
 
     init {
         register()
