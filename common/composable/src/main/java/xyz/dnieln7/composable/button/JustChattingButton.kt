@@ -11,9 +11,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import xyz.dnieln7.composable.theme.JustChattingTheme
 
 @Composable
-fun JustChattingButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+fun JustChattingButton(
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    text: String,
+    onClick: () -> Unit
+) {
     FilledTonalButton(
         modifier = modifier,
+        enabled = enabled,
         shape = MaterialTheme.shapes.small,
         onClick = onClick,
         content = { Text(text) }

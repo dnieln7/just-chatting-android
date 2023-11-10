@@ -7,8 +7,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import xyz.dnieln7.signup.screen.createpassword.CreatePasswordFormViewModel
 import xyz.dnieln7.signup.screen.createpassword.CreatePasswordScreen
-import xyz.dnieln7.signup.screen.createpassword.CreatePasswordViewModel
 import xyz.dnieln7.signup.screen.createuser.CreateUserFormViewModel
 import xyz.dnieln7.signup.screen.createuser.CreateUserScreen
 import xyz.dnieln7.signup.screen.createuser.CreateUserViewModel
@@ -45,13 +45,15 @@ fun NavGraphBuilder.signupNavHost(
             route = CreatePasswordDestination.routeWithArgs,
             arguments = CreatePasswordDestination.args,
         ) {
-            val createPasswordViewModel = hiltViewModel<CreatePasswordViewModel>()
-            val uiState by createPasswordViewModel.state.collectAsStateWithLifecycle()
+            val createPasswordFormViewModel = hiltViewModel<CreatePasswordFormViewModel>()
+            val form by createPasswordFormViewModel.form.collectAsStateWithLifecycle()
+            val validation by createPasswordFormViewModel.validation.collectAsStateWithLifecycle()
 
             CreatePasswordScreen(
-                uiState = uiState,
-                createPassword = createPasswordViewModel::createPassword,
-                resetState = createPasswordViewModel::resetState,
+                form = form,
+                validation = validation,
+                updatePassword = createPasswordFormViewModel::updatePassword,
+                updatePasswordConfirm = createPasswordFormViewModel::updatePasswordConfirm,
                 navigateToRegister = { email, password, username ->
                     CreatePasswordDestination.navigateToRegister(
                         navController = navController,

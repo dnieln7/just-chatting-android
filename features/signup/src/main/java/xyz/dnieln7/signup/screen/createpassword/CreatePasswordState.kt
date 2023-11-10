@@ -1,6 +1,6 @@
 package xyz.dnieln7.signup.screen.createpassword
 
-import xyz.dnieln7.domain.validation.PasswordsValidationError
+import xyz.dnieln7.domain.validation.PasswordValidationError
 
 sealed class CreatePasswordState {
     object None : CreatePasswordState()
@@ -10,7 +10,7 @@ sealed class CreatePasswordState {
         val username: String,
     ) : CreatePasswordState()
 
-    class Error(val passwordError: PasswordsValidationError? = null) : CreatePasswordState()
+    class Error(val passwordError: PasswordValidationError? = null) : CreatePasswordState()
 
     fun asError(): Error? {
         if (this is Error) {
