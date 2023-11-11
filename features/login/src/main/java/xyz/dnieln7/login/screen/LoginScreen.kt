@@ -19,10 +19,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
@@ -45,6 +41,7 @@ import xyz.dnieln7.composable.button.JustChattingNLSButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalFlexibleSpacer
 import xyz.dnieln7.composable.spacer.VerticalSpacer
+import xyz.dnieln7.composable.string.stringFromEmailValidationError
 import xyz.dnieln7.composable.textfield.JustChattingPasswordTextField
 import xyz.dnieln7.composable.textfield.JustChattingTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
@@ -53,9 +50,13 @@ import xyz.dnieln7.login.R
 @Composable
 fun LoginScreen(
     uiState: LoginState,
-    login: (email: String, password: String) -> Unit,
-    onLoggedIn: () -> Unit,
+    login: (String, String) -> Unit,
+    form: LoginForm,
+    validation: LoginFormValidation,
+    updateEmail: (String) -> Unit,
+    updatePassword: (String) -> Unit,
     navigateToSignup: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
 
@@ -75,9 +76,13 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .weight(1F),
                     loginState = uiState,
-                    login = { email, password -> login(email, password) },
-                    onLoggedIn = onLoggedIn,
+                    login = login,
+                    form = form,
+                    validation = validation,
+                    updateEmail = updateEmail,
+                    updatePassword = updatePassword,
                     navigateToSignup = navigateToSignup,
+                    navigateToHome = navigateToHome,
                 )
             }
         } else {
@@ -92,9 +97,13 @@ fun LoginScreen(
                         .fillMaxHeight()
                         .weight(1F),
                     loginState = uiState,
-                    login = { email, password -> login(email, password) },
-                    onLoggedIn = onLoggedIn,
+                    login = login,
+                    form = form,
+                    validation = validation,
+                    updateEmail = updateEmail,
+                    updatePassword = updatePassword,
                     navigateToSignup = navigateToSignup,
+                    navigateToHome = navigateToHome,
                 )
             }
         }
@@ -127,14 +136,15 @@ fun LoginForm(
     modifier: Modifier = Modifier,
     loginState: LoginState,
     login: (String, String) -> Unit,
-    onLoggedIn: () -> Unit,
+    form: LoginForm,
+    validation: LoginFormValidation,
+    updateEmail: (String) -> Unit,
+    updatePassword: (String) -> Unit,
     navigateToSignup: () -> Unit,
+    navigateToHome: () -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
-
-    var email by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
 
     val paddingValues = if (isPortrait) {
         PaddingValues(
@@ -177,8 +187,9 @@ fun LoginForm(
             VerticalFlexibleSpacer()
             JustChattingTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = email,
-                onValueChange = { email = it },
+                value = form.email,
+                error = stringFromEmailValidationError(validation.emailValidationError),
+                onValueChange = updateEmail,
                 label = stringResource(R.string.email),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -191,8 +202,8 @@ fun LoginForm(
             VerticalSpacer(of = 4.dp)
             JustChattingPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = password,
-                onValueChange = { password = it },
+                value = form.password,
+                onValueChange = updatePassword,
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Done,
                     action = { focusManager.clearFocus() }
@@ -212,10 +223,11 @@ fun LoginForm(
             }
             JustChattingNLSButton(
                 modifier = Modifier.fillMaxWidth(),
+                enabled = validation.emailValidationError == null,
                 noneText = stringResource(R.string.login),
                 successText = stringResource(R.string.logged_in),
                 nlsButtonStatus = loginState.toNLSStatus(),
-                onClick = { login(email, password) },
+                onClick = { login(form.email, form.password) },
             )
             VerticalSpacer(of = 12.dp)
             Text(
@@ -241,7 +253,7 @@ fun LoginForm(
 
     if (loginState == LoginState.Success) {
         LaunchedEffect(Unit) {
-            onLoggedIn()
+            navigateToHome()
         }
     }
 }

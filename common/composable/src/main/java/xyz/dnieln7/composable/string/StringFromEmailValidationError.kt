@@ -6,7 +6,6 @@ import androidx.compose.ui.res.stringResource
 import xyz.dnieln7.composable.R
 import xyz.dnieln7.domain.validation.EmailValidationError
 
-// TODO: 17/10/23 Should be part of textfields behaviour?
 @Composable
 @ReadOnlyComposable
 fun stringFromEmailValidationError(emailValidationError: EmailValidationError?): String? {
