@@ -32,13 +32,13 @@ fun NavGraphBuilder.signupNavHost(
                 uiState = uiState,
                 createUser = createUserViewModel::createUser,
                 resetState = createUserViewModel::resetState,
-                navigateToCreatePassword = { email, username ->
-                    CreateUserDestination.navigateToCreatePassword(navController, email, username)
-                },
                 form = form,
                 validation = validation,
                 updateEmail = createUserFormViewModel::updateEmail,
                 updateUsername = createUserFormViewModel::updateUsername,
+                navigateToCreatePassword = { email, username ->
+                    CreateUserDestination.navigateToCreatePassword(navController, email, username)
+                },
             )
         }
         composable(

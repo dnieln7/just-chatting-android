@@ -37,11 +37,11 @@ fun CreateUserScreen(
     uiState: CreateUserState,
     createUser: (email: String, username: String) -> Unit,
     resetState: () -> Unit,
-    navigateToCreatePassword: (String, String) -> Unit,
     form: CreateUserForm,
     validation: CreateUserFormValidation,
     updateEmail: (String) -> Unit,
     updateUsername: (String) -> Unit,
+    navigateToCreatePassword: (String, String) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
