@@ -24,10 +24,10 @@ class LoginFormViewModel @Inject constructor(
 
         validateEmailUseCase(email).fold(
             { error ->
-                _validation.update { it.copy(emailValidationError = error) }
+                _validation.update { it.copy(initialized = true, emailValidationError = error) }
             },
             {
-                _validation.update { it.copy(emailValidationError = null) }
+                _validation.update { it.copy(initialized = true, emailValidationError = null) }
             }
         )
     }

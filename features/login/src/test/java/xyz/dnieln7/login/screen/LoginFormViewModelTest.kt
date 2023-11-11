@@ -6,7 +6,9 @@ import arrow.core.right
 import io.mockk.every
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeNull
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
 import org.junit.Test
 import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
@@ -26,8 +28,15 @@ class LoginFormViewModelTest {
 
     @Test
     fun `GIVEN the happy path WHEN nothing THEN initialize the expected state`() {
-        viewModel.form.value shouldBeEqualTo LoginForm()
-        viewModel.validation.value shouldBeEqualTo LoginFormValidation()
+        viewModel.form.value.let {
+            it.email shouldBeEqualTo ""
+            it.password shouldBeEqualTo ""
+        }
+
+        viewModel.validation.value.let {
+            it.initialized.shouldBeFalse()
+            it.emailValidationError.shouldBeNull()
+        }
     }
 
     @Test
@@ -44,7 +53,10 @@ class LoginFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().emailValidationError.shouldBeNull()
+                awaitItem().let {
+                    it.initialized.shouldBeTrue()
+                    it.emailValidationError.shouldBeNull()
+                }
             }
         }
     }
@@ -63,7 +75,10 @@ class LoginFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().emailValidationError shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
+                awaitItem().let {
+                    it.initialized.shouldBeTrue()
+                    it.emailValidationError shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
+                }
             }
         }
     }

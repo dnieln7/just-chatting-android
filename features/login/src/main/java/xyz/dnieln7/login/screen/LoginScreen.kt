@@ -223,7 +223,7 @@ fun LoginForm(
             }
             JustChattingNLSButton(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = validation.emailValidationError == null,
+                enabled = validation.isValid(),
                 noneText = stringResource(R.string.login),
                 successText = stringResource(R.string.logged_in),
                 nlsButtonStatus = loginState.toNLSStatus(),
