@@ -12,6 +12,7 @@ import org.junit.Test
 import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.domain.usecase.ValidateSimpleTextUseCase
 import xyz.dnieln7.domain.validation.EmailValidationError
+import xyz.dnieln7.domain.validation.SimpleTextValidationError
 import xyz.dnieln7.testing.relaxedMockk
 
 class CreateUserFormViewModelTest {
@@ -66,6 +67,44 @@ class CreateUserFormViewModelTest {
 
             viewModel.validation.test {
                 awaitItem().emailValidationError shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the happy path WHEN updateUsername THEN emit the expected states`() {
+        val username = "username"
+
+        every { validateSimpleTextUseCase(username) } returns Unit.right()
+
+        runTest {
+            viewModel.updateUsername(username)
+
+            viewModel.form.test {
+                awaitItem().username shouldBeEqualTo username
+            }
+
+            viewModel.validation.test {
+                awaitItem().usernameValidationError.shouldBeNull()
+            }
+        }
+    }
+
+    @Test
+    fun `GIVEN the unhappy path WHEN updateUsername THEN emit the expected states`() {
+        val username = "username"
+
+        every { validateSimpleTextUseCase(username) } returns SimpleTextValidationError.EMPTY.left()
+
+        runTest {
+            viewModel.updateUsername(username)
+
+            viewModel.form.test {
+                awaitItem().username shouldBeEqualTo username
+            }
+
+            viewModel.validation.test {
+                awaitItem().usernameValidationError shouldBeEqualTo SimpleTextValidationError.EMPTY
             }
         }
     }
