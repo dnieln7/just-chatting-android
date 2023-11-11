@@ -29,8 +29,15 @@ class CreateUserFormViewModelTest {
 
     @Test
     fun `GIVEN the happy path WHEN nothing THEN initialize the expected state`() {
-        viewModel.form.value shouldBeEqualTo CreateUserForm()
-        viewModel.validation.value shouldBeEqualTo CreateUserFormValidation()
+        viewModel.form.value.let {
+            it.email shouldBeEqualTo ""
+            it.username shouldBeEqualTo ""
+        }
+
+        viewModel.validation.value.let {
+            it.emailValidationError shouldBeEqualTo EmailValidationError.EMPTY
+            it.usernameValidationError shouldBeEqualTo SimpleTextValidationError.EMPTY
+        }
     }
 
     @Test

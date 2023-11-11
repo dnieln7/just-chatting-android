@@ -117,7 +117,7 @@ fun CreateUserScreen(
                 VerticalSpacer(of = (12 * paddingMultiplier).dp)
                 JustChattingNLSButton(
                     modifier = Modifier.fillMaxWidth(),
-                    enabled = validation.emailValidationError == null && validation.usernameValidationError == null,
+                    enabled = validation.isValid(),
                     noneText = stringResource(R.string.create_user),
                     onClick = { createUser(form.email, form.username) },
                     nlsButtonStatus = uiState.toNLSStatus(),
