@@ -7,9 +7,7 @@ import arrow.core.right
 import io.mockk.every
 import kotlinx.coroutines.test.runTest
 import org.amshove.kluent.shouldBeEqualTo
-import org.amshove.kluent.shouldBeFalse
 import org.amshove.kluent.shouldBeNull
-import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
 import org.junit.Test
 import xyz.dnieln7.domain.usecase.ValidatePasswordUseCase
@@ -38,8 +36,17 @@ class CreatePasswordFormViewModelTest {
 
     @Test
     fun `GIVEN the happy path WHEN nothing THEN initialize the expected state`() {
-        viewModel.form.value shouldBeEqualTo CreatePasswordForm(email, username)
-        viewModel.validation.value shouldBeEqualTo CreatePasswordFormValidation()
+        viewModel.form.value.let {
+            it.email shouldBeEqualTo email
+            it.username shouldBeEqualTo username
+            it.password shouldBeEqualTo ""
+            it.passwordConfirm shouldBeEqualTo ""
+        }
+
+        viewModel.validation.value.let {
+            it.passwordsMatch.shouldBeNull()
+            it.passwordValidationError shouldBeEqualTo PasswordValidationError.EMPTY
+        }
     }
 
     @Test
@@ -47,6 +54,8 @@ class CreatePasswordFormViewModelTest {
         val password = "password"
 
         every { validatePasswordUseCase(password) } returns Unit.right()
+
+        viewModel.updatePasswordConfirm(password)
 
         runTest {
             viewModel.updatePassword(password)
@@ -56,7 +65,10 @@ class CreatePasswordFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().passwordValidationError.shouldBeNull()
+                awaitItem().let {
+                    it.passwordsMatch shouldBeEqualTo true
+                    it.passwordValidationError.shouldBeNull()
+                }
             }
         }
     }
@@ -75,7 +87,10 @@ class CreatePasswordFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().passwordValidationError shouldBeEqualTo PasswordValidationError.TOO_SHORT
+                awaitItem().let {
+                    it.passwordsMatch shouldBeEqualTo false
+                    it.passwordValidationError shouldBeEqualTo PasswordValidationError.TOO_SHORT
+                }
             }
         }
     }
@@ -97,7 +112,7 @@ class CreatePasswordFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().passwordsAreEqual.shouldBeTrue()
+                awaitItem().passwordsMatch shouldBeEqualTo true
             }
         }
     }
@@ -119,7 +134,7 @@ class CreatePasswordFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().passwordsAreEqual.shouldBeFalse()
+                awaitItem().passwordsMatch shouldBeEqualTo false
             }
         }
     }

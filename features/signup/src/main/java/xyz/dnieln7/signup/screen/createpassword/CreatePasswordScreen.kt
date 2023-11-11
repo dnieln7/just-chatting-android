@@ -74,7 +74,9 @@ fun CreatePasswordScreen(
             JustChattingPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.passwordConfirm,
-                error = if (validation.passwordsAreEqual) null else stringResource(R.string.passwords_not_equal_error),
+                error = if (validation.passwordsMatch == false)
+                    stringResource(R.string.passwords_not_equal_error)
+                else null,
                 onValueChange = updatePasswordConfirm,
                 label = stringResource(R.string.confirm_password),
                 passwordAction = PasswordAction(
@@ -85,7 +87,7 @@ fun CreatePasswordScreen(
             VerticalSpacer(of = (12 * paddingMultiplier).dp)
             JustChattingButton(
                 modifier = Modifier.fillMaxWidth(),
-                enabled = validation.passwordValidationError == null && validation.passwordsAreEqual,
+                enabled = validation.isValid(),
                 text = stringResource(R.string.create_password),
                 onClick = { navigateToRegister(form.email, form.username, form.password) },
             )

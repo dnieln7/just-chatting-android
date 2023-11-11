@@ -37,10 +37,16 @@ class CreatePasswordFormViewModel @Inject constructor(
                 _validation.update { it.copy(passwordValidationError = null) }
             },
         )
+
+        _validation.update {
+            it.copy(passwordsMatch = password == _form.value.passwordConfirm)
+        }
     }
 
     fun updatePasswordConfirm(passwordConfirm: String) {
         _form.update { it.copy(passwordConfirm = passwordConfirm) }
-        _validation.update { it.copy(passwordsAreEqual = _form.value.password == passwordConfirm) }
+        _validation.update {
+            it.copy(passwordsMatch = _form.value.password == passwordConfirm)
+        }
     }
 }
