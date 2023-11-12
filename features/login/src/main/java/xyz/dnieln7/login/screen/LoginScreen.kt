@@ -37,13 +37,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.button.JustChattingNLSButton
+import xyz.dnieln7.composable.button.JCStatefulButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalFlexibleSpacer
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.string.stringFromEmailValidationError
-import xyz.dnieln7.composable.textfield.JustChattingPasswordTextField
-import xyz.dnieln7.composable.textfield.JustChattingTextField
+import xyz.dnieln7.composable.textfield.JCPasswordTextField
+import xyz.dnieln7.composable.textfield.JCTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
 import xyz.dnieln7.login.R
 
@@ -185,7 +185,7 @@ fun LoginForm(
                 style = MaterialTheme.typography.bodyMedium,
             )
             VerticalFlexibleSpacer()
-            JustChattingTextField(
+            JCTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.email,
                 error = stringFromEmailValidationError(validation.emailValidationError),
@@ -200,7 +200,7 @@ fun LoginForm(
                 ),
             )
             VerticalSpacer(of = 4.dp)
-            JustChattingPasswordTextField(
+            JCPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.password,
                 onValueChange = updatePassword,
@@ -221,12 +221,12 @@ fun LoginForm(
                 )
                 VerticalSpacer(of = 12.dp)
             }
-            JustChattingNLSButton(
+            JCStatefulButton(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = validation.isValid(),
                 noneText = stringResource(R.string.login),
                 successText = stringResource(R.string.logged_in),
-                nlsButtonStatus = loginState.toNLSStatus(),
+                statefulButtonStatus = loginState.toNLSStatus(),
                 onClick = { login(form.email, form.password) },
             )
             VerticalSpacer(of = 12.dp)

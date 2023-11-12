@@ -1,6 +1,6 @@
 package xyz.dnieln7.login.screen
 
-import xyz.dnieln7.composable.button.NLSButtonStatus
+import xyz.dnieln7.composable.button.StatefulButtonStatus
 
 sealed class LoginState {
     object None : LoginState()
@@ -8,12 +8,12 @@ sealed class LoginState {
     object Success : LoginState()
     class Error(val message: String) : LoginState()
 
-    fun toNLSStatus(): NLSButtonStatus {
+    fun toNLSStatus(): StatefulButtonStatus {
         return when (this) {
-            None -> NLSButtonStatus.NONE
-            Loading -> NLSButtonStatus.LOADING
-            Success -> NLSButtonStatus.SUCCESS
-            is Error -> NLSButtonStatus.NONE
+            None -> StatefulButtonStatus.NONE
+            Loading -> StatefulButtonStatus.LOADING
+            Success -> StatefulButtonStatus.SUCCESS
+            is Error -> StatefulButtonStatus.NONE
         }
     }
 }

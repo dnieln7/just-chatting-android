@@ -81,7 +81,7 @@ private val darkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun JustChattingTheme(
+fun JCTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit,

@@ -29,10 +29,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import xyz.dnieln7.composable.R
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun JustChattingPasswordTextField(
+fun JCPasswordTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
@@ -74,15 +74,19 @@ fun JustChattingPasswordTextField(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun OutlinedTextFieldPreview() {
-    JustChattingTheme {
+private fun JCPasswordTextFieldPreview() {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingPasswordTextField(value = "password", onValueChange = {})
+                JCPasswordTextField(
+                    value = "JCPasswordTextFieldPreview",
+                    label = "JCPasswordTextFieldPreview",
+                    onValueChange = {},
+                )
             }
         }
     }

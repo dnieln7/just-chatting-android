@@ -23,10 +23,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun JustChattingTabs(
+fun JCTabs(
     modifier: Modifier = Modifier,
     tabs: List<String>,
     onTabChange: (Int) -> Unit,
@@ -84,15 +84,15 @@ fun JustChattingTabs(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingOutlinedTabsPreview() {
-    JustChattingTheme(darkTheme = false) {
+private fun JCTabsPreview() {
+    JCTheme(darkTheme = false) {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingTabs(tabs = listOf("Home", "Favorites", "Settings"), onTabChange = {})
+                JCTabs(tabs = listOf("Home", "Favorites", "Settings"), onTabChange = {})
             }
         }
     }

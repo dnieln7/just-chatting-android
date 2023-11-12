@@ -13,7 +13,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 import xyz.dnieln7.justchatting.navigation.HomeDestination
 import xyz.dnieln7.justchatting.navigation.JustChattingNavHost
 import xyz.dnieln7.login.navigation.LoginDestination
@@ -42,7 +42,7 @@ class JustChattingActivity : ComponentActivity() {
         }
 
         setContent {
-            JustChattingTheme {
+            JCTheme {
                 val uiState by justChattingViewModel.state.collectAsStateWithLifecycle()
 
                 splashScreen.setKeepOnScreenCondition {

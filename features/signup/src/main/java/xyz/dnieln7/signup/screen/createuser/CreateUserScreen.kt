@@ -23,13 +23,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.button.JustChattingNLSButton
+import xyz.dnieln7.composable.button.JCStatefulButton
 import xyz.dnieln7.composable.extension.isPortrait
-import xyz.dnieln7.composable.progress.StepperProgressIndicator
+import xyz.dnieln7.composable.progress.JCStepper
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.string.stringFromEmailValidationError
 import xyz.dnieln7.composable.string.stringFromSimpleTextValidationError
-import xyz.dnieln7.composable.textfield.JustChattingTextField
+import xyz.dnieln7.composable.textfield.JCTextField
 import xyz.dnieln7.signup.R
 
 @Composable
@@ -68,13 +68,13 @@ fun CreateUserScreen(
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 )
                 VerticalSpacer(of = 20.dp)
-                StepperProgressIndicator(
+                JCStepper(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    currentSteps = 1,
+                    stepsProgress = 1,
                     totalSteps = 2,
                 )
                 VerticalSpacer(of = (12 * paddingMultiplier).dp)
-                JustChattingTextField(
+                JCTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = form.email,
                     onValueChange = updateEmail,
@@ -89,7 +89,7 @@ fun CreateUserScreen(
                     ),
                 )
                 VerticalSpacer(of = (4 * paddingMultiplier).dp)
-                JustChattingTextField(
+                JCTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = form.username,
                     onValueChange = updateUsername,
@@ -115,12 +115,13 @@ fun CreateUserScreen(
                     )
                 }
                 VerticalSpacer(of = (12 * paddingMultiplier).dp)
-                JustChattingNLSButton(
+                JCStatefulButton(
                     modifier = Modifier.fillMaxWidth(),
                     enabled = validation.isValid(),
                     noneText = stringResource(R.string.create_user),
+                    successText = stringResource(R.string.user_created),
                     onClick = { createUser(form.email, form.username) },
-                    nlsButtonStatus = uiState.toNLSStatus(),
+                    statefulButtonStatus = uiState.toStatefulButtonStatus(),
                 )
             }
         }

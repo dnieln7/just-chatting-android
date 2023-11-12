@@ -18,12 +18,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.button.JustChattingButton
+import xyz.dnieln7.composable.button.JCButton
 import xyz.dnieln7.composable.extension.isPortrait
-import xyz.dnieln7.composable.progress.StepperProgressIndicator
+import xyz.dnieln7.composable.progress.JCStepper
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.string.stringFromPasswordValidationError
-import xyz.dnieln7.composable.textfield.JustChattingPasswordTextField
+import xyz.dnieln7.composable.textfield.JCPasswordTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
 import xyz.dnieln7.signup.R
 
@@ -54,13 +54,13 @@ fun CreatePasswordScreen(
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             )
             VerticalSpacer(of = 20.dp)
-            StepperProgressIndicator(
+            JCStepper(
                 modifier = Modifier.padding(horizontal = 20.dp),
-                currentSteps = 2,
+                stepsProgress = 2,
                 totalSteps = 2,
             )
             VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingPasswordTextField(
+            JCPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.password,
                 error = stringFromPasswordValidationError(validation.passwordValidationError),
@@ -71,7 +71,7 @@ fun CreatePasswordScreen(
                 ),
             )
             VerticalSpacer(of = (4 * paddingMultiplier).dp)
-            JustChattingPasswordTextField(
+            JCPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.passwordConfirm,
                 error = if (validation.passwordsMatch == false)
@@ -85,7 +85,7 @@ fun CreatePasswordScreen(
                 ),
             )
             VerticalSpacer(of = (12 * paddingMultiplier).dp)
-            JustChattingButton(
+            JCButton(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = validation.isValid(),
                 text = stringResource(R.string.create_password),

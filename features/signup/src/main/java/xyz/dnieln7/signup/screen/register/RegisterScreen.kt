@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
-import androidx.compose.material.icons.outlined.ErrorOutline
+import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.button.JustChattingButton
+import xyz.dnieln7.composable.button.JCButton
 import xyz.dnieln7.composable.extension.isPortrait
-import xyz.dnieln7.composable.progress.JustChattingScreenProgressIndicator
+import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.signup.R
 
@@ -76,7 +76,7 @@ fun RegisterLoading(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        JustChattingScreenProgressIndicator()
+        JCProgressIndicator()
         VerticalSpacer(of = 48.dp)
         Text(
             text = stringResource(R.string.registering_please_wait),
@@ -94,7 +94,7 @@ fun RegisterSuccess(modifier: Modifier = Modifier) {
     ) {
         Image(
             modifier = Modifier.size(150.dp),
-            imageVector = Icons.Outlined.CheckCircle,
+            imageVector = Icons.Rounded.CheckCircle,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
@@ -120,7 +120,7 @@ fun RegisterError(modifier: Modifier = Modifier, error: String, retry: () -> Uni
     ) {
         Image(
             modifier = Modifier.size(150.dp),
-            imageVector = Icons.Outlined.ErrorOutline,
+            imageVector = Icons.Rounded.Error,
             contentDescription = null,
             colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
@@ -141,7 +141,7 @@ fun RegisterError(modifier: Modifier = Modifier, error: String, retry: () -> Uni
             overflow = TextOverflow.Ellipsis,
         )
         VerticalSpacer(of = (12 * paddingMultiplier).dp)
-        JustChattingButton(
+        JCButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.retry),
             onClick = retry,

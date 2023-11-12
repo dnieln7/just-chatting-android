@@ -12,13 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.spacer.HorizontalSpacer
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun StepperProgressIndicator(modifier: Modifier = Modifier, currentSteps: Int, totalSteps: Int) {
+fun JCStepper(modifier: Modifier = Modifier, stepsProgress: Int, totalSteps: Int) {
     Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
         for (i in 1..totalSteps) {
-            val color = if (i <= currentSteps) {
+            val color = if (i <= stepsProgress) {
                 MaterialTheme.colorScheme.secondary
             } else {
                 MaterialTheme.colorScheme.secondaryContainer
@@ -42,12 +42,12 @@ fun StepperProgressIndicator(modifier: Modifier = Modifier, currentSteps: Int, t
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun StepperProgressIndicatorPreview() {
-    JustChattingTheme(darkTheme = false) {
+private fun JCStepperPreview() {
+    JCTheme(darkTheme = false) {
         Surface {
-            StepperProgressIndicator(
+            JCStepper(
                 modifier = Modifier.padding(20.dp),
-                currentSteps = 1,
+                stepsProgress = 1,
                 totalSteps = 3
             )
         }

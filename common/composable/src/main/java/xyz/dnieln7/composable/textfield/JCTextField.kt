@@ -13,10 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun JustChattingTextField(
+fun JCTextField(
     modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
@@ -40,18 +40,18 @@ fun JustChattingTextField(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingTextFieldPreview() {
-    JustChattingTheme {
+private fun JCTextFieldPreview() {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingTextField(
-                    value = "JustChattingTextField",
+                JCTextField(
+                    value = "JCTextFieldPreview",
                     onValueChange = {},
-                    label = "JustChattingTextField"
+                    label = "JCTextFieldPreview"
                 )
             }
         }

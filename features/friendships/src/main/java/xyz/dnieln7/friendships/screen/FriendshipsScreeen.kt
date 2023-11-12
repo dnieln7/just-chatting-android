@@ -41,16 +41,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import xyz.dnieln7.composable.button.JustChattingButton
-import xyz.dnieln7.composable.error.JustChattingError
-import xyz.dnieln7.composable.error.JustChattingErrorWithRetry
-import xyz.dnieln7.composable.progress.JustChattingScreenProgressIndicator
-import xyz.dnieln7.composable.pullrefresh.JustChattingPullRefresh
+import xyz.dnieln7.composable.alert.AlertAction
+import xyz.dnieln7.composable.alert.JCAlert
+import xyz.dnieln7.composable.alert.JCErrorAlert
+import xyz.dnieln7.composable.button.JCButton
+import xyz.dnieln7.composable.progress.JCProgressIndicator
+import xyz.dnieln7.composable.pullrefresh.PullRefresh
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.tab.JustChattingTabs
-import xyz.dnieln7.composable.text.JustChattingIconText
-import xyz.dnieln7.composable.text.JustChattingIconTextButton
-import xyz.dnieln7.composable.textfield.JustChattingOutlinedSearchBar
+import xyz.dnieln7.composable.tab.JCTabs
+import xyz.dnieln7.composable.textfield.JCOutlinedSearchTextField
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.domain.model.User
 import xyz.dnieln7.friendships.R
@@ -105,7 +104,7 @@ fun FriendshipsScreen(
                     style = MaterialTheme.typography.titleLarge
                 )
                 VerticalSpacer(of = 22.dp)
-                JustChattingTabs(
+                JCTabs(
                     modifier = Modifier.padding(horizontal = 12.dp),
                     tabs = listOf(
                         stringResource(R.string.friendships),
@@ -172,21 +171,23 @@ fun Friendships(
     deleteFriendship: (Friendship) -> Unit
 ) {
     when (uiState) {
-        FriendshipsState.Loading -> JustChattingScreenProgressIndicator(
+        FriendshipsState.Loading -> JCProgressIndicator(
             modifier = Modifier.fillMaxSize()
         )
 
         is FriendshipsState.Success -> {
             if (uiState.data.isEmpty()) {
-                JustChattingIconTextButton(
+                JCAlert(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Rounded.Contacts,
                     text = stringResource(R.string.empty_friendships),
-                    buttonText = stringResource(R.string.try_again),
-                    onClick = getFriendships,
+                    alertAction = AlertAction(
+                        text = stringResource(R.string.try_again),
+                        onClick = getFriendships,
+                    ),
                 )
             } else {
-                JustChattingPullRefresh(onRefresh = getFriendships) {
+                PullRefresh(onRefresh = getFriendships) {
                     LazyColumn {
                         items(items = uiState.data, key = { it.data.id }) {
                             FriendshipListTile(
@@ -201,10 +202,13 @@ fun Friendships(
             }
         }
 
-        is FriendshipsState.Error -> JustChattingErrorWithRetry(
+        is FriendshipsState.Error -> JCErrorAlert(
             icon = Icons.Rounded.Error,
             error = uiState.message,
-            onRetry = getFriendships
+            alertAction = AlertAction(
+                text = stringResource(R.string.try_again),
+                onClick = getFriendships,
+            ),
         )
     }
 }
@@ -217,21 +221,23 @@ fun PendingFriendships(
     rejectFriendship: (Friendship) -> Unit,
 ) {
     when (uiState) {
-        PendingFriendshipsState.Loading -> JustChattingScreenProgressIndicator(
+        PendingFriendshipsState.Loading -> JCProgressIndicator(
             modifier = Modifier.fillMaxSize()
         )
 
         is PendingFriendshipsState.Success -> {
             if (uiState.data.isEmpty()) {
-                JustChattingIconTextButton(
+                JCAlert(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Rounded.Pending,
                     text = stringResource(R.string.empty_pending_friendships),
-                    buttonText = stringResource(R.string.try_again),
-                    onClick = getPendingFriendships,
+                    alertAction = AlertAction(
+                        text = stringResource(R.string.try_again),
+                        onClick = getPendingFriendships,
+                    ),
                 )
             } else {
-                JustChattingPullRefresh(onRefresh = getPendingFriendships) {
+                PullRefresh(onRefresh = getPendingFriendships) {
                     LazyColumn {
                         items(items = uiState.data, key = { it.data.id }) {
                             PendingFriendshipListTile(
@@ -245,10 +251,13 @@ fun PendingFriendships(
             }
         }
 
-        is PendingFriendshipsState.Error -> JustChattingErrorWithRetry(
+        is PendingFriendshipsState.Error -> JCErrorAlert(
             icon = Icons.Rounded.Error,
             error = uiState.message,
-            onRetry = getPendingFriendships
+            alertAction = AlertAction(
+                text = stringResource(R.string.try_again),
+                onClick = getPendingFriendships,
+            ),
         )
     }
 }
@@ -267,7 +276,7 @@ fun AddFriendship(
         sheetState = sheetState,
         onDismissRequest = onModalBottomSheetDismiss,
     ) {
-        JustChattingOutlinedSearchBar(
+        JCOutlinedSearchTextField(
             modifier = Modifier.padding(horizontal = 12.dp),
             placeholder = stringResource(R.string.search_by_email),
             onSearch = { getUserByEmail(it) }
@@ -285,17 +294,17 @@ fun AddFriendship(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             when (uiState) {
-                AddFriendshipState.None -> JustChattingIconText(
+                AddFriendshipState.None -> JCAlert(
                     icon = Icons.Rounded.PersonSearch,
                     text = stringResource(R.string.search_user_hint)
                 )
 
-                AddFriendshipState.Loading -> JustChattingScreenProgressIndicator(
+                AddFriendshipState.Loading -> JCProgressIndicator(
                     modifier = Modifier.fillMaxWidth()
                 )
 
                 is AddFriendshipState.GetUserError -> {
-                    JustChattingError(
+                    JCErrorAlert(
                         icon = Icons.Rounded.SearchOff,
                         error = uiState.message,
                     )
@@ -306,21 +315,22 @@ fun AddFriendship(
                     VerticalSpacer(of = 4.dp)
                     Text(text = uiState.user.email, style = MaterialTheme.typography.bodyLarge)
                     VerticalSpacer(of = 12.dp)
-                    JustChattingButton(
+                    JCButton(
                         text = stringResource(R.string.send_friendship_request),
                         onClick = { sendFriendshipRequest(uiState.user) },
                     )
                 }
 
-                is AddFriendshipState.SendFriendshipRequestError -> {
-                    JustChattingErrorWithRetry(
-                        icon = Icons.Rounded.Error,
-                        error = uiState.message,
-                        onRetry = { sendFriendshipRequest(uiState.user) }
-                    )
-                }
+                is AddFriendshipState.SendFriendshipRequestError -> JCErrorAlert(
+                    icon = Icons.Rounded.Error,
+                    error = uiState.message,
+                    alertAction = AlertAction(
+                        text = stringResource(R.string.try_again),
+                        onClick = { sendFriendshipRequest(uiState.user) },
+                    ),
+                )
 
-                is AddFriendshipState.FriendshipRequestSent -> JustChattingIconText(
+                is AddFriendshipState.FriendshipRequestSent -> JCAlert(
                     icon = Icons.Rounded.Check,
                     text = stringResource(
                         R.string.friendship_request_sent,

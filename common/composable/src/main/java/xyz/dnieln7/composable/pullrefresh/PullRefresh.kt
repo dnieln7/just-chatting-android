@@ -20,11 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun JustChattingPullRefresh(
+fun PullRefresh(
     modifier: Modifier = Modifier,
     onRefresh: () -> Unit,
     content: @Composable () -> Unit,
@@ -56,17 +56,17 @@ fun JustChattingPullRefresh(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingPullRefreshPreview() {
-    JustChattingTheme {
+private fun PullRefreshPreview() {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingPullRefresh(
+                PullRefresh(
                     onRefresh = {},
-                    content = { Text("CONTENT") }
+                    content = { Text("PullRefreshPreview") }
                 )
             }
         }

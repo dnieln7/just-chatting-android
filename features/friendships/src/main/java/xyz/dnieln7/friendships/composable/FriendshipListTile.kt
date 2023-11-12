@@ -27,11 +27,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.button.JustChattingIconButton
+import xyz.dnieln7.composable.button.JCIconButton
 import xyz.dnieln7.composable.spacer.HorizontalFlexibleSpacer
 import xyz.dnieln7.composable.spacer.HorizontalSpacer
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.friendships.R
 import xyz.dnieln7.friendships.screen.StatefulFriendship
@@ -80,7 +80,7 @@ fun FriendshipListTile(
         if (friendship.isLoading) {
             CircularProgressIndicator(strokeCap = StrokeCap.Round)
         } else {
-            JustChattingIconButton(
+            JCIconButton(
                 icon = Icons.Rounded.PersonRemove,
                 contentDescription = stringResource(R.string.unfriend),
                 onClick = { onDelete(friendship.data) }
@@ -91,10 +91,10 @@ fun FriendshipListTile(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun FriendshipListTilePreview() {
+private fun FriendshipListTilePreview() {
     val friendship = Friendship(id = "id", email = "email@example.com", username = "example")
 
-    JustChattingTheme {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),

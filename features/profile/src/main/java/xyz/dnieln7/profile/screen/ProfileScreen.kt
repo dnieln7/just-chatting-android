@@ -28,9 +28,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import xyz.dnieln7.composable.button.JustChattingButton
-import xyz.dnieln7.composable.error.JustChattingErrorWithRetry
-import xyz.dnieln7.composable.progress.JustChattingScreenProgressIndicator
+import xyz.dnieln7.composable.alert.AlertAction
+import xyz.dnieln7.composable.alert.JCErrorAlert
+import xyz.dnieln7.composable.button.JCButton
+import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalFlexibleSpacer
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.domain.model.User
@@ -70,22 +71,28 @@ fun ProfileScreen(
             ),
         ) {
             when (uiState) {
-                ProfileState.Loading -> JustChattingScreenProgressIndicator(
+                ProfileState.Loading -> JCProgressIndicator(
                     modifier = Modifier.fillMaxSize()
                 )
 
-                ProfileState.UserNotFound -> JustChattingErrorWithRetry(
+                ProfileState.UserNotFound -> JCErrorAlert(
                     icon = Icons.Rounded.SearchOff,
                     error = stringResource(R.string.could_not_load_profile),
-                    onRetry = getUser,
+                    alertAction = AlertAction(
+                        text = stringResource(R.string.try_again),
+                        onClick = getUser,
+                    ),
                 )
 
                 is ProfileState.UserFound -> Profile(user = uiState.data, logout = logout)
 
-                is ProfileState.LogoutError -> JustChattingErrorWithRetry(
+                is ProfileState.LogoutError -> JCErrorAlert(
                     icon = Icons.Rounded.Error,
                     error = uiState.message,
-                    onRetry = logout,
+                    alertAction = AlertAction(
+                        text = stringResource(R.string.try_again),
+                        onClick = logout,
+                    ),
                 )
 
                 ProfileState.LoggedOut -> {
@@ -133,7 +140,7 @@ fun Profile(user: User, logout: () -> Unit) {
             style = MaterialTheme.typography.titleSmall,
         )
         VerticalFlexibleSpacer()
-        JustChattingButton(
+        JCButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.logout),
             onClick = logout,

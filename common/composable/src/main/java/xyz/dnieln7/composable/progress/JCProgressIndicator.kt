@@ -13,18 +13,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun JustChattingScreenProgressIndicator(modifier: Modifier = Modifier) {
+fun JCProgressIndicator(modifier: Modifier = Modifier, size: Dp = 100.dp, strokeWidth: Dp = 10.dp) {
     Box(
         modifier = modifier,
         contentAlignment = Alignment.Center,
     ) {
         CircularProgressIndicator(
-            modifier = Modifier.size(100.dp),
-            strokeWidth = 10.dp,
+            modifier = Modifier.size(size),
+            strokeWidth = strokeWidth,
             strokeCap = StrokeCap.Round,
             color = MaterialTheme.colorScheme.secondary,
             trackColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -34,15 +35,15 @@ fun JustChattingScreenProgressIndicator(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingScreenProgressIndicatorPreview() {
-    JustChattingTheme {
+private fun JCProgressIndicatorPreview() {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingScreenProgressIndicator()
+                JCProgressIndicator()
             }
         }
     }

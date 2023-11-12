@@ -29,10 +29,10 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun JustChattingOutlinedSearchBar(
+fun JCOutlinedSearchTextField(
     modifier: Modifier = Modifier,
     placeholder: String,
     icon: ImageVector = Icons.Rounded.Search,
@@ -51,7 +51,7 @@ fun JustChattingOutlinedSearchBar(
         value = query,
         onValueChange = { query = it },
         placeholder = { Text(placeholder) },
-        shape = RoundedCornerShape(50),
+        shape = RoundedCornerShape(percent = 50),
         leadingIcon = {
             Icon(
                 imageVector = icon,
@@ -80,16 +80,16 @@ fun JustChattingOutlinedSearchBar(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingOutlinedSearchBarPreview() {
-    JustChattingTheme {
+private fun JCOutlinedSearchTextFieldPreview() {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingOutlinedSearchBar(
-                    placeholder = "Search",
+                JCOutlinedSearchTextField(
+                    placeholder = "JCOutlinedSearchTextFieldPreview",
                     onSearch = {}
                 )
             }

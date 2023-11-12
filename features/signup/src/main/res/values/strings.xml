@@ -10,4 +10,5 @@
     <string name="registering_please_wait">Registering, please wait…</string>
     <string name="account_created_successfully">Account created successfully!</string>
     <string name="passwords_not_equal_error">Passwords are not equal</string>
+    <string name="user_created">User created</string>
 </resources>

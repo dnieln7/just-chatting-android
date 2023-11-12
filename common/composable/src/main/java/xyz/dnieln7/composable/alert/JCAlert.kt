@@ -1,4 +1,4 @@
-package xyz.dnieln7.composable.text
+package xyz.dnieln7.composable.alert
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,18 +20,17 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import xyz.dnieln7.composable.button.JustChattingButton
+import xyz.dnieln7.composable.button.JCButton
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
 @Composable
-fun JustChattingIconTextButton(
+fun JCAlert(
     modifier: Modifier = Modifier,
     icon: ImageVector,
     text: String,
-    buttonText: String,
-    onClick: () -> Unit,
+    alertAction: AlertAction? = null,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
 
@@ -54,11 +53,13 @@ fun JustChattingIconTextButton(
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyLarge,
             )
-            VerticalSpacer(of = 24.dp)
-            JustChattingButton(
-                text = buttonText,
-                onClick = onClick,
-            )
+            if (alertAction != null) {
+                VerticalSpacer(of = 24.dp)
+                JCButton(
+                    text = alertAction.text,
+                    onClick = alertAction.onClick,
+                )
+            }
         }
     } else {
         Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
@@ -85,11 +86,13 @@ fun JustChattingIconTextButton(
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.bodyLarge,
                 )
-                VerticalSpacer(of = 24.dp)
-                JustChattingButton(
-                    text = buttonText,
-                    onClick = onClick,
-                )
+                if (alertAction != null) {
+                    VerticalSpacer(of = 24.dp)
+                    JCButton(
+                        text = alertAction.text,
+                        onClick = alertAction.onClick,
+                    )
+                }
             }
         }
     }
@@ -97,20 +100,22 @@ fun JustChattingIconTextButton(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun JustChattingIconTextButtonPreview() {
-    JustChattingTheme {
+private fun JCAlertPreview() {
+    JCTheme {
         Surface {
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
-                JustChattingIconTextButton(
+                JCAlert(
                     modifier = Modifier.fillMaxSize(),
                     icon = Icons.Rounded.Warning,
-                    text = "This is a sample message",
-                    buttonText = "Try again",
-                    onClick = {},
+                    text = "JCAlertPreview",
+                    alertAction = AlertAction(
+                        text = "JCAlertPreview",
+                        onClick = {},
+                    ),
                 )
             }
         }

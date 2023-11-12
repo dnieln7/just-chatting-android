@@ -5,9 +5,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import org.junit.Rule
 import org.junit.Test
-import xyz.dnieln7.composable.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
 
-class JustChattingPasswordTextFieldTest {
+class JCTextFieldTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -17,9 +17,9 @@ class JustChattingPasswordTextFieldTest {
         val error = "Example is not an email"
 
         composeTestRule.setContent {
-            JustChattingTheme {
-                JustChattingPasswordTextField(
-                    value = "password",
+            JCTheme {
+                JCTextField(
+                    value = "example",
                     onValueChange = { },
                     label = "Email",
                     error = error,
