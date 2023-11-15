@@ -1,0 +1,13 @@
+apply plugin: libs.plugins.io.gitlab.arturbosch.detekt.get().pluginId
+
+detekt {
+    toolVersion = libs.versions.detekt.asProvider().get()
+    buildUponDefaultConfig = true
+    config = files("${rootDir}/config/detekt/config.yml")
+    source = files("src/main/java", "src/main/kotlin")
+    ignoredBuildTypes = ["release"]
+}
+
+dependencies {
+    detektPlugins(libs.detekt.rules.compose)
+}

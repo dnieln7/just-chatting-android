@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="confirm_password">Confirm password</string>
+    <string name="create_password">Create password</string>
+    <string name="create_user">Create user</string>
+    <string name="username">Username</string>
+    <string name="email">Email\n</string>
+    <string name="retry">Retry</string>
+    <string name="generic_error">There was an error, please try again</string>
+    <string name="registering_please_wait">Registering, please wait…</string>
+    <string name="account_created_successfully">Account created successfully!</string>
+    <string name="passwords_not_equal_error">Passwords are not equal</string>
+    <string name="user_created">User created</string>
+</resources>

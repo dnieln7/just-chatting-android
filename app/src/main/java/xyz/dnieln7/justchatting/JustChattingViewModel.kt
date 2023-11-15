@@ -7,14 +7,14 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import xyz.dnieln7.justchatting.di.common.IO
-import xyz.dnieln7.justchatting.domain.usecase.GetUserUserCase
+import xyz.dnieln7.coroutines.di.IO
+import xyz.dnieln7.domain.usecase.GetUserUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class JustChattingViewModel @Inject constructor(
     @IO private val dispatcher: CoroutineDispatcher,
-    private val getUserUserCase: GetUserUserCase,
+    private val getUserUseCase: GetUserUseCase,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow<InitializedState>(InitializedState.Loading)
@@ -22,7 +22,7 @@ class JustChattingViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(dispatcher) {
-            getUserUserCase().fold(
+            getUserUseCase().fold(
                 {
                     _state.emit(InitializedState.NotAuthenticated)
                 },

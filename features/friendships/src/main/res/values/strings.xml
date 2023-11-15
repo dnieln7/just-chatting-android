@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="friendships">Friendships</string>
+    <string name="unfriend">Unfriend</string>
+    <string name="search">Search</string>
+    <string name="search_by_email">Search by email</string>
+    <string name="pending">Pending</string>
+    <string name="accept">Accept</string>
+    <string name="reject">Reject</string>
+    <string name="add_friendship">Add friendship</string>
+    <string name="search_user_hint">Search a user by their email</string>
+    <string name="send_friendship_request">Send friendship request</string>
+    <string name="friendship_request_sent">A friendship request has been sent, if %1$s accept you will become friends!</string>
+    <string name="empty_friendships">Your friendships will be shown here.</string>
+    <string name="try_again">Try again</string>
+    <string name="empty_pending_friendships">Users that send you friendship request will be shown here.</string>
+</resources>

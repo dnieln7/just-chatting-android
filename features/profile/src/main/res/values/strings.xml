@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="could_not_load_profile">Could not load profile</string>
+    <string name="try_again">Try again</string>
+</resources>

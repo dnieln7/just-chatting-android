@@ -11,7 +11,7 @@
     <string name="username">Username</string>
     <string name="empty_text_error">Cannot be empty</string>
     <string name="email_not_valid_error">This is not an email</string>
-    <string name="password_length_error">Passwords must have at least 12 characters</string>
+    <string name="password_length_error">Passwords must have at least 8 characters</string>
     <string name="passwords_not_equal_error">Passwords are not equal</string>
     <string name="create_user">Create user</string>
     <string name="next">Next</string>
@@ -20,8 +20,9 @@
     <string name="generic_error">There was an error, please try again</string>
     <string name="retry">Retry</string>
     <string name="account_created_successfully">Account created successfully!</string>
-    <string name="registering_please_wait">Registering, please wait...</string>
+    <string name="registering_please_wait">Registering, please wait…</string>
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="email_not_available">This email is already registered</string>
 </resources>

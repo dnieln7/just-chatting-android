@@ -1,31 +1,23 @@
-import com.android.build.api.dsl.ApplicationDefaultConfig
-import java.io.FileInputStream
-import java.util.Properties
-
+@Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
-    id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.com.google.dagger.hilt.android)
 }
 
-
+apply<ApplicationComposeConfigPlugin>()
 
 android {
     namespace = "xyz.dnieln7.justchatting"
-    compileSdk = 34
 
     defaultConfig {
         applicationId = "xyz.dnieln7.justchatting"
-        minSdk = 26
-        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        setBuildConfigFields()
 
         vectorDrawables {
             useSupportLibrary = true
@@ -42,28 +34,8 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
-    }
-
-    buildFeatures {
-        compose = true
-        buildConfig = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        jvmTarget = javaVersion.toString()
     }
 
     kapt {
@@ -72,61 +44,51 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation(platform("androidx.compose:compose-bom:2023.09.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.ui:ui-graphics")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.graphics)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.extended)
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(platform(libs.io.arrow.kt.arrow.stack))
+    implementation(libs.io.arrow.kt.arrow.core)
 
-    implementation(platform("io.arrow-kt:arrow-stack:1.2.0"))
-    implementation("io.arrow-kt:arrow-core")
+    kapt(libs.com.google.dagger.hilt.android.compiler)
+    implementation(libs.com.google.dagger.hilt.android)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.androidx.test.espresso.core)
 
-    implementation("androidx.navigation:navigation-compose:2.7.2")
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-    implementation("com.google.dagger:hilt-android:2.44")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
+    testImplementation(libs.io.mockk)
+    testImplementation(libs.app.cash.turbine)
+    testImplementation(libs.org.amshove.kluent.android)
 
-    ksp("com.squareup.moshi:moshi-kotlin-codegen:1.15.0")
-    implementation("com.squareup.moshi:moshi:1.15.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.2")
-
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-
-    androidTestImplementation(platform("androidx.compose:compose-bom:2023.09.00"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.amshove.kluent:kluent-android:1.73")
-    testImplementation("io.mockk:mockk:1.13.8")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
-    testImplementation("app.cash.turbine:turbine:1.0.0")
-
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-}
-
-fun ApplicationDefaultConfig.setBuildConfigFields() {
-    val localProperties = Properties()
-    localProperties.load(FileInputStream(rootProject.file("local.properties")))
-
-    val justChattingUrl = (localProperties["JUST_CHATTING_URL"] as String?) ?: ""
-
-    buildConfigField(
-        type = "String",
-        name = "JUST_CHATTING_URL",
-        value = "\"$justChattingUrl\""
-    )
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation(project(":framework"))
+    implementation(project(":common:composable"))
+    implementation(project(":common:coroutines"))
+    implementation(project(":common:navigation"))
+    implementation(project(":common:testing"))
+    implementation(project(":features:login"))
+    implementation(project(":features:signup"))
+    implementation(project(":features:friendships"))
+    implementation(project(":features:chats"))
+    implementation(project(":features:profile"))
 }

@@ -13,7 +13,10 @@ import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.dnieln7.justchatting.ui.theme.JustChattingTheme
+import xyz.dnieln7.composable.theme.JCTheme
+import xyz.dnieln7.justchatting.navigation.HomeDestination
+import xyz.dnieln7.justchatting.navigation.JustChattingNavHost
+import xyz.dnieln7.login.navigation.LoginDestination
 
 @AndroidEntryPoint
 class JustChattingActivity : ComponentActivity() {
@@ -32,14 +35,14 @@ class JustChattingActivity : ComponentActivity() {
                 it.view.height.toFloat()
             ).apply {
                 interpolator = OvershootInterpolator()
-                duration = 500L
+                duration = SPLASH_SCREEN_DURATION_MILLIS
 
                 doOnEnd { _ -> it.remove() }
             }.start()
         }
 
         setContent {
-            JustChattingTheme {
+            JCTheme {
                 val uiState by justChattingViewModel.state.collectAsStateWithLifecycle()
 
                 splashScreen.setKeepOnScreenCondition {
@@ -61,3 +64,5 @@ class JustChattingActivity : ComponentActivity() {
         }
     }
 }
+
+private const val SPLASH_SCREEN_DURATION_MILLIS = 500L
