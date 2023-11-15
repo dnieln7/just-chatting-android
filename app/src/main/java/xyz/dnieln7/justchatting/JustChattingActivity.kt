@@ -35,7 +35,7 @@ class JustChattingActivity : ComponentActivity() {
                 it.view.height.toFloat()
             ).apply {
                 interpolator = OvershootInterpolator()
-                duration = 500L
+                duration = SPLASH_SCREEN_DURATION_MILLIS
 
                 doOnEnd { _ -> it.remove() }
             }.start()
@@ -64,3 +64,5 @@ class JustChattingActivity : ComponentActivity() {
         }
     }
 }
+
+private const val SPLASH_SCREEN_DURATION_MILLIS = 500L

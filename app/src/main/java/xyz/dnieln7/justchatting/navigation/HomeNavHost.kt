@@ -29,10 +29,8 @@ import xyz.dnieln7.navigation.utils.compareRouteToDestination
 import xyz.dnieln7.profile.navigation.ProfileDestination
 import xyz.dnieln7.profile.navigation.profileNavigation
 
-object HomeDestination : NavDestination("just-chatting/home")
-
 @Composable
-fun HomeNavHost(navigateToLogin: () -> Unit) {
+fun HomeNavHost(onLoggedOut: () -> Unit) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
@@ -71,19 +69,21 @@ fun HomeNavHost(navigateToLogin: () -> Unit) {
         ) {
             friendshipsNavigation()
             chatsNavigation()
-            profileNavigation(navigateToLogin = navigateToLogin)
+            profileNavigation(navigateToLogin = onLoggedOut)
         }
     }
 }
 
+object HomeDestination : NavDestination("just-chatting/home")
+
 @Composable
 fun RowScope.JustChattingNavigationBarItem(
-    modifier: Modifier = Modifier,
     label: String,
     icon: ImageVector,
     destination: NavDestination,
     onClick: (NavDestination) -> Unit,
     isSelected: (NavDestination) -> Boolean,
+    modifier: Modifier = Modifier,
 ) {
     NavigationBarItem(
         modifier = modifier,

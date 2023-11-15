@@ -17,9 +17,9 @@ import xyz.dnieln7.signup.navigation.signupNavHost
 
 @Composable
 fun JustChattingNavHost(
+    startDestination: String,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination: String,
 ) {
     var rootDestination by rememberSaveable { mutableStateOf(startDestination) }
 
@@ -37,7 +37,7 @@ fun JustChattingNavHost(
             navigateToHome = { rootDestination = HomeDestination.route }
         )
         composable(route = HomeDestination.route) {
-            HomeNavHost(navigateToLogin = { rootDestination = LoginDestination.route })
+            HomeNavHost(onLoggedOut = { rootDestination = LoginDestination.route })
         }
     }
 }
