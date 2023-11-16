@@ -246,6 +246,7 @@ fun PendingFriendships(
                                 onReject = rejectFriendship,
                             )
                         }
+                        item { Spacer(Modifier.height(80.dp)) }
                     }
                 }
             }
