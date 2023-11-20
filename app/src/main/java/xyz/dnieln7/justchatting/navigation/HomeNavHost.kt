@@ -65,10 +65,12 @@ fun HomeNavHost(onLoggedOut: () -> Unit) {
         NavHost(
             modifier = Modifier.padding(it),
             navController = navController,
-            startDestination = FriendshipsDestination.route,
+            startDestination = ChatsDestination.route,
         ) {
             friendshipsNavigation()
-            chatsNavigation()
+            chatsNavigation(
+                navigateToChat = {}
+            )
             profileNavigation(navigateToLogin = onLoggedOut)
         }
     }
