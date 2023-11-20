@@ -17,4 +17,12 @@ class DefaultChatRepository(
             getChatsSvModel.data.map { it.toDomain() }
         }
     }
+
+    override suspend fun getChat(userID: String, chatID: String): Either<Throwable, Chat> {
+        return Either.catch {
+            val chatSvModel = justChattingApiService.getChat(userID, chatID)
+
+            chatSvModel.toDomain()
+        }
+    }
 }
