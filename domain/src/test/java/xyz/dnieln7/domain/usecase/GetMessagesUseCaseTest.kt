@@ -19,6 +19,7 @@ import xyz.dnieln7.testing.fake.buildMessages
 import xyz.dnieln7.testing.relaxedMockk
 
 class GetMessagesUseCaseTest {
+
     @OptIn(ExperimentalCoroutinesApi::class)
     private val dispatcher = UnconfinedTestDispatcher()
 
