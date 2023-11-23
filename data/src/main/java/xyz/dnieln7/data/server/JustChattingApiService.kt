@@ -12,6 +12,7 @@ import xyz.dnieln7.data.server.model.ChatSvModel
 import xyz.dnieln7.data.server.model.EmailAvailabilitySvModel
 import xyz.dnieln7.data.server.model.FriendshipSvModel
 import xyz.dnieln7.data.server.model.GetChatsSvModel
+import xyz.dnieln7.data.server.model.GetMessagesEagerSvModel
 import xyz.dnieln7.data.server.model.LoginSvModel
 import xyz.dnieln7.data.server.model.SendFriendshipRequestSvModel
 import xyz.dnieln7.data.server.model.SignupSvModel
@@ -57,4 +58,7 @@ interface JustChattingApiService {
         @Path("user_id") userID: String,
         @Path("chat_id") chatID: String,
     ): ChatSvModel
+
+    @GET("eager/chats/{id}/messages")
+    suspend fun getMessagesEager(@Path("id") chatID: String): GetMessagesEagerSvModel
 }
