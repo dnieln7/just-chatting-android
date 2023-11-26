@@ -21,6 +21,8 @@ datastore-preferences = "1.0.0"
 room = "2.5.0"
 hilt-navigation-compose = "1.0.0"
 coil = "2.5.0"
+gson = "2.10.1"
+java-webSocket = "1.4.0"
 
 junit = "4.13.2"
 ext-junit = "1.1.5"
@@ -72,6 +74,8 @@ com-google-dagger-hilt-android-compiler = { module = "com.google.dagger:hilt-and
 com-google-dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hilt-navigation-compose" }
 io-coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+com-google-code-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+org-java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "java-webSocket" }
 
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }

@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.com.squareup.retrofit2.converter.moshi)
     implementation(libs.com.squareup.okhttp3.logging.interceptor)
 
+    implementation(libs.com.google.code.gson)
+    implementation(libs.org.java.websocket)
+
     implementation(libs.androidx.datastore.preferences)
 
     ksp(libs.androidx.room.compiler)
@@ -73,6 +76,7 @@ dependencies {
     testImplementation(libs.io.mockk)
     testImplementation(libs.org.amshove.kluent.android)
 
+    implementation(project(":common:coroutines"))
     implementation(project(":domain"))
 
     testImplementation(project(":common:testing"))
@@ -83,10 +87,17 @@ fun setBuildConfigFields(libraryDefaultConfig: LibraryDefaultConfig) {
     localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
     val justChattingUrl = (localProperties["JUST_CHATTING_URL"] as String?) ?: ""
+    val justChattingWs = (localProperties["JUST_CHATTING_WS"] as String?) ?: ""
 
     libraryDefaultConfig.buildConfigField(
         type = "String",
         name = "JUST_CHATTING_URL",
         value = "\"$justChattingUrl\""
+    )
+
+    libraryDefaultConfig.buildConfigField(
+        type = "String",
+        name = "JUST_CHATTING_WS",
+        value = "\"$justChattingWs\""
     )
 }
