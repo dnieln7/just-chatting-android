@@ -12,6 +12,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import xyz.dnieln7.composable.theme.JCTheme
@@ -20,6 +21,7 @@ import xyz.dnieln7.composable.theme.JCTheme
 fun JCIconButton(
     modifier: Modifier = Modifier,
     icon: ImageVector,
+    iconTint: Color = MaterialTheme.colorScheme.primary,
     contentDescription: String,
     onClick: () -> Unit,
 ) {
@@ -30,7 +32,7 @@ fun JCIconButton(
             Icon(
                 imageVector = icon,
                 contentDescription = contentDescription,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = iconTint,
             )
         },
     )

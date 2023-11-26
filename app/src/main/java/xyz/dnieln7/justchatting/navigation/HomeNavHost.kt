@@ -19,6 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import xyz.dnieln7.chat.navigation.ChatDestination
+import xyz.dnieln7.chat.navigation.chatNavigation
+import xyz.dnieln7.chat.navigation.navigateToChat
 import xyz.dnieln7.chats.navigation.ChatsDestination
 import xyz.dnieln7.chats.navigation.chatsNavigation
 import xyz.dnieln7.friendships.navigation.FriendshipsDestination
@@ -34,31 +37,34 @@ fun HomeNavHost(onLoggedOut: () -> Unit) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route ?: ""
+    val isOnChat = compareRouteToDestination(currentRoute, ChatDestination)
 
     Scaffold(
         bottomBar = {
-            NavigationBar {
-                JustChattingNavigationBarItem(
-                    label = stringResource(xyz.dnieln7.friendships.R.string.friendships),
-                    icon = Icons.Rounded.Contacts,
-                    destination = FriendshipsDestination,
-                    onClick = { navController.navigateTo(it) },
-                    isSelected = { compareRouteToDestination(currentRoute, it) }
-                )
-                JustChattingNavigationBarItem(
-                    label = stringResource(xyz.dnieln7.chats.R.string.chats),
-                    icon = Icons.Rounded.Chat,
-                    destination = ChatsDestination,
-                    onClick = { navController.navigateTo(it) },
-                    isSelected = { compareRouteToDestination(currentRoute, it) }
-                )
-                JustChattingNavigationBarItem(
-                    label = stringResource(xyz.dnieln7.profile.R.string.profile),
-                    icon = Icons.Rounded.AccountCircle,
-                    destination = ProfileDestination,
-                    onClick = { navController.navigateTo(it) },
-                    isSelected = { compareRouteToDestination(currentRoute, it) }
-                )
+            if (!isOnChat) {
+                NavigationBar {
+                    JustChattingNavigationBarItem(
+                        label = stringResource(xyz.dnieln7.friendships.R.string.friendships),
+                        icon = Icons.Rounded.Contacts,
+                        destination = FriendshipsDestination,
+                        onClick = { navController.navigateTo(it) },
+                        isSelected = { compareRouteToDestination(currentRoute, it) }
+                    )
+                    JustChattingNavigationBarItem(
+                        label = stringResource(xyz.dnieln7.chats.R.string.chats),
+                        icon = Icons.Rounded.Chat,
+                        destination = ChatsDestination,
+                        onClick = { navController.navigateTo(it) },
+                        isSelected = { compareRouteToDestination(currentRoute, it) }
+                    )
+                    JustChattingNavigationBarItem(
+                        label = stringResource(xyz.dnieln7.profile.R.string.profile),
+                        icon = Icons.Rounded.AccountCircle,
+                        destination = ProfileDestination,
+                        onClick = { navController.navigateTo(it) },
+                        isSelected = { compareRouteToDestination(currentRoute, it) }
+                    )
+                }
             }
         }
     ) {
@@ -69,7 +75,10 @@ fun HomeNavHost(onLoggedOut: () -> Unit) {
         ) {
             friendshipsNavigation()
             chatsNavigation(
-                navigateToChat = {}
+                navigateToChat = { chat -> navigateToChat(navController, chat.me.id, chat.id) }
+            )
+            chatNavigation(
+                navigateBack = navController::navigateUp
             )
             profileNavigation(navigateToLogin = onLoggedOut)
         }
