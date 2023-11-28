@@ -1,5 +1,6 @@
 package xyz.dnieln7.data.di
 
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -51,8 +52,11 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideChatRepository(justChattingApiService: JustChattingApiService): ChatRepository {
-        return DefaultChatRepository(justChattingApiService)
+    fun provideChatRepository(
+        gson: Gson,
+        justChattingApiService: JustChattingApiService
+    ): ChatRepository {
+        return DefaultChatRepository(gson, justChattingApiService)
     }
 
     @Provides

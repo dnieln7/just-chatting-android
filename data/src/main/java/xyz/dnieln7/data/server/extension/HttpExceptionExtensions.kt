@@ -2,6 +2,14 @@ package xyz.dnieln7.data.server.extension
 
 import retrofit2.HttpException
 
+fun HttpException.hasErrorBody(): Boolean {
+    return response()?.errorBody() != null
+}
+
+fun HttpException.getErrorBodyAsString(): String? {
+    return response()?.errorBody()?.string()
+}
+
 fun HttpException.isConflict(): Boolean {
     return code() == HTTP_CONFLICT
 }

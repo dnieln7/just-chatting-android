@@ -9,6 +9,7 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 import xyz.dnieln7.data.server.model.AcceptFriendshipRequestSvModel
 import xyz.dnieln7.data.server.model.ChatSvModel
+import xyz.dnieln7.data.server.model.CreateChatSvModel
 import xyz.dnieln7.data.server.model.EmailAvailabilitySvModel
 import xyz.dnieln7.data.server.model.FriendshipSvModel
 import xyz.dnieln7.data.server.model.GetChatsSvModel
@@ -59,6 +60,9 @@ interface JustChattingApiService {
         @Path("user_id") userID: String,
         @Path("chat_id") chatID: String,
     ): ChatSvModel
+
+    @POST("chats")
+    suspend fun createChat(@Body body: CreateChatSvModel): ChatSvModel
 
     @GET("eager/chats/{id}/messages")
     suspend fun getMessagesEager(@Path("id") chatID: String): GetMessagesEagerSvModel
