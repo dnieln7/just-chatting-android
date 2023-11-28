@@ -1,4 +1,4 @@
-package xyz.dnieln7.friendships.screen
+package xyz.dnieln7.friendships.screen.addfriendship
 
 import app.cash.turbine.test
 import arrow.core.left

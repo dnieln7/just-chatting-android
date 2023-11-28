@@ -5,10 +5,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import xyz.dnieln7.friendships.screen.AddFriendshipViewModel
-import xyz.dnieln7.friendships.screen.FriendshipsScreen
-import xyz.dnieln7.friendships.screen.FriendshipsViewModel
-import xyz.dnieln7.friendships.screen.PendingFriendshipsViewModel
+import xyz.dnieln7.friendships.screen.FriendshipsContainerScreen
+import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipViewModel
+import xyz.dnieln7.friendships.screen.friendships.FriendshipsViewModel
+import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsViewModel
 import xyz.dnieln7.navigation.NavDestination
 
 fun NavGraphBuilder.friendshipsNavigation() {
@@ -21,7 +21,7 @@ fun NavGraphBuilder.friendshipsNavigation() {
         val pendingFriendshipsState by pendingFriendshipsViewModel.state.collectAsStateWithLifecycle()
         val addFriendshipState by addFriendshipViewModel.state.collectAsStateWithLifecycle()
 
-        FriendshipsScreen(
+        FriendshipsContainerScreen(
             friendshipsState = friendshipsState,
             getFriendships = friendshipsViewModel::getFriendships,
             deleteFriendship = friendshipsViewModel::deleteFriendship,

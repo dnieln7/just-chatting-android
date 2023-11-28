@@ -34,7 +34,7 @@ import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.theme.JCTheme
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.friendships.R
-import xyz.dnieln7.friendships.screen.StatefulPendingFriendship
+import xyz.dnieln7.friendships.screen.pendingfriendships.StatefulPendingFriendship
 
 @Composable
 fun PendingFriendshipListTile(

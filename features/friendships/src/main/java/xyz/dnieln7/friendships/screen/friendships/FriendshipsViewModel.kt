@@ -1,4 +1,4 @@
-package xyz.dnieln7.friendships.screen
+package xyz.dnieln7.friendships.screen.friendships
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
