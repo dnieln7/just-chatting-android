@@ -25,6 +25,7 @@ import xyz.dnieln7.friendships.composable.FriendshipListTile
 fun FriendshipsScreen(
     uiState: FriendshipsState,
     getFriendships: () -> Unit,
+    createChat: (Friendship) -> Unit,
     deleteFriendship: (Friendship) -> Unit
 ) {
     when (uiState) {
@@ -49,7 +50,7 @@ fun FriendshipsScreen(
                         items(items = uiState.data, key = { it.data.id }) {
                             FriendshipListTile(
                                 friendship = it,
-                                onClick = { println("onClick") },
+                                onClick = createChat,
                                 onDelete = deleteFriendship,
                             )
                         }

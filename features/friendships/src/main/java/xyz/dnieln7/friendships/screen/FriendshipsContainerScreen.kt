@@ -17,18 +17,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.tab.JCTabs
+import xyz.dnieln7.domain.model.Chat
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.domain.model.User
 import xyz.dnieln7.friendships.R
@@ -42,6 +41,12 @@ import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsState
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FriendshipsContainerScreen(
+    friendshipsContainerState: FriendshipsContainerState,
+    createChat: (Friendship) -> Unit,
+    toggleBottomSheet: (Boolean) -> Unit,
+    toggleScreen: (FriendshipScreen) -> Unit,
+    resetChatState: () -> Unit,
+    navigateToChat: (Chat) -> Unit,
     friendshipsState: FriendshipsState,
     getFriendships: () -> Unit,
     deleteFriendship: (Friendship) -> Unit,
@@ -54,25 +59,103 @@ fun FriendshipsContainerScreen(
     sendFriendshipRequest: (User) -> Unit,
     resetAddFriendshipState: () -> Unit,
 ) {
-    val scope = rememberCoroutineScope()
-    val modalBottomSheetState = rememberModalBottomSheetState()
+    if (friendshipsContainerState.creatingChat) {
+        if (friendshipsContainerState.chat != null) {
+            LaunchedEffect(Unit) {
+                navigateToChat(friendshipsContainerState.chat)
+                resetChatState()
+            }
+        } else {
+            FriendshipsCreatingChat()
+        }
+    } else {
+        val scope = rememberCoroutineScope()
+        val modalBottomSheetState = rememberModalBottomSheetState()
 
-    var showAddFriendship by rememberSaveable { mutableStateOf(false) }
-    var showFriendships by rememberSaveable { mutableStateOf(true) }
+        if (!friendshipsContainerState.showBottomSheet) {
+            AddFriendshipScreen(
+                sheetState = modalBottomSheetState,
+                onModalBottomSheetDismiss = {
+                    scope.launch {
+                        toggleBottomSheet(false)
+                        modalBottomSheetState.hide()
+                        resetAddFriendshipState()
+                    }
+                },
+                uiState = addFriendshipState,
+                getUserByEmail = getUserByEmail,
+                sendFriendshipRequest = sendFriendshipRequest,
+            )
+        }
 
-    if (showAddFriendship) {
-        AddFriendshipScreen(
-            sheetState = modalBottomSheetState,
-            onModalBottomSheetDismiss = {
-                showAddFriendship = false
-                resetAddFriendshipState()
+        FriendshipsContent(
+            friendshipsContainerState = friendshipsContainerState,
+            createChat = createChat,
+            showBottomSheet = {
+                scope.launch {
+                    toggleBottomSheet(true)
+                    modalBottomSheetState.show()
+                }
             },
-            uiState = addFriendshipState,
-            getUserByEmail = getUserByEmail,
-            sendFriendshipRequest = sendFriendshipRequest,
+            toggleScreen = toggleScreen,
+            friendshipsState = friendshipsState,
+            getFriendships = getFriendships,
+            deleteFriendship = deleteFriendship,
+            pendingFriendshipsState = pendingFriendshipsState,
+            getPendingFriendships = getPendingFriendships,
+            acceptFriendship = acceptFriendship,
+            rejectFriendship = rejectFriendship,
         )
     }
+}
 
+@Composable
+fun FriendshipsCreatingChat() {
+    Scaffold(
+        topBar = {
+            Column(
+                modifier = Modifier
+                    .background(MaterialTheme.colorScheme.primaryContainer)
+                    .padding(top = 20.dp, bottom = 18.dp),
+            ) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.friendships),
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleLarge
+                )
+            }
+        },
+    ) { paddingValues ->
+        ElevatedCard(
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.primaryContainer),
+            shape = MaterialTheme.shapes.large.copy(
+                bottomStart = CornerSize(0.dp),
+                bottomEnd = CornerSize(0.dp),
+            ),
+        ) {
+            JCProgressIndicator(modifier = Modifier.fillMaxSize())
+        }
+    }
+}
+
+@Composable
+fun FriendshipsContent(
+    friendshipsContainerState: FriendshipsContainerState,
+    createChat: (Friendship) -> Unit,
+    showBottomSheet: () -> Unit,
+    toggleScreen: (FriendshipScreen) -> Unit,
+    friendshipsState: FriendshipsState,
+    getFriendships: () -> Unit,
+    deleteFriendship: (Friendship) -> Unit,
+    pendingFriendshipsState: PendingFriendshipsState,
+    getPendingFriendships: () -> Unit,
+    acceptFriendship: (Friendship) -> Unit,
+    rejectFriendship: (Friendship) -> Unit,
+) {
     Scaffold(
         topBar = {
             Column(
@@ -95,11 +178,11 @@ fun FriendshipsContainerScreen(
                     ),
                     onTabChange = {
                         if (it == 0) {
-                            showFriendships = true
                             getFriendships()
+                            toggleScreen(FriendshipScreen.FRIENDSHIPS)
                         } else {
-                            showFriendships = false
                             getPendingFriendships()
+                            toggleScreen(FriendshipScreen.PENDING_FRIENDSHIPS)
                         }
                     },
                     selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -109,18 +192,14 @@ fun FriendshipsContainerScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    scope.launch {
-                        showAddFriendship = true
-                        modalBottomSheetState.show()
-                    }
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.PersonAdd,
-                    contentDescription = stringResource(R.string.add_friendship)
-                )
-            }
+                onClick = showBottomSheet,
+                content = {
+                    Icon(
+                        imageVector = Icons.Rounded.PersonAdd,
+                        contentDescription = stringResource(R.string.add_friendship)
+                    )
+                }
+            )
         }
     ) { paddingValues ->
         ElevatedCard(
@@ -133,14 +212,15 @@ fun FriendshipsContainerScreen(
                 bottomEnd = CornerSize(0.dp),
             ),
         ) {
-            if (showFriendships) {
-                FriendshipsScreen(
+            when (friendshipsContainerState.currentScreen) {
+                FriendshipScreen.FRIENDSHIPS -> FriendshipsScreen(
                     uiState = friendshipsState,
                     getFriendships = getFriendships,
+                    createChat = createChat,
                     deleteFriendship = deleteFriendship,
                 )
-            } else {
-                PendingFriendshipsScreen(
+
+                FriendshipScreen.PENDING_FRIENDSHIPS -> PendingFriendshipsScreen(
                     uiState = pendingFriendshipsState,
                     getPendingFriendships = getPendingFriendships,
                     acceptFriendship = acceptFriendship,
@@ -150,3 +230,4 @@ fun FriendshipsContainerScreen(
         }
     }
 }
+

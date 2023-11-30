@@ -73,7 +73,9 @@ fun HomeNavHost(onLoggedOut: () -> Unit) {
             navController = navController,
             startDestination = FriendshipsDestination.route,
         ) {
-            friendshipsNavigation()
+            friendshipsNavigation(
+                navigateToChat = { chat -> navigateToChat(navController, chat.me.id, chat.id) }
+            )
             chatsNavigation(
                 navigateToChat = { chat -> navigateToChat(navController, chat.me.id, chat.id) }
             )

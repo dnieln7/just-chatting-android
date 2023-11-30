@@ -40,13 +40,13 @@ import xyz.dnieln7.friendships.screen.friendships.StatefulFriendship
 fun FriendshipListTile(
     modifier: Modifier = Modifier,
     friendship: StatefulFriendship,
-    onClick: () -> Unit,
+    onClick: (Friendship) -> Unit,
     onDelete: (Friendship) -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .clickable(onClick = { onClick(friendship.data) })
             .padding(12.dp)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
