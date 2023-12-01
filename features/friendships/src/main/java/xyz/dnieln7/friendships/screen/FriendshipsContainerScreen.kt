@@ -72,7 +72,7 @@ fun FriendshipsContainerScreen(
         val scope = rememberCoroutineScope()
         val modalBottomSheetState = rememberModalBottomSheetState()
 
-        if (!friendshipsContainerState.showBottomSheet) {
+        if (friendshipsContainerState.showBottomSheet) {
             AddFriendshipScreen(
                 sheetState = modalBottomSheetState,
                 onModalBottomSheetDismiss = {
