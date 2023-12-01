@@ -36,7 +36,7 @@ class FriendshipsContainerViewModel @Inject constructor(
 
     fun createChat(friendship: Friendship) {
         viewModelScope.launch(dispatcher) {
-            _state.update { it.copy(creatingChat = true) }
+            _state.update { it.copy(creatingChat = true, createChatError = null, chat = null) }
 
             createChatUseCase(friendship.id).fold(
                 { error ->
