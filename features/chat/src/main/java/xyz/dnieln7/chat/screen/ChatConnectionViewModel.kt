@@ -72,7 +72,12 @@ class ChatConnectionViewModel @Inject constructor(
 
     fun getMessages() {
         viewModelScope.launch(dispatcher) {
-            _state.update { it.copy(status = ChatConnectionStatus.FETCHING_MESSAGES) }
+            _state.update {
+                it.copy(
+                    status = ChatConnectionStatus.FETCHING_MESSAGES,
+                    messages = emptyList()
+                )
+            }
 
             getMessagesUseCase(chatID).fold(
                 { _ ->
