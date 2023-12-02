@@ -63,7 +63,6 @@ dependencies {
     testImplementation(libs.app.cash.turbine)
     testImplementation(libs.org.amshove.kluent.android)
 
-    implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":common:composable"))
     implementation(project(":common:coroutines"))

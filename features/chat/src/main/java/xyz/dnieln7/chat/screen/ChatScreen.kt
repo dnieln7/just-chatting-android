@@ -15,10 +15,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.SearchOff
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -29,14 +31,19 @@ import androidx.compose.ui.unit.dp
 import xyz.dnieln7.chat.R
 import xyz.dnieln7.chat.composable.MessageListTile
 import xyz.dnieln7.chat.composable.MessageTextField
+import xyz.dnieln7.composable.alert.AlertAction
+import xyz.dnieln7.composable.alert.JCErrorAlert
 import xyz.dnieln7.composable.button.JCIconButton
 import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.HorizontalSpacer
-import xyz.dnieln7.data.websocket.model.WebSocketStatus
 
 @Composable
 fun ChatScreen(
-    uiState: ChatState,
+    chatState: ChatState,
+    getChat: () -> Unit,
+    connectionState: ChatConnectionState,
+    getMessages: () -> Unit,
+    connect: () -> Unit,
     isMe: (String) -> Boolean,
     getUsername: (String) -> String,
     sendMessage: (String) -> Unit,
@@ -60,14 +67,22 @@ fun ChatScreen(
                     onClick = navigateBack,
                 )
                 HorizontalSpacer(of = 8.dp)
-                if (uiState.chat != null) {
+                if (chatState is ChatState.Success) {
                     Text(
                         text = stringResource(
                             id = R.string.chat_with_friendship,
-                            formatArgs = arrayOf(uiState.chat.friend.username),
+                            formatArgs = arrayOf(chatState.data.friend.username),
                         ),
                         textAlign = TextAlign.Center,
                         style = MaterialTheme.typography.titleLarge
+                    )
+                }
+                if (chatState is ChatState.Error) {
+                    TextButton(
+                        onClick = getChat,
+                        content = {
+                            Text(text = stringResource(R.string.try_again))
+                        }
                     )
                 }
             }
@@ -89,31 +104,59 @@ fun ChatScreen(
                         .fillMaxWidth()
                         .weight(1F)
                 ) {
-                    if (uiState.loadingMessages || uiState.chat == null) {
-                        JCProgressIndicator(modifier = Modifier.fillMaxSize())
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.padding(12.dp),
-                            state = listState,
-                            reverseLayout = true,
-                        ) {
-                            items(items = uiState.messages, key = { it.id }) {
-                                MessageListTile(
-                                    message = it,
-                                    isMe = isMe,
-                                    getUsername = getUsername,
-                                )
-                                Spacer(modifier = Modifier.height(8.dp))
-                            }
-                        }
+                    when (connectionState.status) {
+                        ChatConnectionStatus.NONE,
+                        ChatConnectionStatus.FETCHING_MESSAGES,
+                        ChatConnectionStatus.CONNECTING -> JCProgressIndicator(
+                            modifier = Modifier.fillMaxSize()
+                        )
 
-                        if (uiState.messages.isNotEmpty()) {
-                            LaunchedEffect(uiState) { listState.animateScrollToItem(index = 0) }
+                        ChatConnectionStatus.MESSAGES_ERROR -> JCErrorAlert(
+                            modifier = Modifier.fillMaxSize(),
+                            icon = Icons.Rounded.SearchOff,
+                            error = stringResource(R.string.could_not_load_messages),
+                            alertAction = AlertAction(
+                                text = stringResource(R.string.try_again),
+                                onClick = getMessages,
+                            ),
+                        )
+
+                        ChatConnectionStatus.CONNECTION_ERROR -> JCErrorAlert(
+                            modifier = Modifier.fillMaxSize(),
+                            icon = Icons.Rounded.SearchOff,
+                            error = stringResource(R.string.could_not_connect),
+                            alertAction = AlertAction(
+                                text = stringResource(R.string.try_again),
+                                onClick = connect,
+                            ),
+                        )
+
+                        ChatConnectionStatus.CONNECTED -> {
+                            LazyColumn(
+                                modifier = Modifier.padding(12.dp),
+                                state = listState,
+                                reverseLayout = true,
+                            ) {
+                                items(items = connectionState.messages, key = { it.id }) {
+                                    MessageListTile(
+                                        message = it,
+                                        isMe = isMe,
+                                        getUsername = getUsername,
+                                    )
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                }
+                            }
+
+                            if (connectionState.messages.isNotEmpty()) {
+                                LaunchedEffect(connectionState) {
+                                    listState.animateScrollToItem(index = 0)
+                                }
+                            }
                         }
                     }
                 }
                 MessageTextField(
-                    enabled = uiState.status == WebSocketStatus.CONNECTED,
+                    enabled = connectionState.status == ChatConnectionStatus.CONNECTED,
                     onSend = sendMessage,
                 )
             }

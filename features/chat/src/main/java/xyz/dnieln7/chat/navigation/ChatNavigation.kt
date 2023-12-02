@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import xyz.dnieln7.chat.screen.ChatConnectionViewModel
 import xyz.dnieln7.chat.screen.ChatScreen
 import xyz.dnieln7.chat.screen.ChatViewModel
 import xyz.dnieln7.navigation.NavArgsDestination
@@ -17,14 +18,21 @@ fun NavGraphBuilder.chatNavigation(
 ) {
     composable(route = ChatDestination.routeWithArgs, arguments = ChatDestination.args) {
         val chatViewModel = hiltViewModel<ChatViewModel>()
+        val chatConnectionViewModel = hiltViewModel<ChatConnectionViewModel>()
 
-        val uiState by chatViewModel.state.collectAsStateWithLifecycle()
+        val chatState by chatViewModel.state.collectAsStateWithLifecycle()
+        val connectionState by chatConnectionViewModel.state.collectAsStateWithLifecycle()
+
 
         ChatScreen(
-            uiState = uiState,
+            chatState = chatState,
+            getChat = chatViewModel::getChat,
+            connectionState = connectionState,
+            getMessages = chatConnectionViewModel::getMessages,
+            connect = chatConnectionViewModel::connect,
             isMe = chatViewModel::isMe,
             getUsername = chatViewModel::getUsername,
-            sendMessage = chatViewModel::sendMessage,
+            sendMessage = chatConnectionViewModel::sendMessage,
             navigateBack = navigateBack,
         )
     }

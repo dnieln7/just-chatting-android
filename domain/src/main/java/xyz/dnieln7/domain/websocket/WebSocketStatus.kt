@@ -1,4 +1,4 @@
-package xyz.dnieln7.data.websocket.model
+package xyz.dnieln7.domain.websocket
 
 enum class WebSocketStatus {
     DISCONNECTED,
