@@ -6,8 +6,21 @@ detekt {
     config = files("${rootDir}/config/detekt/config.yml")
     source = files("src/main/java", "src/main/kotlin")
     ignoredBuildTypes = ["release"]
+    baseline = file("${rootDir}/config/detekt/baseline.xml")
 }
 
 dependencies {
     detektPlugins(libs.detekt.rules.compose)
+}
+
+tasks.named("detekt").configure {
+    reports {
+        xml.required.set(false)
+        txt.required.set(false)
+        sarif.required.set(false)
+        html.required.set(true)
+        html.outputLocation.set(file("build/reports/detekt.html"))
+        md.required.set(true)
+        md.outputLocation.set(file("build/reports/detekt.md"))
+    }
 }
