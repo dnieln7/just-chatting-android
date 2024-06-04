@@ -5,7 +5,6 @@ ksp = "1.8.10-1.0.9"
 hilt = "2.44"
 detekt = "1.23.3"
 detekt-rules-compose = "1.3.0"
-
 core-ktx = "1.12.0"
 core-splashscreen = "1.0.1"
 lifecycle-runtime-ktx = "2.6.2"
@@ -23,7 +22,6 @@ hilt-navigation-compose = "1.0.0"
 coil = "2.5.0"
 gson = "2.10.1"
 java-webSocket = "1.4.0"
-
 junit = "4.13.2"
 ext-junit = "1.1.5"
 espresso-core = "3.5.1"
@@ -56,6 +54,9 @@ androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = 
 androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-material = { module = "androidx.compose.material:material" }
@@ -76,11 +77,6 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 io-coil-kt-coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 com-google-code-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 org-java-websocket = { module = "org.java-websocket:Java-WebSocket", version.ref = "java-webSocket" }
-
-androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
-androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
-
 junit = { module = "junit:junit", version.ref = "junit" }
 androidx-test-ext-junit = { module = "androidx.test.ext:junit", version.ref = "ext-junit" }
 androidx-test-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
