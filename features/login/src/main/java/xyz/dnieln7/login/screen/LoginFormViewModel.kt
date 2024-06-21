@@ -22,14 +22,9 @@ class LoginFormViewModel @Inject constructor(
     fun updateEmail(email: String) {
         _form.update { it.copy(email = email) }
 
-        validateEmailUseCase(email).fold(
-            { error ->
-                _validation.update { it.copy(initialized = true, emailValidationError = error) }
-            },
-            {
-                _validation.update { it.copy(initialized = true, emailValidationError = null) }
-            }
-        )
+        val validationStatus = validateEmailUseCase(email)
+
+        _validation.update { it.copy(initialized = true, emailValidation = validationStatus) }
     }
 
     fun updatePassword(password: String) {

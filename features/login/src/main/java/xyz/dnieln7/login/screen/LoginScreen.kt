@@ -38,10 +38,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.button.JCStatefulButton
+import xyz.dnieln7.composable.extension.asString
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.spacer.VerticalFlexibleSpacer
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.string.stringFromEmailValidationError
 import xyz.dnieln7.composable.textfield.JCPasswordTextField
 import xyz.dnieln7.composable.textfield.JCTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
@@ -188,7 +188,7 @@ fun LoginForm(
             JCTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.email,
-                error = stringFromEmailValidationError(validation.emailValidationError),
+                error = validation.emailValidation?.asString(),
                 onValueChange = updateEmail,
                 label = stringResource(R.string.email),
                 keyboardOptions = KeyboardOptions(

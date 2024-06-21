@@ -19,10 +19,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.button.JCButton
+import xyz.dnieln7.composable.extension.asString
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.progress.JCStepper
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.string.stringFromPasswordValidationError
 import xyz.dnieln7.composable.textfield.JCPasswordTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
 import xyz.dnieln7.signup.R
@@ -63,7 +63,7 @@ fun CreatePasswordScreen(
             JCPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.password,
-                error = stringFromPasswordValidationError(validation.passwordValidationError),
+                error = validation.passwordValidation.asString(),
                 onValueChange = updatePassword,
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Next,

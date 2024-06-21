@@ -11,7 +11,6 @@ import org.amshove.kluent.shouldBeNull
 import org.junit.Before
 import org.junit.Test
 import xyz.dnieln7.domain.usecase.ValidatePasswordUseCase
-import xyz.dnieln7.domain.validation.PasswordValidationError
 import xyz.dnieln7.signup.navigation.CREATE_PASSWORD_EMAIL
 import xyz.dnieln7.signup.navigation.CREATE_PASSWORD_USERNAME
 import xyz.dnieln7.testing.relaxedMockk
@@ -45,7 +44,7 @@ class CreatePasswordFormViewModelTest {
 
         viewModel.validation.value.let {
             it.passwordsMatch.shouldBeNull()
-            it.passwordValidationError shouldBeEqualTo PasswordValidationError.EMPTY
+            it.passwordValidation shouldBeEqualTo PasswordValidationError.EMPTY
         }
     }
 
@@ -67,7 +66,7 @@ class CreatePasswordFormViewModelTest {
             viewModel.validation.test {
                 awaitItem().let {
                     it.passwordsMatch shouldBeEqualTo true
-                    it.passwordValidationError.shouldBeNull()
+                    it.passwordValidation.shouldBeNull()
                 }
             }
         }
@@ -89,7 +88,7 @@ class CreatePasswordFormViewModelTest {
             viewModel.validation.test {
                 awaitItem().let {
                     it.passwordsMatch shouldBeEqualTo false
-                    it.passwordValidationError shouldBeEqualTo PasswordValidationError.TOO_SHORT
+                    it.passwordValidation shouldBeEqualTo PasswordValidationError.TOO_SHORT
                 }
             }
         }

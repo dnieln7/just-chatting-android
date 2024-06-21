@@ -29,17 +29,13 @@ class CreatePasswordFormViewModel @Inject constructor(
     fun updatePassword(password: String) {
         _form.update { it.copy(password = password) }
 
-        validatePasswordUseCase(password).fold(
-            { error ->
-                _validation.update { it.copy(passwordValidationError = error) }
-            },
-            {
-                _validation.update { it.copy(passwordValidationError = null) }
-            },
-        )
+        val validationStatus = validatePasswordUseCase(password)
 
         _validation.update {
-            it.copy(passwordsMatch = password == _form.value.passwordConfirm)
+            it.copy(
+                passwordsMatch = password == _form.value.passwordConfirm,
+                passwordValidation = validationStatus,
+            )
         }
     }
 

@@ -11,8 +11,6 @@ import org.junit.Before
 import org.junit.Test
 import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
 import xyz.dnieln7.domain.usecase.ValidateSimpleTextUseCase
-import xyz.dnieln7.domain.validation.EmailValidationError
-import xyz.dnieln7.domain.validation.SimpleTextValidationError
 import xyz.dnieln7.testing.relaxedMockk
 
 class CreateUserFormViewModelTest {
@@ -35,8 +33,8 @@ class CreateUserFormViewModelTest {
         }
 
         viewModel.validation.value.let {
-            it.emailValidationError shouldBeEqualTo EmailValidationError.EMPTY
-            it.usernameValidationError shouldBeEqualTo SimpleTextValidationError.EMPTY
+            it.emailValidation shouldBeEqualTo EmailValidationError.EMPTY
+            it.usernameValidation shouldBeEqualTo SimpleTextValidationError.EMPTY
         }
     }
 
@@ -54,7 +52,7 @@ class CreateUserFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().emailValidationError.shouldBeNull()
+                awaitItem().emailValidation.shouldBeNull()
             }
         }
     }
@@ -73,7 +71,7 @@ class CreateUserFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().emailValidationError shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
+                awaitItem().emailValidation shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
             }
         }
     }
@@ -92,7 +90,7 @@ class CreateUserFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().usernameValidationError.shouldBeNull()
+                awaitItem().usernameValidation.shouldBeNull()
             }
         }
     }
@@ -111,7 +109,7 @@ class CreateUserFormViewModelTest {
             }
 
             viewModel.validation.test {
-                awaitItem().usernameValidationError shouldBeEqualTo SimpleTextValidationError.EMPTY
+                awaitItem().usernameValidation shouldBeEqualTo SimpleTextValidationError.EMPTY
             }
         }
     }

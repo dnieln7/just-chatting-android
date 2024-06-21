@@ -24,26 +24,16 @@ class CreateUserFormViewModel @Inject constructor(
     fun updateEmail(email: String) {
         _form.update { it.copy(email = email) }
 
-        validateEmailUseCase(email).fold(
-            { error ->
-                _validation.update { it.copy(emailValidationError = error) }
-            },
-            {
-                _validation.update { it.copy(emailValidationError = null) }
-            }
-        )
+        val validationStatus = validateEmailUseCase(email)
+
+        _validation.update { it.copy(emailValidation = validationStatus) }
     }
 
     fun updateUsername(username: String) {
         _form.update { it.copy(username = username) }
 
-        validateSimpleTextUseCase(username).fold(
-            { error ->
-                _validation.update { it.copy(usernameValidationError = error) }
-            },
-            {
-                _validation.update { it.copy(usernameValidationError = null) }
-            }
-        )
+        val validationStatus = validateSimpleTextUseCase(username)
+
+        _validation.update { it.copy(usernameValidation = validationStatus) }
     }
 }

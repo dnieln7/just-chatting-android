@@ -24,11 +24,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.button.JCStatefulButton
+import xyz.dnieln7.composable.extension.asString
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.progress.JCStepper
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.string.stringFromEmailValidationError
-import xyz.dnieln7.composable.string.stringFromSimpleTextValidationError
 import xyz.dnieln7.composable.textfield.JCTextField
 import xyz.dnieln7.signup.R
 
@@ -79,7 +78,7 @@ fun CreateUserScreen(
                     value = form.email,
                     onValueChange = updateEmail,
                     label = stringResource(R.string.email),
-                    error = stringFromEmailValidationError(validation.emailValidationError),
+                    error = validation.emailValidation.asString(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next,
@@ -94,7 +93,7 @@ fun CreateUserScreen(
                     value = form.username,
                     onValueChange = updateUsername,
                     label = stringResource(R.string.username),
-                    error = stringFromSimpleTextValidationError(validation.usernameValidationError),
+                    error = validation.usernameValidation.asString(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done,
