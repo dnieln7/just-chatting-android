@@ -4,13 +4,10 @@ import java.util.Properties
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.library)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.kapt)
-    alias(libs.plugins.com.google.devtools.ksp)
+    alias(libs.plugins.xyz.dnieln7.conventions.library)
+    alias(libs.plugins.xyz.dnieln7.conventions.code.gen)
+    alias(libs.plugins.xyz.dnieln7.conventions.hilt)
 }
-
-apply<LibraryDefaultConfigPlugin>()
 
 android {
     namespace = "xyz.dnieln7.data"
@@ -19,27 +16,12 @@ android {
         setBuildConfigFields(this)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
 
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments["room.schemaLocation"] = "$projectDir/schemas"
             }
         }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
-    kotlinOptions {
-        jvmTarget = javaVersion.toString()
     }
 }
 
@@ -63,10 +45,6 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
-
-    kapt(libs.com.google.dagger.hilt.android.compiler)
-    implementation(libs.com.google.dagger.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

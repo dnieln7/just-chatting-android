@@ -33,6 +33,9 @@ kluent-android = "1.73"
 [plugins]
 # Convention
 xyz-dnieln7-conventions-application-compose = { id = "xyz.dnieln7.conventions.application-compose", version = "unspecified" }
+xyz-dnieln7-conventions-library = { id = "xyz.dnieln7.conventions.library", version = "unspecified" }
+xyz-dnieln7-conventions-code-gen = { id = "xyz.dnieln7.conventions.code-gen", version = "unspecified" }
+xyz-dnieln7-conventions-hilt = { id = "xyz.dnieln7.conventions.hilt", version = "unspecified" }
 # Convention
 
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
