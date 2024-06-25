@@ -1,13 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    alias(libs.plugins.com.android.application)
-    alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.org.jetbrains.kotlin.kapt)
-    alias(libs.plugins.com.google.devtools.ksp)
-    alias(libs.plugins.com.google.dagger.hilt.android)
+    alias(libs.plugins.xyz.dnieln7.conventions.application.compose)
 }
-
-apply<ApplicationComposeConfigPlugin>()
 
 android {
     namespace = "xyz.dnieln7.justchatting"
@@ -16,30 +10,6 @@ android {
         applicationId = "xyz.dnieln7.justchatting"
         versionCode = 1
         versionName = "1.0"
-
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-
-        vectorDrawables {
-            useSupportLibrary = true
-        }
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-
-    kotlinOptions {
-        jvmTarget = javaVersion.toString()
-    }
-
-    kapt {
-        correctErrorTypes = true
     }
 }
 
