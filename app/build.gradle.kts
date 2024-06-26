@@ -35,10 +35,6 @@ dependencies {
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)
 
-    kapt(libs.com.google.dagger.hilt.android.compiler)
-    implementation(libs.com.google.dagger.hilt.android)
-    implementation(libs.androidx.hilt.navigation.compose)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.androidx.test.espresso.core)

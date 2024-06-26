@@ -5,7 +5,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
-import xyz.dnieln7.conventions.extension.kapt
 import xyz.dnieln7.conventions.extension.kotlinOptions
 import xyz.dnieln7.conventions.utils.KOTLIN_COMPILER_EXTENSION_VERSION
 import xyz.dnieln7.conventions.utils.MIN_SDK
@@ -20,9 +19,8 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
-                apply("com.google.devtools.ksp")
-                apply("com.google.dagger.hilt.android")
+                apply("xyz.dnieln7.conventions.code-gen")
+                apply("xyz.dnieln7.conventions.hilt")
             }
 
             apply(from = "${project.rootDir}/config/detekt/detekt.gradle")
@@ -73,10 +71,6 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
                     resources {
                         excludes.addAll(excludedResources)
                     }
-                }
-
-                kapt {
-                    correctErrorTypes = true
                 }
             }
         }
