@@ -10,6 +10,8 @@ android {
         applicationId = "xyz.dnieln7.justchatting"
         versionCode = 1
         versionName = "1.0"
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }
 
@@ -35,22 +37,12 @@ dependencies {
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-
-    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
-    testImplementation(libs.io.mockk)
-    testImplementation(libs.app.cash.turbine)
-    testImplementation(libs.org.amshove.kluent.android)
-
     implementation(project(":domain"))
     implementation(project(":data"))
     implementation(project(":framework"))
     implementation(project(":common:composable"))
     implementation(project(":common:coroutines"))
     implementation(project(":common:navigation"))
-    implementation(project(":common:testing"))
     implementation(project(":features:login"))
     implementation(project(":features:signup"))
     implementation(project(":features:friendships"))

@@ -21,6 +21,7 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.android")
                 apply("xyz.dnieln7.conventions.code-gen")
                 apply("xyz.dnieln7.conventions.hilt")
+                apply("xyz.dnieln7.conventions.testing")
             }
 
             apply(from = "${project.rootDir}/config/detekt/detekt.gradle")
@@ -31,8 +32,6 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
                 defaultConfig {
                     minSdk = MIN_SDK
                     targetSdk = TARGET_SDK
-
-                    testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
                     vectorDrawables {
                         useSupportLibrary = true
