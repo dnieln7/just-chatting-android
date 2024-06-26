@@ -29,5 +29,9 @@ gradlePlugin {
             id = "xyz.dnieln7.conventions.hilt"
             implementationClass = "xyz.dnieln7.conventions.HiltConventionPlugin"
         }
+        register("TestingConventionPlugin") {
+            id = "xyz.dnieln7.conventions.testing"
+            implementationClass = "xyz.dnieln7.conventions.TestingConventionPlugin"
+        }
     }
 }

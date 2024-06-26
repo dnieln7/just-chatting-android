@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.xyz.dnieln7.conventions.library)
     alias(libs.plugins.xyz.dnieln7.conventions.code.gen)
     alias(libs.plugins.xyz.dnieln7.conventions.hilt)
+    alias(libs.plugins.xyz.dnieln7.conventions.testing)
 }
 
 android {
@@ -18,14 +19,4 @@ dependencies {
 
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-
-    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
-    testImplementation(libs.io.mockk)
-    testImplementation(libs.org.amshove.kluent.android)
-
-    testImplementation(project(":common:testing"))
 }

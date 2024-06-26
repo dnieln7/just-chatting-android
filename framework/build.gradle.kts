@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.xyz.dnieln7.conventions.library)
     alias(libs.plugins.xyz.dnieln7.conventions.code.gen)
     alias(libs.plugins.xyz.dnieln7.conventions.hilt)
+    alias(libs.plugins.xyz.dnieln7.conventions.testing)
 }
 
 android {
@@ -15,10 +16,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
 
     implementation(project(":domain"))
 }

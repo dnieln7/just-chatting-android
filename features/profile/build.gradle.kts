@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.xyz.dnieln7.conventions.library.compose)
     alias(libs.plugins.xyz.dnieln7.conventions.code.gen)
     alias(libs.plugins.xyz.dnieln7.conventions.hilt)
+    alias(libs.plugins.xyz.dnieln7.conventions.testing)
 }
 
 android {
@@ -25,19 +26,8 @@ dependencies {
 
     implementation(libs.io.coil.kt.coil.compose)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-
-    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
-    testImplementation(libs.io.mockk)
-    testImplementation(libs.app.cash.turbine)
-    testImplementation(libs.org.amshove.kluent.android)
-
     implementation(project(":domain"))
     implementation(project(":common:composable"))
     implementation(project(":common:coroutines"))
     implementation(project(":common:navigation"))
-
-    testImplementation(project(":common:testing"))
 }

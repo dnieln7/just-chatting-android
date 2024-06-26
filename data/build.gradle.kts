@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.xyz.dnieln7.conventions.library)
     alias(libs.plugins.xyz.dnieln7.conventions.code.gen)
     alias(libs.plugins.xyz.dnieln7.conventions.hilt)
+    alias(libs.plugins.xyz.dnieln7.conventions.testing)
 }
 
 android {
@@ -46,18 +47,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-
-    testImplementation(libs.org.jetbrains.kotlinx.coroutines.test)
-    testImplementation(libs.io.mockk)
-    testImplementation(libs.org.amshove.kluent.android)
-
     implementation(project(":common:coroutines"))
     implementation(project(":domain"))
-
-    testImplementation(project(":common:testing"))
 }
 
 fun setBuildConfigFields(libraryDefaultConfig: LibraryDefaultConfig) {

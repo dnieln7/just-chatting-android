@@ -37,6 +37,7 @@ xyz-dnieln7-conventions-library = { id = "xyz.dnieln7.conventions.library", vers
 xyz-dnieln7-conventions-library-compose = { id = "xyz.dnieln7.conventions.library-compose", version = "unspecified" }
 xyz-dnieln7-conventions-code-gen = { id = "xyz.dnieln7.conventions.code-gen", version = "unspecified" }
 xyz-dnieln7-conventions-hilt = { id = "xyz.dnieln7.conventions.hilt", version = "unspecified" }
+xyz-dnieln7-conventions-testing = { id = "xyz.dnieln7.conventions.testing", version = "unspecified" }
 # Convention
 
 com-android-application = { id = "com.android.application", version.ref = "gradle" }
