@@ -18,9 +18,6 @@ android {
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
 
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)

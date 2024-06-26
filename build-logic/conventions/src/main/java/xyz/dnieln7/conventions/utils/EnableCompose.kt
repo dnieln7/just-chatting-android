@@ -28,6 +28,12 @@ fun Project.enableCompose(commonExtension: CommonExtension<*, *, *, *, *>) {
             "androidTestImplementation"(libs.findLibrary("androidx.compose.ui.test.junit4").get())
             "debugImplementation"(libs.findLibrary("androidx.compose.ui.tooling").get())
             "debugImplementation"(libs.findLibrary("androidx.compose.ui.test.manifest").get())
+
+            "implementation"(libs.findLibrary("androidx.lifecycle.runtime.compose").get())
+            "implementation"(libs.findLibrary("androidx.activity.compose").get())
+            "implementation"(libs.findLibrary("androidx.navigation.compose").get())
+            "implementation"(libs.findLibrary("androidx.hilt.navigation.compose").get())
+            "implementation"(libs.findLibrary("io.coil.kt.coil.compose").get())
         }
     }
 }

@@ -16,15 +16,9 @@ android {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.navigation.compose)
 
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)
-
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    implementation(libs.io.coil.kt.coil.compose)
 
     implementation(project(":domain"))
     implementation(project(":common:composable"))
