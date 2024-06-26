@@ -1,7 +1,7 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.xyz.dnieln7.conventions.library.compose)
-    alias(libs.plugins.xyz.dnieln7.conventions.code.gen)
+    alias(libs.plugins.xyz.dnieln7.conventions.codegen)
     alias(libs.plugins.xyz.dnieln7.conventions.hilt)
     alias(libs.plugins.xyz.dnieln7.conventions.testing)
 }

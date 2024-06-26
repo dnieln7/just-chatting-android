@@ -19,7 +19,7 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
-                apply("xyz.dnieln7.conventions.code-gen")
+                apply("xyz.dnieln7.conventions.codegen")
                 apply("xyz.dnieln7.conventions.hilt")
                 apply("xyz.dnieln7.conventions.testing")
             }

@@ -22,7 +22,7 @@ gradlePlugin {
             implementationClass = "xyz.dnieln7.conventions.LibraryComposeConventionPlugin"
         }
         register("CodeGenConventionPlugin") {
-            id = "xyz.dnieln7.conventions.code-gen"
+            id = "xyz.dnieln7.conventions.codegen"
             implementationClass = "xyz.dnieln7.conventions.CodeGenConventionPlugin"
         }
         register("HiltConventionPlugin") {
