@@ -11,5 +11,5 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.io.mockk)
 
-    implementation(project(":domain"))
+    implementation(projects.domain)
 }

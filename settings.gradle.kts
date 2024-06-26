@@ -18,8 +18,9 @@ dependencyResolutionManagement {
 }
 
 gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-rootProject.name = "Just Chatting"
+rootProject.name = "just-chatting"
 
 include(":app")
 

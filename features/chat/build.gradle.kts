@@ -20,8 +20,8 @@ dependencies {
     implementation(platform(libs.io.arrow.kt.arrow.stack))
     implementation(libs.io.arrow.kt.arrow.core)
 
-    implementation(project(":domain"))
-    implementation(project(":common:composable"))
-    implementation(project(":common:coroutines"))
-    implementation(project(":common:navigation"))
+    implementation(projects.domain)
+    implementation(projects.common.composable)
+    implementation(projects.common.coroutines)
+    implementation(projects.common.navigation)
 }

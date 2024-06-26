@@ -47,8 +47,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.runtime)
 
-    implementation(project(":common:coroutines"))
-    implementation(project(":domain"))
+    implementation(projects.common.coroutines)
+    implementation(projects.domain)
 }
 
 fun setBuildConfigFields(libraryDefaultConfig: LibraryDefaultConfig) {
