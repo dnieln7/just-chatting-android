@@ -50,7 +50,6 @@ io-gitlab-arturbosch-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref 
 
 [libraries]
 # Convention libraries
-com-android-tools-build-gradle-api = { module = "com.android.tools.build:gradle-api", version.ref = "gradle" }
 com-android-tools-build-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 org-jetbrains-kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 # Convention libraries
