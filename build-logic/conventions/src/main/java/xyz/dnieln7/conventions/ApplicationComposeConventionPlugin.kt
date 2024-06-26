@@ -6,9 +6,9 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import xyz.dnieln7.conventions.extension.kotlinOptions
-import xyz.dnieln7.conventions.utils.KOTLIN_COMPILER_EXTENSION_VERSION
 import xyz.dnieln7.conventions.utils.MIN_SDK
 import xyz.dnieln7.conventions.utils.TARGET_SDK
+import xyz.dnieln7.conventions.utils.enableCompose
 import xyz.dnieln7.conventions.utils.excludedResources
 import xyz.dnieln7.conventions.utils.javaVersion
 
@@ -27,6 +27,8 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
             apply(from = "${project.rootDir}/config/detekt/detekt.gradle")
 
             extensions.configure<ApplicationExtension> {
+                enableCompose(this)
+
                 compileSdk = TARGET_SDK
 
                 defaultConfig {
@@ -58,12 +60,7 @@ class ApplicationComposeConventionPlugin : Plugin<Project> {
                 }
 
                 buildFeatures {
-                    compose = true
                     buildConfig = true
-                }
-
-                composeOptions {
-                    kotlinCompilerExtensionVersion = KOTLIN_COMPILER_EXTENSION_VERSION
                 }
 
                 packaging {
