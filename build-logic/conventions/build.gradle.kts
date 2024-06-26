@@ -17,6 +17,10 @@ gradlePlugin {
             id = "xyz.dnieln7.conventions.library"
             implementationClass = "xyz.dnieln7.conventions.LibraryConventionPlugin"
         }
+        register("LibraryComposeConventionPlugin") {
+            id = "xyz.dnieln7.conventions.library-compose"
+            implementationClass = "xyz.dnieln7.conventions.LibraryComposeConventionPlugin"
+        }
         register("CodeGenConventionPlugin") {
             id = "xyz.dnieln7.conventions.code-gen"
             implementationClass = "xyz.dnieln7.conventions.CodeGenConventionPlugin"
