@@ -31,9 +31,7 @@ import xyz.dnieln7.signup.R
 fun CreatePasswordScreen(
     form: CreatePasswordForm,
     validation: CreatePasswordFormValidation,
-    updatePassword: (String) -> Unit,
-    updatePasswordConfirm: (String) -> Unit,
-    navigateToRegister: (String, String, String) -> Unit,
+    onAction: (CreatePasswordAction) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -64,7 +62,7 @@ fun CreatePasswordScreen(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.password,
                 error = validation.passwordValidation.asString(),
-                onValueChange = updatePassword,
+                onValueChange = { onAction(CreatePasswordAction.OnPasswordInput(it)) },
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Next,
                     action = { focusManager.moveFocus(FocusDirection.Down) }
@@ -77,7 +75,7 @@ fun CreatePasswordScreen(
                 error = if (validation.passwordsMatch == false)
                     stringResource(R.string.passwords_not_equal_error)
                 else null,
-                onValueChange = updatePasswordConfirm,
+                onValueChange = { onAction(CreatePasswordAction.OnPasswordConfirmInput(it)) },
                 label = stringResource(R.string.confirm_password),
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Done,
@@ -89,7 +87,15 @@ fun CreatePasswordScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = validation.isValid(),
                 text = stringResource(R.string.create_password),
-                onClick = { navigateToRegister(form.email, form.username, form.password) },
+                onClick = {
+                    onAction(
+                        CreatePasswordAction.OnCreatePasswordClick(
+                            email = form.email,
+                            username = form.username,
+                            password = form.password,
+                        )
+                    )
+                },
             )
         }
     }

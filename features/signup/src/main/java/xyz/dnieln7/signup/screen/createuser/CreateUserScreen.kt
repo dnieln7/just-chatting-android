@@ -34,13 +34,9 @@ import xyz.dnieln7.signup.R
 @Composable
 fun CreateUserScreen(
     uiState: CreateUserState,
-    createUser: (email: String, username: String) -> Unit,
-    resetState: () -> Unit,
     form: CreateUserForm,
     validation: CreateUserFormValidation,
-    updateEmail: (String) -> Unit,
-    updateUsername: (String) -> Unit,
-    navigateToCreatePassword: (String, String) -> Unit,
+    onAction: (CreateUserAction) -> Unit
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -49,8 +45,7 @@ fun CreateUserScreen(
 
     if (uiState is CreateUserState.Success) {
         LaunchedEffect(Unit) {
-            navigateToCreatePassword(uiState.email, uiState.username)
-            resetState()
+            onAction(CreateUserAction.OnUserCreated(uiState.email, uiState.username))
         }
     } else {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -76,7 +71,7 @@ fun CreateUserScreen(
                 JCTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = form.email,
-                    onValueChange = updateEmail,
+                    onValueChange = { onAction(CreateUserAction.OnEmailInput(it)) },
                     label = stringResource(R.string.email),
                     error = validation.emailValidation.asString(),
                     keyboardOptions = KeyboardOptions(
@@ -91,7 +86,7 @@ fun CreateUserScreen(
                 JCTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = form.username,
-                    onValueChange = updateUsername,
+                    onValueChange = { onAction(CreateUserAction.OnUsernameInput(it)) },
                     label = stringResource(R.string.username),
                     error = validation.usernameValidation.asString(),
                     keyboardOptions = KeyboardOptions(
@@ -119,7 +114,14 @@ fun CreateUserScreen(
                     enabled = validation.isValid(),
                     noneText = stringResource(R.string.create_user),
                     successText = stringResource(R.string.user_created),
-                    onClick = { createUser(form.email, form.username) },
+                    onClick = {
+                        onAction(
+                            CreateUserAction.OnCreateUserClick(
+                                email = form.email,
+                                username = form.username
+                            )
+                        )
+                    },
                     statefulButtonStatus = uiState.toStatefulButtonStatus(),
                 )
             }

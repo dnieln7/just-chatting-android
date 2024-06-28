@@ -32,9 +32,7 @@ import xyz.dnieln7.signup.R
 @Composable
 fun RegisterScreen(
     uiState: RegisterState,
-    navigateToHome: () -> Unit,
-    register: () -> Unit,
-    resetState: () -> Unit,
+    onAction: (RegisterAction) -> Unit,
 ) {
     Surface(modifier = Modifier.fillMaxSize()) {
         when (uiState) {
@@ -51,8 +49,7 @@ fun RegisterScreen(
                         .padding(20.dp),
                 )
                 LaunchedEffect(Unit) {
-                    navigateToHome()
-                    resetState()
+                    onAction(RegisterAction.OnUserRegistered)
                 }
             }
 
@@ -62,7 +59,7 @@ fun RegisterScreen(
                         .fillMaxWidth()
                         .padding(20.dp),
                     error = uiState.message,
-                    retry = register,
+                    retry = { onAction(RegisterAction.OnRegisterClick) },
                 )
             }
         }
