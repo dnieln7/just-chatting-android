@@ -50,13 +50,9 @@ import xyz.dnieln7.login.R
 @Composable
 fun LoginScreen(
     uiState: LoginState,
-    login: (String, String) -> Unit,
     form: LoginForm,
     validation: LoginFormValidation,
-    updateEmail: (String) -> Unit,
-    updatePassword: (String) -> Unit,
-    navigateToSignup: () -> Unit,
-    navigateToHome: () -> Unit,
+    onAction: (LoginAction) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
 
@@ -76,13 +72,9 @@ fun LoginScreen(
                         .fillMaxWidth()
                         .weight(1F),
                     loginState = uiState,
-                    login = login,
                     form = form,
                     validation = validation,
-                    updateEmail = updateEmail,
-                    updatePassword = updatePassword,
-                    navigateToSignup = navigateToSignup,
-                    navigateToHome = navigateToHome,
+                    onAction = onAction,
                 )
             }
         } else {
@@ -97,13 +89,9 @@ fun LoginScreen(
                         .fillMaxHeight()
                         .weight(1F),
                     loginState = uiState,
-                    login = login,
                     form = form,
                     validation = validation,
-                    updateEmail = updateEmail,
-                    updatePassword = updatePassword,
-                    navigateToSignup = navigateToSignup,
-                    navigateToHome = navigateToHome,
+                    onAction = onAction,
                 )
             }
         }
@@ -135,13 +123,9 @@ fun Logo(modifier: Modifier = Modifier) {
 fun LoginForm(
     modifier: Modifier = Modifier,
     loginState: LoginState,
-    login: (String, String) -> Unit,
     form: LoginForm,
     validation: LoginFormValidation,
-    updateEmail: (String) -> Unit,
-    updatePassword: (String) -> Unit,
-    navigateToSignup: () -> Unit,
-    navigateToHome: () -> Unit,
+    onAction: (LoginAction) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -189,7 +173,7 @@ fun LoginForm(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.email,
                 error = validation.emailValidation?.asString(),
-                onValueChange = updateEmail,
+                onValueChange = { onAction(LoginAction.OnEmailInput(it)) },
                 label = stringResource(R.string.email),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
@@ -203,7 +187,7 @@ fun LoginForm(
             JCPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.password,
-                onValueChange = updatePassword,
+                onValueChange = { onAction(LoginAction.OnPasswordInput(it)) },
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Done,
                     action = { focusManager.clearFocus() }
@@ -227,13 +211,13 @@ fun LoginForm(
                 noneText = stringResource(R.string.login),
                 successText = stringResource(R.string.logged_in),
                 statefulButtonStatus = loginState.toNLSStatus(),
-                onClick = { login(form.email, form.password) },
+                onClick = { onAction(LoginAction.OnLoginClick(form.email, form.password)) },
             )
             VerticalSpacer(of = 12.dp)
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { navigateToSignup() },
+                    .clickable { onAction(LoginAction.OnSignupClick) },
                 text = buildAnnotatedString {
                     append(stringResource(R.string.don_t_have_an_account))
                     append(" ")
@@ -253,7 +237,7 @@ fun LoginForm(
 
     if (loginState == LoginState.Success) {
         LaunchedEffect(Unit) {
-            navigateToHome()
+            onAction(LoginAction.OnLoggedIn)
         }
     }
 }
