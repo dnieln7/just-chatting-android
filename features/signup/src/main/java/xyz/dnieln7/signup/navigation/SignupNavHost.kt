@@ -105,7 +105,7 @@ fun NavGraphBuilder.signupNavHost(
                 uiState = uiState,
                 onAction = {
                     when (it) {
-                        RegisterAction.OnRegisterClick -> registerViewModel.register()
+                        RegisterAction.OnRetryClick -> registerViewModel.register()
                         RegisterAction.OnUserRegistered -> {
                             navigateToHome()
                             registerViewModel.resetState()
