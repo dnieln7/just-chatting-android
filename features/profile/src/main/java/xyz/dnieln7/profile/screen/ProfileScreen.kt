@@ -78,7 +78,7 @@ fun ProfileScreen(
                     error = stringResource(R.string.could_not_load_profile),
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = { onAction(ProfileAction.OnLoadProfileClick) },
+                        onClick = { onAction(ProfileAction.OnRetryClick) },
                     ),
                 )
 

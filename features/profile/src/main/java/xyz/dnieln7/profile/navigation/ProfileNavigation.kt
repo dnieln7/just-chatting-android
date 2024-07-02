@@ -20,7 +20,7 @@ fun NavGraphBuilder.profileNavigation(navigateToLogin: () -> Unit) {
             uiState = uiState,
             onAction = {
                 when (it) {
-                    ProfileAction.OnLoadProfileClick -> profileViewModel.getUser()
+                    ProfileAction.OnRetryClick -> profileViewModel.getUser()
                     ProfileAction.OnLogoutClick -> profileViewModel.logout()
                     ProfileAction.OnLoggedOut -> navigateToLogin()
                 }
