@@ -17,16 +17,13 @@ import xyz.dnieln7.composable.alert.JCAlert
 import xyz.dnieln7.composable.alert.JCErrorAlert
 import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.pullrefresh.PullRefresh
-import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.friendships.R
 import xyz.dnieln7.friendships.composable.FriendshipListTile
 
 @Composable
 fun FriendshipsScreen(
     uiState: FriendshipsState,
-    getFriendships: () -> Unit,
-    createChat: (Friendship) -> Unit,
-    deleteFriendship: (Friendship) -> Unit
+    onAction: (FriendshipsAction) -> Unit,
 ) {
     when (uiState) {
         FriendshipsState.Loading -> JCProgressIndicator(
@@ -41,17 +38,21 @@ fun FriendshipsScreen(
                     text = stringResource(R.string.empty_friendships),
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = getFriendships,
+                        onClick = { onAction(FriendshipsAction.OnRefreshFriendshipsPull) },
                     ),
                 )
             } else {
-                PullRefresh(onRefresh = getFriendships) {
+                PullRefresh(onRefresh = { onAction(FriendshipsAction.OnRefreshFriendshipsPull) }) {
                     LazyColumn {
-                        items(items = uiState.data, key = { it.data.id }) {
+                        items(items = uiState.data, key = { it.data.id }) { statefulFriendship ->
                             FriendshipListTile(
-                                friendship = it,
-                                onClick = createChat,
-                                onDelete = deleteFriendship,
+                                statefulFriendship = statefulFriendship,
+                                onClick = {
+                                    onAction(FriendshipsAction.OnFriendshipClick(it))
+                                },
+                                onDelete = {
+                                    onAction(FriendshipsAction.OnDeleteFriendshipClick(it))
+                                },
                             )
                         }
                         item { Spacer(Modifier.height(80.dp)) }
@@ -65,7 +66,7 @@ fun FriendshipsScreen(
             error = uiState.message,
             alertAction = AlertAction(
                 text = stringResource(R.string.try_again),
-                onClick = getFriendships,
+                onClick = { onAction(FriendshipsAction.OnRefreshFriendshipsPull) },
             ),
         )
     }

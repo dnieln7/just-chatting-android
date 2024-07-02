@@ -39,14 +39,14 @@ import xyz.dnieln7.friendships.screen.friendships.StatefulFriendship
 @Composable
 fun FriendshipListTile(
     modifier: Modifier = Modifier,
-    friendship: StatefulFriendship,
+    statefulFriendship: StatefulFriendship,
     onClick: (Friendship) -> Unit,
     onDelete: (Friendship) -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(onClick = { onClick(friendship.data) })
+            .clickable(onClick = { onClick(statefulFriendship.data) })
             .padding(12.dp)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
@@ -67,23 +67,23 @@ fun FriendshipListTile(
         HorizontalSpacer(of = 12.dp)
         Column {
             Text(
-                text = friendship.data.username,
+                text = statefulFriendship.data.username,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             )
             VerticalSpacer(of = 4.dp)
             Text(
-                text = friendship.data.email,
+                text = statefulFriendship.data.email,
                 style = MaterialTheme.typography.titleMedium,
             )
         }
         HorizontalFlexibleSpacer()
-        if (friendship.isLoading) {
+        if (statefulFriendship.isLoading) {
             CircularProgressIndicator(strokeCap = StrokeCap.Round)
         } else {
             JCIconButton(
                 icon = Icons.Rounded.PersonRemove,
                 contentDescription = stringResource(R.string.unfriend),
-                onClick = { onDelete(friendship.data) }
+                onClick = { onDelete(statefulFriendship.data) }
             )
         }
     }
@@ -102,7 +102,7 @@ private fun FriendshipListTilePreview() {
                 verticalArrangement = Arrangement.Center,
             ) {
                 FriendshipListTile(
-                    friendship = StatefulFriendship(isLoading = true, data = friendship),
+                    statefulFriendship = StatefulFriendship(isLoading = true, data = friendship),
                     onClick = {},
                     onDelete = {})
             }

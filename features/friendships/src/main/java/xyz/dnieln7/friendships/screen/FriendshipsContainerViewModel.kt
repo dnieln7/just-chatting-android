@@ -49,7 +49,7 @@ class FriendshipsContainerViewModel @Inject constructor(
         }
     }
 
-    fun resetChatState() {
+    fun resetState() {
         viewModelScope.launch(dispatcher) {
             _state.update { it.copy(creatingChat = false, createChatError = null, chat = null) }
         }

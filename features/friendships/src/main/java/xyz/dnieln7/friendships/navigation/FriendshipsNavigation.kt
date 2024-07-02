@@ -6,8 +6,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import xyz.dnieln7.domain.model.Chat
+import xyz.dnieln7.friendships.screen.FriendshipScreen
 import xyz.dnieln7.friendships.screen.FriendshipsContainerScreen
 import xyz.dnieln7.friendships.screen.FriendshipsContainerViewModel
+import xyz.dnieln7.friendships.screen.FriendshipsOverviewAction
 import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipViewModel
 import xyz.dnieln7.friendships.screen.friendships.FriendshipsViewModel
 import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsViewModel
@@ -27,22 +29,72 @@ fun NavGraphBuilder.friendshipsNavigation(navigateToChat: (Chat) -> Unit) {
 
         FriendshipsContainerScreen(
             friendshipsContainerState = friendshipsContainerState,
-            toggleBottomSheet = friendshipsContainerViewModel::toggleBottomSheet,
-            toggleScreen = friendshipsContainerViewModel::toggleScreen,
-            createChat = friendshipsContainerViewModel::createChat,
-            resetChatState = friendshipsContainerViewModel::resetChatState,
-            navigateToChat = navigateToChat,
             friendshipsState = friendshipsState,
-            getFriendships = friendshipsViewModel::getFriendships,
-            deleteFriendship = friendshipsViewModel::deleteFriendship,
             pendingFriendshipsState = pendingFriendshipsState,
-            getPendingFriendships = pendingFriendshipsViewModel::getPendingFriendships,
-            acceptFriendship = pendingFriendshipsViewModel::acceptFriendship,
-            rejectFriendship = pendingFriendshipsViewModel::rejectFriendship,
             addFriendshipState = addFriendshipState,
-            getUserByEmail = addFriendshipViewModel::getUserByEmail,
-            sendFriendshipRequest = addFriendshipViewModel::sendFriendshipRequest,
-            resetAddFriendshipState = addFriendshipViewModel::resetAddFriendshipState,
+            onAction = {
+                when (it) {
+                    FriendshipsOverviewAction.OnRefreshPendingFriendshipsPull -> {
+                        friendshipsViewModel.getFriendships()
+                    }
+
+                    is FriendshipsOverviewAction.OnFriendshipClick -> {
+                        friendshipsContainerViewModel.createChat(it.friendship)
+                    }
+
+                    is FriendshipsOverviewAction.OnDeleteFriendshipClick -> {
+                        friendshipsViewModel.deleteFriendship(it.friendship)
+                    }
+
+                    FriendshipsOverviewAction.OnRefreshFriendshipsPull -> {
+                        pendingFriendshipsViewModel.getPendingFriendships()
+                    }
+
+                    is FriendshipsOverviewAction.OnAcceptFriendship -> {
+                        pendingFriendshipsViewModel.acceptFriendship(it.friendship)
+                    }
+
+                    is FriendshipsOverviewAction.OnRejectFriendship -> {
+                        pendingFriendshipsViewModel.rejectFriendship(it.friendship)
+                    }
+
+                    is FriendshipsOverviewAction.OnSearchClick -> {
+                        addFriendshipViewModel.getUserByEmail(it.email)
+                    }
+
+                    is FriendshipsOverviewAction.OnSendFriendshipClick -> {
+                        addFriendshipViewModel.sendFriendshipRequest(it.user)
+                    }
+
+                    is FriendshipsOverviewAction.OnChatCreated -> {
+                        navigateToChat(it.chat)
+                        friendshipsContainerViewModel.resetState()
+                    }
+
+                    FriendshipsOverviewAction.OnShowBottomSheetClick -> {
+                        friendshipsContainerViewModel.toggleBottomSheet(true)
+                    }
+
+                    FriendshipsOverviewAction.OnDismissBottomSheetClick -> {
+                        friendshipsContainerViewModel.toggleBottomSheet(false)
+                        addFriendshipViewModel.resetAddFriendshipState()
+                    }
+
+                    is FriendshipsOverviewAction.OnTabClick -> {
+                        when (it.friendshipScreen) {
+                            FriendshipScreen.FRIENDSHIPS -> {
+                                friendshipsViewModel.getFriendships()
+                            }
+
+                            FriendshipScreen.PENDING_FRIENDSHIPS -> {
+                                pendingFriendshipsViewModel.getPendingFriendships()
+                            }
+                        }
+
+                        friendshipsContainerViewModel.toggleScreen(it.friendshipScreen)
+                    }
+                }
+            }
         )
     }
 }

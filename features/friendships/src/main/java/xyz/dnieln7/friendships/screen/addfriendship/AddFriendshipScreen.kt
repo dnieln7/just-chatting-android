@@ -26,17 +26,15 @@ import xyz.dnieln7.composable.button.JCButton
 import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.textfield.JCOutlinedSearchTextField
-import xyz.dnieln7.domain.model.User
 import xyz.dnieln7.friendships.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFriendshipScreen(
+    uiState: AddFriendshipState,
     sheetState: SheetState,
     onModalBottomSheetDismiss: () -> Unit,
-    uiState: AddFriendshipState,
-    getUserByEmail: (String) -> Unit,
-    sendFriendshipRequest: (User) -> Unit
+    onAction: (AddFriendshipAction) -> Unit,
 ) {
     ModalBottomSheet(
         modifier = Modifier,
@@ -46,7 +44,7 @@ fun AddFriendshipScreen(
         JCOutlinedSearchTextField(
             modifier = Modifier.padding(horizontal = 12.dp),
             placeholder = stringResource(R.string.search_by_email),
-            onSearch = { getUserByEmail(it) }
+            onSearch = { onAction(AddFriendshipAction.OnSearchClick(it)) }
         )
         Column(
             modifier = Modifier
@@ -84,7 +82,9 @@ fun AddFriendshipScreen(
                     VerticalSpacer(of = 12.dp)
                     JCButton(
                         text = stringResource(R.string.send_friendship_request),
-                        onClick = { sendFriendshipRequest(uiState.user) },
+                        onClick = {
+                            onAction(AddFriendshipAction.OnSendFriendshipClick(uiState.user))
+                        },
                     )
                 }
 
@@ -93,7 +93,9 @@ fun AddFriendshipScreen(
                     error = uiState.message,
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = { sendFriendshipRequest(uiState.user) },
+                        onClick = {
+                            onAction(AddFriendshipAction.OnSendFriendshipClick(uiState.user))
+                        },
                     ),
                 )
 

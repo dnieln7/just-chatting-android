@@ -127,7 +127,7 @@ class FriendshipsContainerViewModelTest {
         viewModel.createChat(friendship)
 
         runTest(dispatcher) {
-            viewModel.resetChatState()
+            viewModel.resetState()
 
             viewModel.state.test {
                 skipItems(1)

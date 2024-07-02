@@ -17,16 +17,13 @@ import xyz.dnieln7.composable.alert.JCAlert
 import xyz.dnieln7.composable.alert.JCErrorAlert
 import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.pullrefresh.PullRefresh
-import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.friendships.R
 import xyz.dnieln7.friendships.composable.PendingFriendshipListTile
 
 @Composable
 fun PendingFriendshipsScreen(
     uiState: PendingFriendshipsState,
-    getPendingFriendships: () -> Unit,
-    acceptFriendship: (Friendship) -> Unit,
-    rejectFriendship: (Friendship) -> Unit,
+    onAction: (PendingFriendshipsAction) -> Unit,
 ) {
     when (uiState) {
         PendingFriendshipsState.Loading -> JCProgressIndicator(
@@ -41,17 +38,21 @@ fun PendingFriendshipsScreen(
                     text = stringResource(R.string.empty_pending_friendships),
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = getPendingFriendships,
+                        onClick = { onAction(PendingFriendshipsAction.OnRefreshPendingFriendshipsPull) },
                     ),
                 )
             } else {
-                PullRefresh(onRefresh = getPendingFriendships) {
+                PullRefresh(onRefresh = { onAction(PendingFriendshipsAction.OnRefreshPendingFriendshipsPull) }) {
                     LazyColumn {
-                        items(items = uiState.data, key = { it.data.id }) {
+                        items(items = uiState.data, key = { it.data.id }) { statefulPendingFriendship ->
                             PendingFriendshipListTile(
-                                friendship = it,
-                                onAccept = acceptFriendship,
-                                onReject = rejectFriendship,
+                                statefulPendingFriendship = statefulPendingFriendship,
+                                onAccept = {
+                                    onAction(PendingFriendshipsAction.OnAcceptFriendship(it))
+                                },
+                                onReject = {
+                                    onAction(PendingFriendshipsAction.OnRejectFriendship(it))
+                                },
                             )
                         }
                         item { Spacer(Modifier.height(80.dp)) }
@@ -65,7 +66,7 @@ fun PendingFriendshipsScreen(
             error = uiState.message,
             alertAction = AlertAction(
                 text = stringResource(R.string.try_again),
-                onClick = getPendingFriendships,
+                onClick = { onAction(PendingFriendshipsAction.OnRefreshPendingFriendshipsPull) },
             ),
         )
     }

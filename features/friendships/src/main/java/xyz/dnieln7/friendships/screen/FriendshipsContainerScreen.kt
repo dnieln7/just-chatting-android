@@ -27,14 +27,14 @@ import kotlinx.coroutines.launch
 import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.tab.JCTabs
-import xyz.dnieln7.domain.model.Chat
-import xyz.dnieln7.domain.model.Friendship
-import xyz.dnieln7.domain.model.User
 import xyz.dnieln7.friendships.R
+import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipAction
 import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipScreen
 import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipState
+import xyz.dnieln7.friendships.screen.friendships.FriendshipsAction
 import xyz.dnieln7.friendships.screen.friendships.FriendshipsScreen
 import xyz.dnieln7.friendships.screen.friendships.FriendshipsState
+import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsAction
 import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsScreen
 import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsState
 
@@ -42,28 +42,15 @@ import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsState
 @Composable
 fun FriendshipsContainerScreen(
     friendshipsContainerState: FriendshipsContainerState,
-    createChat: (Friendship) -> Unit,
-    toggleBottomSheet: (Boolean) -> Unit,
-    toggleScreen: (FriendshipScreen) -> Unit,
-    resetChatState: () -> Unit,
-    navigateToChat: (Chat) -> Unit,
     friendshipsState: FriendshipsState,
-    getFriendships: () -> Unit,
-    deleteFriendship: (Friendship) -> Unit,
     pendingFriendshipsState: PendingFriendshipsState,
-    getPendingFriendships: () -> Unit,
-    acceptFriendship: (Friendship) -> Unit,
-    rejectFriendship: (Friendship) -> Unit,
     addFriendshipState: AddFriendshipState,
-    getUserByEmail: (String) -> Unit,
-    sendFriendshipRequest: (User) -> Unit,
-    resetAddFriendshipState: () -> Unit,
+    onAction: (FriendshipsOverviewAction) -> Unit,
 ) {
     if (friendshipsContainerState.creatingChat) {
         if (friendshipsContainerState.chat != null) {
             LaunchedEffect(Unit) {
-                navigateToChat(friendshipsContainerState.chat)
-                resetChatState()
+                onAction(FriendshipsOverviewAction.OnChatCreated(friendshipsContainerState.chat))
             }
         } else {
             FriendshipsCreatingChat()
@@ -74,37 +61,39 @@ fun FriendshipsContainerScreen(
 
         if (friendshipsContainerState.showBottomSheet) {
             AddFriendshipScreen(
+                uiState = addFriendshipState,
                 sheetState = modalBottomSheetState,
                 onModalBottomSheetDismiss = {
                     scope.launch {
-                        toggleBottomSheet(false)
+                        onAction(FriendshipsOverviewAction.OnDismissBottomSheetClick)
                         modalBottomSheetState.hide()
-                        resetAddFriendshipState()
                     }
                 },
-                uiState = addFriendshipState,
-                getUserByEmail = getUserByEmail,
-                sendFriendshipRequest = sendFriendshipRequest,
+                onAction = {
+                    when (it) {
+                        is AddFriendshipAction.OnSearchClick -> {
+                            onAction(FriendshipsOverviewAction.OnSearchClick(it.email))
+                        }
+
+                        is AddFriendshipAction.OnSendFriendshipClick -> {
+                            onAction(FriendshipsOverviewAction.OnSendFriendshipClick(it.user))
+                        }
+                    }
+                }
             )
         }
 
         FriendshipsContent(
             friendshipsContainerState = friendshipsContainerState,
-            createChat = createChat,
+            friendshipsState = friendshipsState,
+            pendingFriendshipsState = pendingFriendshipsState,
             showBottomSheet = {
                 scope.launch {
-                    toggleBottomSheet(true)
+                    onAction(FriendshipsOverviewAction.OnShowBottomSheetClick)
                     modalBottomSheetState.show()
                 }
             },
-            toggleScreen = toggleScreen,
-            friendshipsState = friendshipsState,
-            getFriendships = getFriendships,
-            deleteFriendship = deleteFriendship,
-            pendingFriendshipsState = pendingFriendshipsState,
-            getPendingFriendships = getPendingFriendships,
-            acceptFriendship = acceptFriendship,
-            rejectFriendship = rejectFriendship,
+            onAction = onAction,
         )
     }
 }
@@ -145,16 +134,10 @@ fun FriendshipsCreatingChat() {
 @Composable
 fun FriendshipsContent(
     friendshipsContainerState: FriendshipsContainerState,
-    createChat: (Friendship) -> Unit,
-    showBottomSheet: () -> Unit,
-    toggleScreen: (FriendshipScreen) -> Unit,
     friendshipsState: FriendshipsState,
-    getFriendships: () -> Unit,
-    deleteFriendship: (Friendship) -> Unit,
     pendingFriendshipsState: PendingFriendshipsState,
-    getPendingFriendships: () -> Unit,
-    acceptFriendship: (Friendship) -> Unit,
-    rejectFriendship: (Friendship) -> Unit,
+    showBottomSheet: () -> Unit,
+    onAction: (FriendshipsOverviewAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -178,11 +161,15 @@ fun FriendshipsContent(
                     ),
                     onTabChange = {
                         if (it == 0) {
-                            getFriendships()
-                            toggleScreen(FriendshipScreen.FRIENDSHIPS)
+                            onAction(
+                                FriendshipsOverviewAction.OnTabClick(FriendshipScreen.FRIENDSHIPS)
+                            )
                         } else {
-                            getPendingFriendships()
-                            toggleScreen(FriendshipScreen.PENDING_FRIENDSHIPS)
+                            onAction(
+                                FriendshipsOverviewAction.OnTabClick(
+                                    FriendshipScreen.PENDING_FRIENDSHIPS
+                                )
+                            )
                         }
                     },
                     selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -215,16 +202,46 @@ fun FriendshipsContent(
             when (friendshipsContainerState.currentScreen) {
                 FriendshipScreen.FRIENDSHIPS -> FriendshipsScreen(
                     uiState = friendshipsState,
-                    getFriendships = getFriendships,
-                    createChat = createChat,
-                    deleteFriendship = deleteFriendship,
+                    onAction = {
+                        when (it) {
+                            FriendshipsAction.OnRefreshFriendshipsPull -> {
+                                onAction(FriendshipsOverviewAction.OnRefreshPendingFriendshipsPull)
+                            }
+
+                            is FriendshipsAction.OnFriendshipClick -> {
+                                onAction(FriendshipsOverviewAction.OnFriendshipClick(it.friendship))
+                            }
+
+                            is FriendshipsAction.OnDeleteFriendshipClick -> {
+                                onAction(
+                                    FriendshipsOverviewAction.OnDeleteFriendshipClick(it.friendship)
+                                )
+                            }
+                        }
+                    },
                 )
 
                 FriendshipScreen.PENDING_FRIENDSHIPS -> PendingFriendshipsScreen(
                     uiState = pendingFriendshipsState,
-                    getPendingFriendships = getPendingFriendships,
-                    acceptFriendship = acceptFriendship,
-                    rejectFriendship = rejectFriendship,
+                    onAction = {
+                        when (it) {
+                            PendingFriendshipsAction.OnRefreshPendingFriendshipsPull -> {
+                                onAction(FriendshipsOverviewAction.OnRefreshFriendshipsPull)
+                            }
+
+                            is PendingFriendshipsAction.OnAcceptFriendship -> {
+                                onAction(
+                                    FriendshipsOverviewAction.OnAcceptFriendship(it.friendship)
+                                )
+                            }
+
+                            is PendingFriendshipsAction.OnRejectFriendship -> {
+                                onAction(
+                                    FriendshipsOverviewAction.OnRejectFriendship(it.friendship)
+                                )
+                            }
+                        }
+                    },
                 )
             }
         }
