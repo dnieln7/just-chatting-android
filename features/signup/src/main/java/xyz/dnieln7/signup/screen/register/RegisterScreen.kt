@@ -59,7 +59,7 @@ fun RegisterScreen(
                         .fillMaxWidth()
                         .padding(20.dp),
                     error = uiState.message,
-                    retry = { onAction(RegisterAction.OnRetryClick) },
+                    retry = { onAction(RegisterAction.OnRegisterRetryClick) },
                 )
             }
         }

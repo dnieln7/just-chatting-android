@@ -8,6 +8,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import xyz.dnieln7.chat.screen.ChatAction
 import xyz.dnieln7.chat.screen.ChatConnectionViewModel
 import xyz.dnieln7.chat.screen.ChatScreen
 import xyz.dnieln7.chat.screen.ChatViewModel
@@ -26,14 +27,20 @@ fun NavGraphBuilder.chatNavigation(
 
         ChatScreen(
             chatState = chatState,
-            getChat = chatViewModel::getChat,
             connectionState = connectionState,
-            getMessages = chatConnectionViewModel::getMessages,
-            connect = chatConnectionViewModel::connect,
             isMe = chatViewModel::isMe,
             getUsername = chatViewModel::getUsername,
-            sendMessage = chatConnectionViewModel::sendMessage,
-            navigateBack = navigateBack,
+            onAction = {
+                when (it) {
+                    ChatAction.OnBackClick -> navigateBack()
+                    ChatAction.OnLoadChatRetryClick -> chatViewModel.getChat()
+                    ChatAction.OnLoadMessagesRetryClick -> chatConnectionViewModel.getMessages()
+                    ChatAction.OnReconnectClick -> chatConnectionViewModel.connect()
+                    is ChatAction.OnSendMessageClick -> {
+                        chatConnectionViewModel.sendMessage(it.message)
+                    }
+                }
+            },
         )
     }
 }

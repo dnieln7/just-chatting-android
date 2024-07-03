@@ -40,14 +40,10 @@ import xyz.dnieln7.composable.spacer.HorizontalSpacer
 @Composable
 fun ChatScreen(
     chatState: ChatState,
-    getChat: () -> Unit,
     connectionState: ChatConnectionState,
-    getMessages: () -> Unit,
-    connect: () -> Unit,
     isMe: (String) -> Boolean,
     getUsername: (String) -> String,
-    sendMessage: (String) -> Unit,
-    navigateBack: () -> Unit,
+    onAction: (ChatAction) -> Unit,
 ) {
     val listState = rememberLazyListState()
 
@@ -64,7 +60,7 @@ fun ChatScreen(
                 JCIconButton(
                     icon = Icons.Rounded.ArrowBack,
                     contentDescription = stringResource(R.string.go_back),
-                    onClick = navigateBack,
+                    onClick = { onAction(ChatAction.OnBackClick) },
                 )
                 HorizontalSpacer(of = 8.dp)
                 if (chatState is ChatState.Success) {
@@ -79,7 +75,7 @@ fun ChatScreen(
                 }
                 if (chatState is ChatState.Error) {
                     TextButton(
-                        onClick = getChat,
+                        onClick = { onAction(ChatAction.OnLoadChatRetryClick) },
                         content = {
                             Text(text = stringResource(R.string.try_again))
                         }
@@ -117,7 +113,7 @@ fun ChatScreen(
                             error = stringResource(R.string.could_not_load_messages),
                             alertAction = AlertAction(
                                 text = stringResource(R.string.try_again),
-                                onClick = getMessages,
+                                onClick = { onAction(ChatAction.OnLoadMessagesRetryClick) },
                             ),
                         )
 
@@ -127,7 +123,7 @@ fun ChatScreen(
                             error = stringResource(R.string.could_not_connect),
                             alertAction = AlertAction(
                                 text = stringResource(R.string.try_again),
-                                onClick = connect,
+                                onClick = { onAction(ChatAction.OnReconnectClick) },
                             ),
                         )
 
@@ -157,7 +153,7 @@ fun ChatScreen(
                 }
                 MessageTextField(
                     enabled = connectionState.status == ChatConnectionStatus.CONNECTED,
-                    onSend = sendMessage,
+                    onSend = { onAction(ChatAction.OnSendMessageClick(it)) },
                 )
             }
         }
