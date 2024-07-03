@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import xyz.dnieln7.chats.screen.ChatsAction
 import xyz.dnieln7.chats.screen.ChatsScreen
 import xyz.dnieln7.chats.screen.ChatsViewModel
 import xyz.dnieln7.domain.model.Chat
@@ -18,8 +19,12 @@ fun NavGraphBuilder.chatsNavigation(navigateToChat: (Chat) -> Unit) {
 
         ChatsScreen(
             uiState = uiState,
-            getChats = chatsViewModel::getChats,
-            navigateToChat = navigateToChat,
+            onAction = {
+                when (it) {
+                    ChatsAction.OnRefreshChatsPull -> chatsViewModel.getChats()
+                    is ChatsAction.OnChatClick -> navigateToChat(it.chat)
+                }
+            },
         )
     }
 }

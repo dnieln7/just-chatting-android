@@ -25,13 +25,11 @@ import xyz.dnieln7.composable.alert.AlertAction
 import xyz.dnieln7.composable.alert.JCErrorAlert
 import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.pullrefresh.PullRefresh
-import xyz.dnieln7.domain.model.Chat
 
 @Composable
 fun ChatsScreen(
     uiState: ChatsState,
-    getChats: () -> Unit,
-    navigateToChat: (Chat) -> Unit,
+    onAction: (ChatsAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -70,16 +68,18 @@ fun ChatsScreen(
                     error = uiState.message,
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = getChats,
+                        onClick = { onAction(ChatsAction.OnRefreshChatsPull) },
                     ),
                 )
 
-                is ChatsState.Success -> PullRefresh(onRefresh = getChats) {
+                is ChatsState.Success -> PullRefresh(
+                    onRefresh = { onAction(ChatsAction.OnRefreshChatsPull) },
+                ) {
                     LazyColumn {
                         items(items = uiState.data, key = { it.id }) {
                             ChatListTile(
                                 chat = it,
-                                onClick = { navigateToChat(it) },
+                                onClick = { onAction(ChatsAction.OnChatClick(it)) },
                             )
                         }
                     }
