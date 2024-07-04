@@ -1,4 +1,4 @@
-package xyz.dnieln7.friendships.screen.addfriendship
+package xyz.dnieln7.friendships.screen.friendshipsearch
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,25 +14,25 @@ import xyz.dnieln7.domain.usecase.SendFriendshipRequestUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class AddFriendshipViewModel @Inject constructor(
+class FriendshipSearchViewModel @Inject constructor(
     @IO private val dispatcher: CoroutineDispatcher,
     private val getUserByEmailUseCase: GetUserByEmailUseCase,
     private val sendFriendshipRequestUseCase: SendFriendshipRequestUseCase,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<AddFriendshipState>(AddFriendshipState.None)
+    private val _state = MutableStateFlow<FriendshipSearchState>(FriendshipSearchState.None)
     val state get() = _state.asStateFlow()
 
     fun getUserByEmail(email: String) {
         viewModelScope.launch(dispatcher) {
-            _state.emit(AddFriendshipState.Loading)
+            _state.emit(FriendshipSearchState.Loading)
 
             getUserByEmailUseCase(email).fold(
                 {
-                    _state.emit(AddFriendshipState.GetUserError(it))
+                    _state.emit(FriendshipSearchState.GetUserError(it))
                 },
                 {
-                    _state.emit(AddFriendshipState.UserFound(it))
+                    _state.emit(FriendshipSearchState.UserFound(it))
                 }
             )
         }
@@ -40,14 +40,14 @@ class AddFriendshipViewModel @Inject constructor(
 
     fun sendFriendshipRequest(user: User) {
         viewModelScope.launch(dispatcher) {
-            _state.emit(AddFriendshipState.Loading)
+            _state.emit(FriendshipSearchState.Loading)
 
             sendFriendshipRequestUseCase(user.id).fold(
                 {
-                    _state.emit(AddFriendshipState.SendFriendshipRequestError(it, user))
+                    _state.emit(FriendshipSearchState.SendFriendshipSearchRequestError(it, user))
                 },
                 {
-                    _state.emit(AddFriendshipState.FriendshipRequestSent(user))
+                    _state.emit(FriendshipSearchState.FriendshipRequestSentSearch(user))
                 }
             )
         }
@@ -55,7 +55,7 @@ class AddFriendshipViewModel @Inject constructor(
 
     fun resetAddFriendshipState() {
         viewModelScope.launch(dispatcher) {
-            _state.emit(AddFriendshipState.None)
+            _state.emit(FriendshipSearchState.None)
         }
     }
 }

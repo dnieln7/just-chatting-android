@@ -1,4 +1,4 @@
-package xyz.dnieln7.friendships.screen.addfriendship
+package xyz.dnieln7.friendships.screen.friendshipsearch
 
 import app.cash.turbine.test
 import arrow.core.left
@@ -18,23 +18,23 @@ import xyz.dnieln7.testing.fake.buildUser
 import xyz.dnieln7.testing.relaxedMockk
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class AddFriendshipViewModelTest {
+class FriendshipSearchViewModelTest {
 
     private val dispatcher = StandardTestDispatcher()
 
     private val getUserByEmailUseCase = relaxedMockk<GetUserByEmailUseCase>()
     private val sendFriendshipRequestUseCase = relaxedMockk<SendFriendshipRequestUseCase>()
 
-    private lateinit var viewModel: AddFriendshipViewModel
+    private lateinit var viewModel: FriendshipSearchViewModel
 
     @Before
     fun setup() {
-        viewModel = AddFriendshipViewModel(dispatcher, getUserByEmailUseCase, sendFriendshipRequestUseCase)
+        viewModel = FriendshipSearchViewModel(dispatcher, getUserByEmailUseCase, sendFriendshipRequestUseCase)
     }
 
     @Test
     fun `GIVEN the happy path WHEN nothing THEN initialize the expected state`() {
-        viewModel.state.value shouldBeEqualTo AddFriendshipState.None
+        viewModel.state.value shouldBeEqualTo FriendshipSearchState.None
     }
 
     @Test
@@ -48,11 +48,11 @@ class AddFriendshipViewModelTest {
             viewModel.getUserByEmail(email)
 
             viewModel.state.test {
-                awaitItem() shouldBeEqualTo AddFriendshipState.None
-                awaitItem() shouldBeEqualTo AddFriendshipState.Loading
+                awaitItem() shouldBeEqualTo FriendshipSearchState.None
+                awaitItem() shouldBeEqualTo FriendshipSearchState.Loading
                 awaitItem().let {
-                    it shouldBeInstanceOf AddFriendshipState.UserFound::class
-                    (it as AddFriendshipState.UserFound).user shouldBeEqualTo user
+                    it shouldBeInstanceOf FriendshipSearchState.UserFound::class
+                    (it as FriendshipSearchState.UserFound).user shouldBeEqualTo user
                 }
             }
         }
@@ -69,11 +69,11 @@ class AddFriendshipViewModelTest {
             viewModel.getUserByEmail(email)
 
             viewModel.state.test {
-                awaitItem() shouldBeEqualTo AddFriendshipState.None
-                awaitItem() shouldBeEqualTo AddFriendshipState.Loading
+                awaitItem() shouldBeEqualTo FriendshipSearchState.None
+                awaitItem() shouldBeEqualTo FriendshipSearchState.Loading
                 awaitItem().let {
-                    it shouldBeInstanceOf AddFriendshipState.GetUserError::class
-                    (it as AddFriendshipState.GetUserError).message shouldBeEqualTo error
+                    it shouldBeInstanceOf FriendshipSearchState.GetUserError::class
+                    (it as FriendshipSearchState.GetUserError).message shouldBeEqualTo error
                 }
             }
         }
@@ -89,11 +89,11 @@ class AddFriendshipViewModelTest {
             viewModel.sendFriendshipRequest(user)
 
             viewModel.state.test {
-                awaitItem() shouldBeEqualTo AddFriendshipState.None
-                awaitItem() shouldBeEqualTo AddFriendshipState.Loading
+                awaitItem() shouldBeEqualTo FriendshipSearchState.None
+                awaitItem() shouldBeEqualTo FriendshipSearchState.Loading
                 awaitItem().let {
-                    it shouldBeInstanceOf AddFriendshipState.FriendshipRequestSent::class
-                    (it as AddFriendshipState.FriendshipRequestSent).user shouldBeEqualTo user
+                    it shouldBeInstanceOf FriendshipSearchState.FriendshipRequestSentSearch::class
+                    (it as FriendshipSearchState.FriendshipRequestSentSearch).user shouldBeEqualTo user
                 }
             }
         }
@@ -110,11 +110,11 @@ class AddFriendshipViewModelTest {
             viewModel.sendFriendshipRequest(user)
 
             viewModel.state.test {
-                awaitItem() shouldBeEqualTo AddFriendshipState.None
-                awaitItem() shouldBeEqualTo AddFriendshipState.Loading
+                awaitItem() shouldBeEqualTo FriendshipSearchState.None
+                awaitItem() shouldBeEqualTo FriendshipSearchState.Loading
                 awaitItem().let {
-                    it shouldBeInstanceOf AddFriendshipState.SendFriendshipRequestError::class
-                    (it as AddFriendshipState.SendFriendshipRequestError).message shouldBeEqualTo error
+                    it shouldBeInstanceOf FriendshipSearchState.SendFriendshipSearchRequestError::class
+                    (it as FriendshipSearchState.SendFriendshipSearchRequestError).message shouldBeEqualTo error
                     it.user shouldBeEqualTo user
                 }
             }
@@ -129,7 +129,7 @@ class AddFriendshipViewModelTest {
             viewModel.state.test {
                 advanceUntilIdle()
 
-                awaitItem() shouldBeEqualTo AddFriendshipState.None
+                awaitItem() shouldBeEqualTo FriendshipSearchState.None
             }
         }
     }

@@ -28,23 +28,23 @@ import xyz.dnieln7.composable.progress.JCProgressIndicator
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.tab.JCTabs
 import xyz.dnieln7.friendships.R
-import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipAction
-import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipScreen
-import xyz.dnieln7.friendships.screen.addfriendship.AddFriendshipState
 import xyz.dnieln7.friendships.screen.friendships.FriendshipsAction
 import xyz.dnieln7.friendships.screen.friendships.FriendshipsScreen
 import xyz.dnieln7.friendships.screen.friendships.FriendshipsState
+import xyz.dnieln7.friendships.screen.friendshipsearch.FriendshipSearchAction
+import xyz.dnieln7.friendships.screen.friendshipsearch.FriendshipSearchBottomSheet
+import xyz.dnieln7.friendships.screen.friendshipsearch.FriendshipSearchState
 import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsAction
 import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsScreen
 import xyz.dnieln7.friendships.screen.pendingfriendships.PendingFriendshipsState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FriendshipsContainerScreen(
+fun FriendshipsOverviewScreen(
     friendshipsContainerState: FriendshipsContainerState,
     friendshipsState: FriendshipsState,
     pendingFriendshipsState: PendingFriendshipsState,
-    addFriendshipState: AddFriendshipState,
+    friendshipSearchState: FriendshipSearchState,
     onAction: (FriendshipsOverviewAction) -> Unit,
 ) {
     if (friendshipsContainerState.creatingChat) {
@@ -53,53 +53,54 @@ fun FriendshipsContainerScreen(
                 onAction(FriendshipsOverviewAction.OnChatCreated(friendshipsContainerState.chat))
             }
         } else {
-            FriendshipsCreatingChat()
+            CreatingChatPlaceholder()
         }
     } else {
         val scope = rememberCoroutineScope()
         val modalBottomSheetState = rememberModalBottomSheetState()
 
         if (friendshipsContainerState.showBottomSheet) {
-            AddFriendshipScreen(
-                uiState = addFriendshipState,
+            FriendshipSearchBottomSheet(
+                uiState = friendshipSearchState,
                 sheetState = modalBottomSheetState,
-                onModalBottomSheetDismiss = {
-                    scope.launch {
-                        onAction(FriendshipsOverviewAction.OnDismissBottomSheetClick)
-                        modalBottomSheetState.hide()
-                    }
-                },
                 onAction = {
                     when (it) {
-                        is AddFriendshipAction.OnSearchClick -> {
+                        is FriendshipSearchAction.OnSearchClick -> {
                             onAction(FriendshipsOverviewAction.OnSearchClick(it.email))
                         }
 
-                        is AddFriendshipAction.OnSendFriendshipClick -> {
+                        is FriendshipSearchAction.OnSendFriendshipClick -> {
                             onAction(FriendshipsOverviewAction.OnSendFriendshipClick(it.user))
+                        }
+
+                        FriendshipSearchAction.OnDismissClick -> scope.launch {
+                            onAction(FriendshipsOverviewAction.OnDismissBottomSheetClick)
+                            modalBottomSheetState.hide()
                         }
                     }
                 }
             )
         }
 
-        FriendshipsContent(
+        FriendshipsTabs(
             friendshipsContainerState = friendshipsContainerState,
             friendshipsState = friendshipsState,
             pendingFriendshipsState = pendingFriendshipsState,
-            showBottomSheet = {
-                scope.launch {
-                    onAction(FriendshipsOverviewAction.OnShowBottomSheetClick)
-                    modalBottomSheetState.show()
+            onAction = {
+                if (it == FriendshipsOverviewAction.OnShowBottomSheetClick) {
+                    scope.launch {
+                        modalBottomSheetState.show()
+                    }
                 }
+
+                onAction(it)
             },
-            onAction = onAction,
         )
     }
 }
 
 @Composable
-fun FriendshipsCreatingChat() {
+fun CreatingChatPlaceholder() {
     Scaffold(
         topBar = {
             Column(
@@ -132,11 +133,10 @@ fun FriendshipsCreatingChat() {
 }
 
 @Composable
-fun FriendshipsContent(
+fun FriendshipsTabs(
     friendshipsContainerState: FriendshipsContainerState,
     friendshipsState: FriendshipsState,
     pendingFriendshipsState: PendingFriendshipsState,
-    showBottomSheet: () -> Unit,
     onAction: (FriendshipsOverviewAction) -> Unit,
 ) {
     Scaffold(
@@ -179,7 +179,7 @@ fun FriendshipsContent(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = showBottomSheet,
+                onClick = { onAction(FriendshipsOverviewAction.OnShowBottomSheetClick) },
                 content = {
                     Icon(
                         imageVector = Icons.Rounded.PersonAdd,
