@@ -47,60 +47,32 @@ fun FriendshipsOverviewScreen(
     friendshipSearchState: FriendshipSearchState,
     onAction: (FriendshipsOverviewAction) -> Unit,
 ) {
-    if (friendshipsContainerState.creatingChat) {
-        if (friendshipsContainerState.chat != null) {
-            LaunchedEffect(Unit) {
-                onAction(FriendshipsOverviewAction.OnChatCreated(friendshipsContainerState.chat))
-            }
-        } else {
-            CreatingChatPlaceholder()
-        }
-    } else {
-        val scope = rememberCoroutineScope()
-        val modalBottomSheetState = rememberModalBottomSheetState()
+    val scope = rememberCoroutineScope()
+    val modalBottomSheetState = rememberModalBottomSheetState()
 
-        if (friendshipsContainerState.showBottomSheet) {
-            FriendshipSearchBottomSheet(
-                uiState = friendshipSearchState,
-                sheetState = modalBottomSheetState,
-                onAction = {
-                    when (it) {
-                        is FriendshipSearchAction.OnSearchClick -> {
-                            onAction(FriendshipsOverviewAction.OnSearchClick(it.email))
-                        }
-
-                        is FriendshipSearchAction.OnSendFriendshipClick -> {
-                            onAction(FriendshipsOverviewAction.OnSendFriendshipClick(it.user))
-                        }
-
-                        FriendshipSearchAction.OnDismissClick -> scope.launch {
-                            onAction(FriendshipsOverviewAction.OnDismissBottomSheetClick)
-                            modalBottomSheetState.hide()
-                        }
-                    }
-                }
-            )
-        }
-
-        FriendshipsTabs(
-            friendshipsContainerState = friendshipsContainerState,
-            friendshipsState = friendshipsState,
-            pendingFriendshipsState = pendingFriendshipsState,
+    if (friendshipsContainerState.showBottomSheet) {
+        FriendshipSearchBottomSheet(
+            uiState = friendshipSearchState,
+            sheetState = modalBottomSheetState,
             onAction = {
-                if (it == FriendshipsOverviewAction.OnShowBottomSheetClick) {
-                    scope.launch {
-                        modalBottomSheetState.show()
+                when (it) {
+                    is FriendshipSearchAction.OnSearchClick -> {
+                        onAction(FriendshipsOverviewAction.OnSearchClick(it.email))
+                    }
+
+                    is FriendshipSearchAction.OnSendFriendshipClick -> {
+                        onAction(FriendshipsOverviewAction.OnSendFriendshipClick(it.user))
+                    }
+
+                    FriendshipSearchAction.OnDismissClick -> scope.launch {
+                        onAction(FriendshipsOverviewAction.OnDismissBottomSheetClick)
+                        modalBottomSheetState.hide()
                     }
                 }
-
-                onAction(it)
-            },
+            }
         )
     }
-}
 
-@Composable
-fun CreatingChatPlaceholder() {
     Scaffold(
         topBar = {
             Column(
@@ -114,8 +86,51 @@ fun CreatingChatPlaceholder() {
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge
                 )
+                if (!friendshipsContainerState.creatingChat) {
+                    VerticalSpacer(of = 22.dp)
+                    JCTabs(
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        tabs = listOf(
+                            stringResource(R.string.friendships),
+                            stringResource(R.string.pending)
+                        ),
+                        onTabChange = {
+                            if (it == 0) {
+                                onAction(
+                                    FriendshipsOverviewAction.OnTabClick(FriendshipScreen.FRIENDSHIPS)
+                                )
+                            } else {
+                                onAction(
+                                    FriendshipsOverviewAction.OnTabClick(
+                                        FriendshipScreen.PENDING_FRIENDSHIPS
+                                    )
+                                )
+                            }
+                        },
+                        selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                        indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                }
             }
         },
+        floatingActionButton = {
+            if (!friendshipsContainerState.creatingChat) {
+                FloatingActionButton(
+                    onClick = {
+                        scope.launch {
+                            onAction(FriendshipsOverviewAction.OnShowBottomSheetClick)
+                            modalBottomSheetState.show()
+                        }
+                    },
+                    content = {
+                        Icon(
+                            imageVector = Icons.Rounded.PersonAdd,
+                            contentDescription = stringResource(R.string.add_friendship)
+                        )
+                    }
+                )
+            }
+        }
     ) { paddingValues ->
         ElevatedCard(
             modifier = Modifier
@@ -127,124 +142,76 @@ fun CreatingChatPlaceholder() {
                 bottomEnd = CornerSize(0.dp),
             ),
         ) {
-            JCProgressIndicator(modifier = Modifier.fillMaxSize())
+            if (friendshipsContainerState.creatingChat) {
+                if (friendshipsContainerState.chat != null) {
+                    LaunchedEffect(Unit) {
+                        onAction(FriendshipsOverviewAction.OnChatCreated(friendshipsContainerState.chat))
+                    }
+                } else {
+                    JCProgressIndicator(modifier = Modifier.fillMaxSize())
+                }
+            } else {
+                FriendshipsTabs(
+                    friendshipsContainerState = friendshipsContainerState,
+                    friendshipsState = friendshipsState,
+                    pendingFriendshipsState = pendingFriendshipsState,
+                    onAction = onAction,
+                )
+            }
         }
     }
 }
 
 @Composable
-fun FriendshipsTabs(
+private fun FriendshipsTabs(
     friendshipsContainerState: FriendshipsContainerState,
     friendshipsState: FriendshipsState,
     pendingFriendshipsState: PendingFriendshipsState,
     onAction: (FriendshipsOverviewAction) -> Unit,
 ) {
-    Scaffold(
-        topBar = {
-            Column(
-                modifier = Modifier
-                    .background(MaterialTheme.colorScheme.primaryContainer)
-                    .padding(top = 20.dp, bottom = 18.dp),
-            ) {
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.friendships),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge
-                )
-                VerticalSpacer(of = 22.dp)
-                JCTabs(
-                    modifier = Modifier.padding(horizontal = 12.dp),
-                    tabs = listOf(
-                        stringResource(R.string.friendships),
-                        stringResource(R.string.pending)
-                    ),
-                    onTabChange = {
-                        if (it == 0) {
-                            onAction(
-                                FriendshipsOverviewAction.OnTabClick(FriendshipScreen.FRIENDSHIPS)
-                            )
-                        } else {
-                            onAction(
-                                FriendshipsOverviewAction.OnTabClick(
-                                    FriendshipScreen.PENDING_FRIENDSHIPS
-                                )
-                            )
-                        }
-                    },
-                    selectedTextColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    indicatorColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                )
-            }
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onAction(FriendshipsOverviewAction.OnShowBottomSheetClick) },
-                content = {
-                    Icon(
-                        imageVector = Icons.Rounded.PersonAdd,
-                        contentDescription = stringResource(R.string.add_friendship)
-                    )
+    when (friendshipsContainerState.currentScreen) {
+        FriendshipScreen.FRIENDSHIPS -> FriendshipsScreen(
+            uiState = friendshipsState,
+            onAction = {
+                when (it) {
+                    FriendshipsAction.OnRefreshFriendshipsPull -> {
+                        onAction(FriendshipsOverviewAction.OnRefreshPendingFriendshipsPull)
+                    }
+
+                    is FriendshipsAction.OnFriendshipClick -> {
+                        onAction(FriendshipsOverviewAction.OnFriendshipClick(it.friendship))
+                    }
+
+                    is FriendshipsAction.OnDeleteFriendshipClick -> {
+                        onAction(
+                            FriendshipsOverviewAction.OnDeleteFriendshipClick(it.friendship)
+                        )
+                    }
                 }
-            )
-        }
-    ) { paddingValues ->
-        ElevatedCard(
-            modifier = Modifier
-                .padding(paddingValues)
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.primaryContainer),
-            shape = MaterialTheme.shapes.large.copy(
-                bottomStart = CornerSize(0.dp),
-                bottomEnd = CornerSize(0.dp),
-            ),
-        ) {
-            when (friendshipsContainerState.currentScreen) {
-                FriendshipScreen.FRIENDSHIPS -> FriendshipsScreen(
-                    uiState = friendshipsState,
-                    onAction = {
-                        when (it) {
-                            FriendshipsAction.OnRefreshFriendshipsPull -> {
-                                onAction(FriendshipsOverviewAction.OnRefreshPendingFriendshipsPull)
-                            }
+            },
+        )
 
-                            is FriendshipsAction.OnFriendshipClick -> {
-                                onAction(FriendshipsOverviewAction.OnFriendshipClick(it.friendship))
-                            }
+        FriendshipScreen.PENDING_FRIENDSHIPS -> PendingFriendshipsScreen(
+            uiState = pendingFriendshipsState,
+            onAction = {
+                when (it) {
+                    PendingFriendshipsAction.OnRefreshPendingFriendshipsPull -> {
+                        onAction(FriendshipsOverviewAction.OnRefreshFriendshipsPull)
+                    }
 
-                            is FriendshipsAction.OnDeleteFriendshipClick -> {
-                                onAction(
-                                    FriendshipsOverviewAction.OnDeleteFriendshipClick(it.friendship)
-                                )
-                            }
-                        }
-                    },
-                )
+                    is PendingFriendshipsAction.OnAcceptFriendship -> {
+                        onAction(
+                            FriendshipsOverviewAction.OnAcceptFriendship(it.friendship)
+                        )
+                    }
 
-                FriendshipScreen.PENDING_FRIENDSHIPS -> PendingFriendshipsScreen(
-                    uiState = pendingFriendshipsState,
-                    onAction = {
-                        when (it) {
-                            PendingFriendshipsAction.OnRefreshPendingFriendshipsPull -> {
-                                onAction(FriendshipsOverviewAction.OnRefreshFriendshipsPull)
-                            }
-
-                            is PendingFriendshipsAction.OnAcceptFriendship -> {
-                                onAction(
-                                    FriendshipsOverviewAction.OnAcceptFriendship(it.friendship)
-                                )
-                            }
-
-                            is PendingFriendshipsAction.OnRejectFriendship -> {
-                                onAction(
-                                    FriendshipsOverviewAction.OnRejectFriendship(it.friendship)
-                                )
-                            }
-                        }
-                    },
-                )
-            }
-        }
+                    is PendingFriendshipsAction.OnRejectFriendship -> {
+                        onAction(
+                            FriendshipsOverviewAction.OnRejectFriendship(it.friendship)
+                        )
+                    }
+                }
+            },
+        )
     }
 }
-

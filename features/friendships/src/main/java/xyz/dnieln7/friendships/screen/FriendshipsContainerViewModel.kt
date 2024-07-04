@@ -43,7 +43,7 @@ class FriendshipsContainerViewModel @Inject constructor(
                     _state.update { it.copy(creatingChat = false, createChatError = error) }
                 },
                 { chat ->
-                    _state.update { it.copy(creatingChat = false, chat = chat) }
+                    _state.update { it.copy(chat = chat) }
                 }
             )
         }
