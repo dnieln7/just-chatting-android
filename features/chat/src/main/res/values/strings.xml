@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="chat_with_friendship">Chat with %1$s</string>
+    <string name="go_back">Go back</string>
+    <string name="send_message">Send message</string>
+    <string name="start_typing">Start typing…</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="try_again">Try again</string>
+    <string name="could_not_load_messages">Could not load messages</string>
+    <string name="could_not_connect">Could not connect to chat</string>
+</resources>

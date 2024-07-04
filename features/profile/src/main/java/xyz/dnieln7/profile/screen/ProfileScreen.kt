@@ -40,9 +40,7 @@ import xyz.dnieln7.profile.R
 @Composable
 fun ProfileScreen(
     uiState: ProfileState,
-    getUser: () -> Unit,
-    logout: () -> Unit,
-    navigateToLogin: () -> Unit,
+    onAction: (ProfileAction) -> Unit,
 ) {
     Scaffold(
         topBar = {
@@ -80,24 +78,24 @@ fun ProfileScreen(
                     error = stringResource(R.string.could_not_load_profile),
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = getUser,
+                        onClick = { onAction(ProfileAction.OnLoadProfileRetryClick) },
                     ),
                 )
 
-                is ProfileState.UserFound -> Profile(user = uiState.data, logout = logout)
+                is ProfileState.UserFound -> Profile(user = uiState.data, onAction = onAction)
 
                 is ProfileState.LogoutError -> JCErrorAlert(
                     icon = Icons.Rounded.Error,
                     error = uiState.message,
                     alertAction = AlertAction(
                         text = stringResource(R.string.try_again),
-                        onClick = logout,
+                        onClick = { onAction(ProfileAction.OnLogoutClick) },
                     ),
                 )
 
                 ProfileState.LoggedOut -> {
                     LaunchedEffect(Unit) {
-                        navigateToLogin()
+                        onAction(ProfileAction.OnLoggedOut)
                     }
                 }
             }
@@ -106,7 +104,10 @@ fun ProfileScreen(
 }
 
 @Composable
-fun Profile(user: User, logout: () -> Unit) {
+fun Profile(
+    user: User,
+    onAction: (ProfileAction) -> Unit,
+) {
     val context = LocalContext.current
 
     Column(
@@ -143,7 +144,7 @@ fun Profile(user: User, logout: () -> Unit) {
         JCButton(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.logout),
-            onClick = logout,
+            onClick = { onAction(ProfileAction.OnLogoutClick) },
         )
     }
 }

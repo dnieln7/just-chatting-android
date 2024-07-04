@@ -14,17 +14,17 @@ class DefaultDataStorePreferences(
     private val dataStore: DataStore<Preferences>,
 ) : DataStorePreferences {
 
-    override suspend fun setUser(user: User) {
-        dataStore.edit {
-            it[USER_KEY] = user.toSingleLineString()
-        }
-    }
-
     override fun getUser(): Flow<User?> {
-        return dataStore.data.withIOExceptionGuard().map {
+        return dataStore.data.catchIOException().map {
             val singleLineString = it[USER_KEY] ?: DEFAULT_STRING
 
             User.fromSingleLineString(singleLineString)
+        }
+    }
+
+    override suspend fun setUser(user: User) {
+        dataStore.edit {
+            it[USER_KEY] = user.toSingleLineString()
         }
     }
 
@@ -33,15 +33,14 @@ class DefaultDataStorePreferences(
     }
 
     companion object {
+        private val Context.createDataStore by preferencesDataStore(PREFERENCES_NAME)
 
         fun build(context: Context): DefaultDataStorePreferences {
-            return DefaultDataStorePreferences(dataStore = context.createDataStoreWithMigrations)
+            return DefaultDataStorePreferences(dataStore = context.createDataStore)
         }
-
-        private const val PREFERENCES_NAME = "just_chatting_preferences"
-
-        private val Context.createDataStoreWithMigrations by preferencesDataStore(PREFERENCES_NAME)
     }
 }
+
+private const val PREFERENCES_NAME = "just_chatting_preferences"
 
 private const val DEFAULT_STRING = ""

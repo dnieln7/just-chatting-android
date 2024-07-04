@@ -12,7 +12,6 @@ import org.amshove.kluent.shouldBeTrue
 import org.junit.Before
 import org.junit.Test
 import xyz.dnieln7.domain.usecase.ValidateEmailUseCase
-import xyz.dnieln7.domain.validation.EmailValidationError
 import xyz.dnieln7.testing.relaxedMockk
 
 class LoginFormViewModelTest {
@@ -35,7 +34,7 @@ class LoginFormViewModelTest {
 
         viewModel.validation.value.let {
             it.initialized.shouldBeFalse()
-            it.emailValidationError.shouldBeNull()
+            it.emailValidation.shouldBeNull()
         }
     }
 
@@ -55,7 +54,7 @@ class LoginFormViewModelTest {
             viewModel.validation.test {
                 awaitItem().let {
                     it.initialized.shouldBeTrue()
-                    it.emailValidationError.shouldBeNull()
+                    it.emailValidation.shouldBeNull()
                 }
             }
         }
@@ -77,7 +76,7 @@ class LoginFormViewModelTest {
             viewModel.validation.test {
                 awaitItem().let {
                     it.initialized.shouldBeTrue()
-                    it.emailValidationError shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
+                    it.emailValidation shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
                 }
             }
         }

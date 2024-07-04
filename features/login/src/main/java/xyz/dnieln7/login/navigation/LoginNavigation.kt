@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import xyz.dnieln7.login.screen.LoginAction
 import xyz.dnieln7.login.screen.LoginFormViewModel
 import xyz.dnieln7.login.screen.LoginScreen
 import xyz.dnieln7.login.screen.LoginViewModel
@@ -24,15 +25,19 @@ fun NavGraphBuilder.loginNavigation(
 
         LoginScreen(
             uiState = uiState,
-            login = loginViewModel::login,
             form = form,
             validation = validation,
-            updateEmail = loginFormViewModel::updateEmail,
-            updatePassword = loginFormViewModel::updatePassword,
-            navigateToSignup = navigateToSignup,
-            navigateToHome = {
-                navigateToHome()
-                loginViewModel.onLoggedIn()
+            onAction = {
+                when (it) {
+                    LoginAction.OnSignupClick -> navigateToSignup()
+                    is LoginAction.OnEmailInput -> loginFormViewModel.updateEmail(it.text)
+                    is LoginAction.OnPasswordInput -> loginFormViewModel.updatePassword(it.text)
+                    is LoginAction.OnLoginClick -> loginViewModel.login(it.email, it.password)
+                    LoginAction.OnLoggedIn -> {
+                        navigateToHome()
+                        loginViewModel.onLoggedIn()
+                    }
+                }
             },
         )
     }

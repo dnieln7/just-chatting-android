@@ -3,7 +3,7 @@ package xyz.dnieln7.domain.usecase
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Test
-import xyz.dnieln7.domain.validation.EmailValidationError
+import xyz.dnieln7.domain.validation.ValidationStatus
 
 class ValidateEmailUseCaseTest {
 
@@ -15,29 +15,29 @@ class ValidateEmailUseCaseTest {
     }
 
     @Test
-    fun `GIVEN the happy path WHEN invoke THEN return Unit`() {
+    fun `GIVEN the happy path WHEN invoke THEN return Valid`() {
         val email = "example@gmail.com"
 
-        val result = useCase(email).getOrNull()
+        val result = useCase(email)
 
-        result shouldBeEqualTo Unit
+        result shouldBeEqualTo ValidationStatus.Email.Valid
     }
 
     @Test
-    fun `GIVEN an empty email WHEN invoke THEN return EmailValidationError_EMPTY`() {
+    fun `GIVEN an empty email WHEN invoke THEN return EMPTY`() {
         val email = ""
 
-        val result = useCase(email).swap().getOrNull()
+        val result = useCase(email)
 
-        result shouldBeEqualTo EmailValidationError.EMPTY
+        result shouldBeEqualTo ValidationStatus.Email.Invalid.EMPTY
     }
 
     @Test
-    fun `GIVEN wrong email WHEN invoke THEN return EmailValidationError_NOT_AN_EMAIL`() {
+    fun `GIVEN wrong email WHEN invoke THEN return MALFORMED`() {
         val email = "@@asdlkcom"
 
-        val result = useCase(email).swap().getOrNull()
+        val result = useCase(email)
 
-        result shouldBeEqualTo EmailValidationError.NOT_AN_EMAIL
+        result shouldBeEqualTo ValidationStatus.Email.Invalid.MALFORMED
     }
 }

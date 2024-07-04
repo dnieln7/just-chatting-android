@@ -7,11 +7,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import xyz.dnieln7.signup.screen.createpassword.CreatePasswordAction
 import xyz.dnieln7.signup.screen.createpassword.CreatePasswordFormViewModel
 import xyz.dnieln7.signup.screen.createpassword.CreatePasswordScreen
+import xyz.dnieln7.signup.screen.createuser.CreateUserAction
 import xyz.dnieln7.signup.screen.createuser.CreateUserFormViewModel
 import xyz.dnieln7.signup.screen.createuser.CreateUserScreen
 import xyz.dnieln7.signup.screen.createuser.CreateUserViewModel
+import xyz.dnieln7.signup.screen.register.RegisterAction
 import xyz.dnieln7.signup.screen.register.RegisterScreen
 import xyz.dnieln7.signup.screen.register.RegisterViewModel
 
@@ -30,15 +33,32 @@ fun NavGraphBuilder.signupNavHost(
 
             CreateUserScreen(
                 uiState = uiState,
-                createUser = createUserViewModel::createUser,
-                resetState = createUserViewModel::resetState,
                 form = form,
                 validation = validation,
-                updateEmail = createUserFormViewModel::updateEmail,
-                updateUsername = createUserFormViewModel::updateUsername,
-                navigateToCreatePassword = { email, username ->
-                    CreateUserDestination.navigateToCreatePassword(navController, email, username)
-                },
+                onAction = {
+                    when (it) {
+                        is CreateUserAction.OnEmailInput -> {
+                            createUserFormViewModel.updateEmail(it.text)
+                        }
+
+                        is CreateUserAction.OnUsernameInput -> {
+                            createUserFormViewModel.updateUsername(it.text)
+                        }
+
+                        is CreateUserAction.OnCreateUserClick -> {
+                            createUserViewModel.createUser(it.email, it.username)
+                        }
+
+                        is CreateUserAction.OnUserCreated -> {
+                            CreateUserDestination.navigateToCreatePassword(
+                                navController = navController,
+                                email = it.email,
+                                username = it.username
+                            )
+                            createUserViewModel.resetState()
+                        }
+                    }
+                }
             )
         }
         composable(
@@ -52,16 +72,26 @@ fun NavGraphBuilder.signupNavHost(
             CreatePasswordScreen(
                 form = form,
                 validation = validation,
-                updatePassword = createPasswordFormViewModel::updatePassword,
-                updatePasswordConfirm = createPasswordFormViewModel::updatePasswordConfirm,
-                navigateToRegister = { email, password, username ->
-                    CreatePasswordDestination.navigateToRegister(
-                        navController = navController,
-                        email = email,
-                        password = password,
-                        username = username
-                    )
-                },
+                onAction = {
+                    when (it) {
+                        is CreatePasswordAction.OnPasswordInput -> {
+                            createPasswordFormViewModel.updatePassword(it.text)
+                        }
+
+                        is CreatePasswordAction.OnPasswordConfirmInput -> {
+                            createPasswordFormViewModel.updatePasswordConfirm(it.text)
+                        }
+
+                        is CreatePasswordAction.OnCreatePasswordClick -> {
+                            CreatePasswordDestination.navigateToRegister(
+                                navController = navController,
+                                email = it.email,
+                                password = it.password,
+                                username = it.username
+                            )
+                        }
+                    }
+                }
             )
         }
         composable(
@@ -73,9 +103,15 @@ fun NavGraphBuilder.signupNavHost(
 
             RegisterScreen(
                 uiState = uiState,
-                navigateToHome = navigateToHome,
-                register = registerViewModel::register,
-                resetState = registerViewModel::resetState,
+                onAction = {
+                    when (it) {
+                        RegisterAction.OnRegisterRetryClick -> registerViewModel.register()
+                        RegisterAction.OnUserRegistered -> {
+                            navigateToHome()
+                            registerViewModel.resetState()
+                        }
+                    }
+                }
             )
         }
     }

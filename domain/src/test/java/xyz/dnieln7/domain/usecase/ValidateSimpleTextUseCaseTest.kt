@@ -3,7 +3,7 @@ package xyz.dnieln7.domain.usecase
 import org.amshove.kluent.shouldBeEqualTo
 import org.junit.Before
 import org.junit.Test
-import xyz.dnieln7.domain.validation.SimpleTextValidationError
+import xyz.dnieln7.domain.validation.ValidationStatus
 
 class ValidateSimpleTextUseCaseTest {
 
@@ -15,20 +15,20 @@ class ValidateSimpleTextUseCaseTest {
     }
 
     @Test
-    fun `GIVEN the happy path String WHEN invoke THEN return Unit`() {
+    fun `GIVEN the happy path String WHEN invoke THEN return Valid`() {
         val string = "STRING"
 
-        val result = useCase(string).getOrNull()
+        val result = useCase(string)
 
-        result shouldBeEqualTo Unit
+        result shouldBeEqualTo ValidationStatus.Text.Valid
     }
 
     @Test
-    fun `GIVEN a empty String WHEN invoke THEN return SimpleTextValidationError_EMPTY`() {
+    fun `GIVEN a empty String WHEN invoke THEN return EMPTY`() {
         val string = ""
 
-        val result = useCase(string).swap().getOrNull()
+        val result = useCase(string)
 
-        result shouldBeEqualTo SimpleTextValidationError.EMPTY
+        result shouldBeEqualTo ValidationStatus.Text.Invalid.EMPTY
     }
 }

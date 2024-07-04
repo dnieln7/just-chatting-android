@@ -24,24 +24,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.button.JCStatefulButton
+import xyz.dnieln7.composable.extension.asString
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.progress.JCStepper
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.string.stringFromEmailValidationError
-import xyz.dnieln7.composable.string.stringFromSimpleTextValidationError
 import xyz.dnieln7.composable.textfield.JCTextField
 import xyz.dnieln7.signup.R
 
 @Composable
 fun CreateUserScreen(
     uiState: CreateUserState,
-    createUser: (email: String, username: String) -> Unit,
-    resetState: () -> Unit,
     form: CreateUserForm,
     validation: CreateUserFormValidation,
-    updateEmail: (String) -> Unit,
-    updateUsername: (String) -> Unit,
-    navigateToCreatePassword: (String, String) -> Unit,
+    onAction: (CreateUserAction) -> Unit
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -50,8 +45,7 @@ fun CreateUserScreen(
 
     if (uiState is CreateUserState.Success) {
         LaunchedEffect(Unit) {
-            navigateToCreatePassword(uiState.email, uiState.username)
-            resetState()
+            onAction(CreateUserAction.OnUserCreated(uiState.email, uiState.username))
         }
     } else {
         Surface(modifier = Modifier.fillMaxSize()) {
@@ -77,9 +71,9 @@ fun CreateUserScreen(
                 JCTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = form.email,
-                    onValueChange = updateEmail,
+                    onValueChange = { onAction(CreateUserAction.OnEmailInput(it)) },
                     label = stringResource(R.string.email),
-                    error = stringFromEmailValidationError(validation.emailValidationError),
+                    error = validation.emailValidation.asString(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Email,
                         imeAction = ImeAction.Next,
@@ -92,9 +86,9 @@ fun CreateUserScreen(
                 JCTextField(
                     modifier = Modifier.fillMaxWidth(),
                     value = form.username,
-                    onValueChange = updateUsername,
+                    onValueChange = { onAction(CreateUserAction.OnUsernameInput(it)) },
                     label = stringResource(R.string.username),
-                    error = stringFromSimpleTextValidationError(validation.usernameValidationError),
+                    error = validation.usernameValidation.asString(),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Done,
@@ -120,7 +114,14 @@ fun CreateUserScreen(
                     enabled = validation.isValid(),
                     noneText = stringResource(R.string.create_user),
                     successText = stringResource(R.string.user_created),
-                    onClick = { createUser(form.email, form.username) },
+                    onClick = {
+                        onAction(
+                            CreateUserAction.OnCreateUserClick(
+                                email = form.email,
+                                username = form.username
+                            )
+                        )
+                    },
                     statefulButtonStatus = uiState.toStatefulButtonStatus(),
                 )
             }

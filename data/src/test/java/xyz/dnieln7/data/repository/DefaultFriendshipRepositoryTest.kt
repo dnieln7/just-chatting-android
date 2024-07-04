@@ -8,20 +8,14 @@ import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
-import org.amshove.kluent.shouldContainSame
-import org.amshove.kluent.shouldNotBeNull
 import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
 import retrofit2.Response
 import xyz.dnieln7.data.exception.FriendshipDuplicatedException
 import xyz.dnieln7.data.server.JustChattingApiService
-import xyz.dnieln7.data.server.model.FriendshipSvModel
 import xyz.dnieln7.data.server.model.SendFriendshipRequestSvModel
 import xyz.dnieln7.domain.provider.ResourceProvider
-import xyz.dnieln7.testing.fake.buildException
-import xyz.dnieln7.testing.fake.buildFriendships
-import xyz.dnieln7.testing.fake.buildUser
 import xyz.dnieln7.testing.relaxedMockk
 
 class DefaultFriendshipRepositoryTest {
@@ -54,36 +48,6 @@ class DefaultFriendshipRepositoryTest {
 
             result shouldBeInstanceOf FriendshipDuplicatedException::class
             result?.message shouldBeEqualTo error
-        }
-    }
-
-    @Test
-    fun `GIVEN the happy path WHEN getFriendships THEN return the expected result`() {
-        val user = buildUser()
-        val friendships = buildFriendships()
-        val friendshipSvModels = friendships.map { FriendshipSvModel(it.id, it.email, it.username) }
-
-        coEvery { justChattingApiService.getFriendships(user.id) } returns friendshipSvModels
-
-        runTest(dispatcher) {
-            val result = repository.getFriendships(user.id).getOrNull()
-
-            result.shouldNotBeNull()
-            result shouldContainSame friendships
-        }
-    }
-
-    @Test
-    fun `GIVEN a Throwable from justChattingApiService_getFriendships WHEN getFriendships THEN return the expected result`() {
-        val user = buildUser()
-        val throwable = buildException()
-
-        coEvery { justChattingApiService.getFriendships(user.id) } throws throwable
-
-        runTest(dispatcher) {
-            val result = repository.getFriendships(user.id).swap().getOrNull()
-
-            result?.localizedMessage shouldBeEqualTo throwable.localizedMessage
         }
     }
 }

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="chats">Chats</string>
+    <string name="try_again">Try again</string>
+    <string name="chat_with_friendship">Chat with %1$s</string>
 </resources>

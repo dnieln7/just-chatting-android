@@ -1,14 +1,13 @@
 package xyz.dnieln7.signup.screen.createuser
 
-import xyz.dnieln7.domain.validation.EmailValidationError
-import xyz.dnieln7.domain.validation.SimpleTextValidationError
+import xyz.dnieln7.domain.validation.ValidationStatus
 
 data class CreateUserFormValidation(
-    val emailValidationError: EmailValidationError? = EmailValidationError.EMPTY,
-    val usernameValidationError: SimpleTextValidationError? = SimpleTextValidationError.EMPTY,
+    val emailValidation: ValidationStatus.Email = ValidationStatus.Email.Invalid.EMPTY,
+    val usernameValidation: ValidationStatus.Text = ValidationStatus.Text.Invalid.EMPTY,
 ) {
 
     fun isValid(): Boolean {
-        return emailValidationError == null && usernameValidationError == null
+        return emailValidation == ValidationStatus.Email.Valid && usernameValidation == ValidationStatus.Text.Valid
     }
 }

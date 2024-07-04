@@ -34,12 +34,12 @@ import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.theme.JCTheme
 import xyz.dnieln7.domain.model.Friendship
 import xyz.dnieln7.friendships.R
-import xyz.dnieln7.friendships.screen.StatefulPendingFriendship
+import xyz.dnieln7.friendships.screen.pendingfriendships.StatefulPendingFriendship
 
 @Composable
 fun PendingFriendshipListTile(
     modifier: Modifier = Modifier,
-    friendship: StatefulPendingFriendship,
+    statefulPendingFriendship: StatefulPendingFriendship,
     onAccept: (Friendship) -> Unit,
     onReject: (Friendship) -> Unit,
 ) {
@@ -66,28 +66,28 @@ fun PendingFriendshipListTile(
         HorizontalSpacer(of = 12.dp)
         Column {
             Text(
-                text = friendship.data.username,
+                text = statefulPendingFriendship.data.username,
                 style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
             )
             VerticalSpacer(of = 4.dp)
             Text(
-                text = friendship.data.email,
+                text = statefulPendingFriendship.data.email,
                 style = MaterialTheme.typography.titleMedium,
             )
         }
         HorizontalFlexibleSpacer()
-        if (friendship.isLoading) {
+        if (statefulPendingFriendship.isLoading) {
             CircularProgressIndicator(strokeCap = StrokeCap.Round)
         } else {
             JCIconButton(
                 icon = Icons.Rounded.Check,
                 contentDescription = stringResource(R.string.accept),
-                onClick = { onAccept(friendship.data) },
+                onClick = { onAccept(statefulPendingFriendship.data) },
             )
             JCIconButton(
                 icon = Icons.Rounded.NotInterested,
                 contentDescription = stringResource(R.string.reject),
-                onClick = { onReject(friendship.data) },
+                onClick = { onReject(statefulPendingFriendship.data) },
             )
         }
     }
@@ -106,7 +106,7 @@ private fun PendingFriendshipListTilePreview() {
                 verticalArrangement = Arrangement.Center,
             ) {
                 PendingFriendshipListTile(
-                    friendship = StatefulPendingFriendship(isLoading = true, data = friendship),
+                    statefulPendingFriendship = StatefulPendingFriendship(isLoading = true, data = friendship),
                     onAccept = {},
                     onReject = {})
             }

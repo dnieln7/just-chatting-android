@@ -1,8 +1,11 @@
 package xyz.dnieln7.domain.extension
 
 import org.amshove.kluent.shouldBeEqualTo
+import org.amshove.kluent.shouldBeFalse
+import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
 import java.time.Instant
+import java.time.ZonedDateTime
 
 class ZonedDateTimeExtensionsTest {
 
@@ -14,5 +17,23 @@ class ZonedDateTimeExtensionsTest {
         val result = zonedDateTime.toEpochMilli()
 
         result shouldBeEqualTo millis
+    }
+
+    @Test
+    fun `GIVEN today WHEN isToday THEN return true`() {
+        val zonedDateTime = ZonedDateTime.now()
+
+        val result = zonedDateTime.isToday()
+
+        result.shouldBeTrue()
+    }
+
+    @Test
+    fun `GIVEN yesterday WHEN isToday THEN return false`() {
+        val zonedDateTime = ZonedDateTime.now().minusDays(1)
+
+        val result = zonedDateTime.isToday()
+
+        result.shouldBeFalse()
     }
 }

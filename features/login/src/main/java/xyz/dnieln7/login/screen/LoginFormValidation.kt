@@ -1,13 +1,13 @@
 package xyz.dnieln7.login.screen
 
-import xyz.dnieln7.domain.validation.EmailValidationError
+import xyz.dnieln7.domain.validation.ValidationStatus
 
 data class LoginFormValidation(
     val initialized: Boolean = false,
-    val emailValidationError: EmailValidationError? = null,
+    val emailValidation: ValidationStatus.Email? = null,
 ) {
 
     fun isValid(): Boolean {
-        return initialized && emailValidationError == null
+        return initialized && emailValidation == ValidationStatus.Email.Valid
     }
 }

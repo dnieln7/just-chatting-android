@@ -6,6 +6,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import xyz.dnieln7.navigation.NavDestination
+import xyz.dnieln7.profile.screen.ProfileAction
 import xyz.dnieln7.profile.screen.ProfileScreen
 import xyz.dnieln7.profile.screen.ProfileViewModel
 
@@ -17,9 +18,13 @@ fun NavGraphBuilder.profileNavigation(navigateToLogin: () -> Unit) {
 
         ProfileScreen(
             uiState = uiState,
-            getUser = profileViewModel::getUser,
-            logout = profileViewModel::logout,
-            navigateToLogin = navigateToLogin,
+            onAction = {
+                when (it) {
+                    ProfileAction.OnLoadProfileRetryClick -> profileViewModel.getUser()
+                    ProfileAction.OnLogoutClick -> profileViewModel.logout()
+                    ProfileAction.OnLoggedOut -> navigateToLogin()
+                }
+            }
         )
     }
 }

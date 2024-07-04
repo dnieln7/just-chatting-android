@@ -19,10 +19,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.button.JCButton
+import xyz.dnieln7.composable.extension.asString
 import xyz.dnieln7.composable.extension.isPortrait
 import xyz.dnieln7.composable.progress.JCStepper
 import xyz.dnieln7.composable.spacer.VerticalSpacer
-import xyz.dnieln7.composable.string.stringFromPasswordValidationError
 import xyz.dnieln7.composable.textfield.JCPasswordTextField
 import xyz.dnieln7.composable.textfield.PasswordAction
 import xyz.dnieln7.signup.R
@@ -31,9 +31,7 @@ import xyz.dnieln7.signup.R
 fun CreatePasswordScreen(
     form: CreatePasswordForm,
     validation: CreatePasswordFormValidation,
-    updatePassword: (String) -> Unit,
-    updatePasswordConfirm: (String) -> Unit,
-    navigateToRegister: (String, String, String) -> Unit,
+    onAction: (CreatePasswordAction) -> Unit,
 ) {
     val isPortrait = LocalConfiguration.current.isPortrait()
     val focusManager = LocalFocusManager.current
@@ -63,8 +61,8 @@ fun CreatePasswordScreen(
             JCPasswordTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = form.password,
-                error = stringFromPasswordValidationError(validation.passwordValidationError),
-                onValueChange = updatePassword,
+                error = validation.passwordValidation.asString(),
+                onValueChange = { onAction(CreatePasswordAction.OnPasswordInput(it)) },
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Next,
                     action = { focusManager.moveFocus(FocusDirection.Down) }
@@ -77,7 +75,7 @@ fun CreatePasswordScreen(
                 error = if (validation.passwordsMatch == false)
                     stringResource(R.string.passwords_not_equal_error)
                 else null,
-                onValueChange = updatePasswordConfirm,
+                onValueChange = { onAction(CreatePasswordAction.OnPasswordConfirmInput(it)) },
                 label = stringResource(R.string.confirm_password),
                 passwordAction = PasswordAction(
                     imeAction = ImeAction.Done,
@@ -89,7 +87,15 @@ fun CreatePasswordScreen(
                 modifier = Modifier.fillMaxWidth(),
                 enabled = validation.isValid(),
                 text = stringResource(R.string.create_password),
-                onClick = { navigateToRegister(form.email, form.username, form.password) },
+                onClick = {
+                    onAction(
+                        CreatePasswordAction.OnCreatePasswordClick(
+                            email = form.email,
+                            username = form.username,
+                            password = form.password,
+                        )
+                    )
+                },
             )
         }
     }
