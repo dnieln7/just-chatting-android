@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import xyz.dnieln7.composable.spacer.VerticalSpacer
 import xyz.dnieln7.composable.theme.JCTheme
+import xyz.dnieln7.domain.extension.isToday
 import xyz.dnieln7.domain.model.Message
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -78,9 +79,15 @@ fun MessageListTile(
                 VerticalSpacer(of = 4.dp)
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(
-                        message.createdAt,
-                    ),
+                    text = if (message.createdAt.isToday()) {
+                        DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(
+                            message.createdAt,
+                        )
+                    } else {
+                        DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).format(
+                            message.createdAt,
+                        )
+                    },
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.labelSmall,
                 )
@@ -120,7 +127,8 @@ private fun MessageListTilePreview() {
                 VerticalSpacer(of = 12.dp)
                 MessageListTile(
                     message = message.copy(
-                        message = "Its been so long that i have seen you"
+                        message = "Its been so long that i have seen you",
+                        createdAt = message.createdAt.minusDays(1)
                     ),
                     getUsername = { "Not me" },
                     isMe = { false },
@@ -136,7 +144,8 @@ private fun MessageListTilePreview() {
                 VerticalSpacer(of = 12.dp)
                 MessageListTile(
                     message = message.copy(
-                        message = "I am missing you guys so much meet you soon"
+                        message = "I am missing you guys so much meet you soon",
+                        createdAt = message.createdAt.minusDays(1)
                     ),
                     getUsername = { "Me" },
                     isMe = { true },
